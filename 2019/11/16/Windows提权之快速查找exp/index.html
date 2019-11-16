@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Windows提权之快速查找exp 利用代码出自https:&#x2F;&#x2F;github.com&#x2F;Micropoor&#x2F;Micro8  快速查找exp首先先贴上paylaod，作用是在命令行下执行检测未打的补丁，命令如下： 1systeminfo&amp;gt;micropoor.txt&amp;amp;(for %i in (KB977165 KB2160329 KB2503665 KB2592799  KB2707511">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows提权之快速查找exp">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;16&#x2F;Windows%E6%8F%90%E6%9D%83%E4%B9%8B%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BEexp&#x2F;index.html">
+<meta property="og:site_name" content="白仁弟弟的博客">
+<meta property="og:description" content="Windows提权之快速查找exp 利用代码出自https:&#x2F;&#x2F;github.com&#x2F;Micropoor&#x2F;Micro8  快速查找exp首先先贴上paylaod，作用是在命令行下执行检测未打的补丁，命令如下： 1systeminfo&amp;gt;micropoor.txt&amp;amp;(for %i in (KB977165 KB2160329 KB2503665 KB2592799  KB2707511">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-16T03:25:52.585Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/16/Windows提权之快速查找exp/"/>
+
+
+
+
+
+  <title>Windows提权之快速查找exp | 白仁弟弟的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁弟弟的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/16/Windows%E6%8F%90%E6%9D%83%E4%B9%8B%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BEexp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁弟弟的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Windows提权之快速查找exp</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-16T10:39:53+08:00">
+                2019-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Windows提权之快速查找exp"><a href="#Windows提权之快速查找exp" class="headerlink" title="Windows提权之快速查找exp"></a>Windows提权之快速查找exp</h1><blockquote>
+<p>利用代码出自<br><a href="https://github.com/Micropoor/Micro8" target="_blank" rel="noopener">https://github.com/Micropoor/Micro8</a></p>
+</blockquote>
+<h2 id="快速查找exp"><a href="#快速查找exp" class="headerlink" title="快速查找exp"></a>快速查找exp</h2><p>首先先贴上paylaod，作用是在命令行下执行检测未打的补丁，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systeminfo&gt;micropoor.txt&amp;(for %i in (KB977165 KB2160329 KB2503665 KB2592799  KB2707511 KB2829361 KB2850851 KB3000061   KB3045171 KB3077657 KB3079904  KB3134228 KB3143141  KB3141780)do @type micropoor.txt|@find /i &quot;%i&quot;||@echo %i you can fuck)&amp;del /f /q /a micropoor.txt</span><br></pre></td></tr></table></figure>
+
+<p>我们来详细看一下代码的意思，我们先通过命令连接符&amp;把代码分成三个部分，然后分开查看每一部分的代码：</p>
+<h3 id="第一部分："><a href="#第一部分：" class="headerlink" title="第一部分："></a>第一部分：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1、systeminfo&gt;micropoor.txt</span><br></pre></td></tr></table></figure>
+<p>上面代码首先是使用systeminfo命令可以得出该靶机所安装的补丁，然后将命令的内容重定向到micropoor.txt里面。</p>
+<ul>
+<li>附上&gt;、&gt;&gt;的区别：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;用于将标准输出重定向至文件</span><br><span class="line">&gt;&gt;和&gt;相比的区别在于：&gt;是覆写文件而&gt;&gt;是追加文件。</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="第二部分"><a href="#第二部分" class="headerlink" title="第二部分:"></a>第二部分:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2. (for %i in (KB977165 KB2160329 KB2503665 KB2592799  KB2707511 KB2829361 KB2850851 KB3000061   KB3045171 KB3077657 KB3079904  KB3134228 KB3143141  KB3141780)do @type micropoor.txt|@find /i &quot;%i&quot;||@echo %i you can fuck)</span><br></pre></td></tr></table></figure>
+<p>上面代码首先通过|、||进行了连接</p>
+<ul>
+<li>首先附上说明：<blockquote>
+<p>&amp;&amp;表示当前一条命令执行成功时,执行后一条命令<br>||表示当前一条命令执行失败时,才执行后一条命令<br>&amp;表示将任务置于后台运行<br>|表示将前一条命令的输出，用作后一条命令的输入</p>
+</blockquote>
+</li>
+</ul>
+<p>这样代码的意义就明了了：首先先用形式变量%i在exp列表中循环并且通过find命令在type命令打印出来的micropoor.txt的内容中查找该exp是否存在。</p>
+<ul>
+<li>假如%i的值存在，说明靶机已经打了相应补丁。并且前一条命令执行成功，不执行||后命令，则不打印该exp可用；</li>
+<li>假如%i的值不存在，说明该靶机没打相应的补丁。则前一条命令执行失败，执行||后命令，打印出该exp可用；</li>
+</ul>
+<h3 id="第三部分："><a href="#第三部分：" class="headerlink" title="第三部分："></a>第三部分：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3、del /f /q /a micropoor.txt</span><br></pre></td></tr></table></figure>
+<p>上面代码很明显就是把生成的systeminfo文件进行删除。事了拂衣去，深藏功与名。</p>
+<ul>
+<li>附上del各个选项的含义：<blockquote>
+<p>/f  强制删除只读文件（补充：del只是删除文件，如要删除文件夹用rd）<br>/s  从当前目录及其所有子目录中删除指定文件。显示正在被删除的文件名。（补充：删除指定文件一定要有后缀，否则只是文件夹。删除时具有寻找功能，从当前目录及其所有子目录中）<br>/q  指定静音状态。不提示您确认删除。<br>/a 根据属性选择要删除的文件。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>但上述的payload需要在可执行写入的目录运行，类似 tmp目录，如C:\tmp&gt;</p>
+<p>然后这样我们就可以找出可以利用的Windows靶机exp了</p>
+<ul>
+<li>附上exp列表：</li>
+<li>exp注：<br>MS17-017 [KB4013081] [GDI Palette Objects Local Privilege Escalation]<br>(windows 7/8)<br>CVE-2017-8464 [LNK Remote Code Execution Vulnerability] (windows<br>10/8.1/7/2016/2010/2008)<br>CVE-2017-0213 [Windows COM Elevation of Privilege Vulnerability] (windows<br>10/8.1/7/2016/2010/2008)<br>MS17-010 [KB4013389] [Windows Kernel Mode Drivers] (windows<br>7/2008/2003/XP)<br>MS16-135 [KB3199135] [Windows Kernel Mode Drivers] (2016)<br>MS16-111 [KB3186973] [kernel api] (Windows 10 10586 (32/64)/8.1)<br>MS16-098 [KB3178466] [Kernel Driver] (Win 8.1)<br>MS16-075 [KB3164038] [Hot Potato] (2003/2008/7/8/2012)<br>MS16-034 [KB3143145] [Kernel Driver] (2008/7/8/10/2012)<br>MS16-032 [KB3143141] [Secondary Logon Handle] (2008/7/8/10/2012)<br>MS16-016 [KB3136041] [WebDAV] (2008/Vista/7)<br>MS15-097 [KB3089656] [remote code execution] (win8.1/2012)<br>MS15-076 [KB3067505] [RPC] (2003/2008/7/8/2012)<br>MS15-077 [KB3077657] [ATM] (XP/Vista/Win7/Win8/2000/2003/2008/2012)<br>MS15-061 [KB3057839] [Kernel Driver] (2003/2008/7/8/2012)<br>MS15-051 [KB3057191] [Windows Kernel Mode Drivers]<br>(2003/2008/7/8/2012)<br>MS15-010 [KB3036220] [Kernel Driver] (2003/2008/7/8)<br>MS15-015 [KB3031432] [Kernel Driver] (Win7/8/8.1/2012/RT/2012 R2/2008<br>R2)<br>MS15-001 [KB3023266] [Kernel Driver] (2008/2012/7/8)<br>MS14-070 [KB2989935] [Kernel Driver] (2003)<br>MS14-068 [KB3011780] [Domain Privilege Escalation] (2003/2008/2012/7/8)<br>MS14-058 [KB3000061] [Win32k.sys] (2003/2008/2012/7/8)<br>MS14-040 [KB2975684] [AFD Driver] (2003/2008/2012/7/8)<br>MS14-002 [KB2914368] [NDProxy] (2003/XP)<br>MS13-053 [KB2850851] [win32k.sys] (XP/Vista/2003/2008/win 7)<br>MS13-046 [KB2840221] [dxgkrnl.sys] (Vista/2003/2008/2012/7)<br>MS13-005 [KB2778930] [Kernel Mode Driver] (2003/2008/2012/win7/8)<br>MS12-042 [KB2972621] [Service Bus] (2008/2012/win7)<br>MS12-020 [KB2671387] [RDP] (2003/2008/7/XP)<br>MS11-080 [KB2592799] [AFD.sys] (2003/XP)<br>MS11-062 [KB2566454] [NDISTAPI] (2003/XP)<br>MS11-046 [KB2503665] [AFD.sys] (2003/2008/7/XP)<br>MS11-011 [KB2393802] [kernel Driver] (2003/2008/7/XP/Vista)<br>MS10-092 [KB2305420] [Task Scheduler] (2008/7)<br>MS10-065 [KB2267960] [FastCGI] (IIS 5.1, 6.0, 7.0, and 7.5)<br>MS10-059 [KB982799] [ACL-Churraskito] (2008/7/Vista)<br>MS10-048 [KB2160329] [win32k.sys] (XP SP2 &amp; SP3/2003 SP2/Vista SP1 &amp;<br>SP2/2008 Gold &amp; SP2 &amp; R2/Win7)<br>MS10-015 [KB977165] [KiTrap0D] (2003/2008/7/XP)<br>MS10-012 [KB971468] [SMB Client Trans2 stack overflow] (Windows<br>7/2008R2)<br>MS09-050 [KB975517] [Remote Code Execution] (2008/Vista)<br>MS09-020 [KB970483] [IIS 6.0] (IIS 5.1 and 6.0)<br>MS09-012 [KB959454] [Chimichurri] (Vista/win7/2008/Vista)<br>MS08-068 [KB957097] [Remote Code Execution] (2000/XP)<br>MS08-067 [KB958644] [Remote Code Execution] (Windows 2000/XP/Server<br>2003/Vista/Server 2008)<br>MS08-066 [] [] (Windows 2000/XP/Server 2003)<br>MS08-025 [KB941693] [Win32.sys] (XP/2003/2008/Vista)<br>MS06-040 [KB921883] [Remote Code Execution] (2003/xp/2000)<br>MS05-039 [KB899588] [PnP Service] (Win 9X/ME/NT/2000/XP/2003)<br>MS03-026 [KB823980] [Buffer Overrun In RPC Interface]<br>(/NT/2000/XP/2003)</li>
+</ul>
+<p>已对外公开exp注：<br><a href="https://github.com/SecWiki/windows-kernel-exploits" target="_blank" rel="noopener">https://github.com/SecWiki/windows-kernel-exploits</a><br><a href="https://github.com/WindowsExploits/Exploits" target="_blank" rel="noopener">https://github.com/WindowsExploits/Exploits</a><br><a href="https://github.com/AusJock/Privilege-Escalation" target="_blank" rel="noopener">https://github.com/AusJock/Privilege-Escalation</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/14/%E7%AE%80%E4%BB%8B/" rel="next" title="简介">
+                <i class="fa fa-chevron-left"></i> 简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows提权之快速查找exp"><span class="nav-number">1.</span> <span class="nav-text">Windows提权之快速查找exp</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#快速查找exp"><span class="nav-number">1.1.</span> <span class="nav-text">快速查找exp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一部分："><span class="nav-number">1.1.1.</span> <span class="nav-text">第一部分：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二部分"><span class="nav-number">1.1.2.</span> <span class="nav-text">第二部分:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三部分："><span class="nav-number">1.1.3.</span> <span class="nav-text">第三部分：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
