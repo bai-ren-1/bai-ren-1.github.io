@@ -89,7 +89,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;18&#x2F;%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx&#x2F;lcx-1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;18&#x2F;%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx&#x2F;lcx-3.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;18&#x2F;%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx&#x2F;lcx-2.png">
-<meta property="og:updated_time" content="2019-11-18T08:14:46.651Z">
+<meta property="og:updated_time" content="2019-11-18T14:02:00.200Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;18&#x2F;%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx&#x2F;lcx-1.png">
 
@@ -334,11 +334,12 @@
 
 
 
-<p>4、拓展</p>
+<p>4、拓展：</p>
 <p>在上面我们主机B使用的是我们自己的VPS，然后通过自己访问本地的转发的端口5678进行对内网的穿透。</p>
 <p>但其实也可以使用被我们通过Web漏洞Getshell的具有外网ip并连接内网的中间机的ip，然后我们访问中间机的对应的转发端口即可，如下：</p>
 <p><img src="/2019/11/18/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx/lcx-3.png" alt></p>
-<h4 id="2-端口映射"><a href="#2-端口映射" class="headerlink" title="2.端口映射"></a>2.端口映射</h4><p><img src="/2019/11/18/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx/lcx-2.png" alt></p>
+<h4 id="2-端口映射"><a href="#2-端口映射" class="headerlink" title="2.端口映射"></a>2.端口映射</h4><p>① 、场景使用1：（将目标主机上端口被防火墙防护的端口 [3389] 映射到目标主机上没被防火墙防护 [53] 的另一个端口；使得我们的攻击机能够通过防火墙访问到映射后的端口 [53] ，对应的就是原来被防护的端口 [3389] ）</p>
+<p><img src="/2019/11/18/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Blcx/lcx-2.png" alt></p>
 <p>假设依然是这两台主机，但环境有所变化</p>
 <p>1、 网络环境：</p>
 <p>（1）3389端口无法通过防火墙</p>
@@ -356,6 +357,7 @@
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">mstsc: 192.168.0.2:53 连目标的远程桌面</span></span><br></pre></td></tr></table></figure>
 
 <p> 通过访问目标主机映射的53端口，就相当于访问了3389端口，连接到内网的主机上</p>
+<p>② 、使用场景2：(在自己的攻击机上的简单的利用)</p>
 <h2 id="二、Lcx内网穿透之Linux版"><a href="#二、Lcx内网穿透之Linux版" class="headerlink" title="二、Lcx内网穿透之Linux版"></a>二、Lcx内网穿透之Linux版</h2><h4 id="1、端口转发"><a href="#1、端口转发" class="headerlink" title="1、端口转发"></a>1、端口转发</h4><p> 1.首先在自己的VPS上设置监听端口，将本VPS上的80[或者443]端口监听的流量转发给1234端口:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./portmap -m 2 -p1 80[或者443] -h2 59.49.12.3[自己的vps地址] -p2 1234</span><br></pre></td></tr></table></figure>
 
@@ -404,6 +406,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/18/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Bnetcat/" rel="prev" title="内网渗透工具之netcat">
+                内网渗透工具之netcat <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -480,7 +486,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
