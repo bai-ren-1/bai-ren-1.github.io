@@ -79,12 +79,12 @@
 
 
 
-<meta name="description" content="二进制安全DAY1系统栈和经典栈溢出寄存器ebp和esp 寄存器ebp指向  当前的栈帧 的底部（高地址）；  寄存器esp指向   当前的栈帧 的顶部（低地址）；   函数栈帧 函数返回地址：函数调用前的指令位置； 栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）； 局部变量：为函数局部变量开辟的内存空间；  函数调用过程 参数入栈：  参数从右往左依次">
+<meta name="description" content="系统栈和经典栈溢出寄存器ebp和esp 寄存器ebp指向  当前的栈帧 的底部（高地址）；  寄存器esp指向   当前的栈帧 的顶部（低地址）；   函数栈帧 函数返回地址：函数调用前的指令位置； 栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）； 局部变量：为函数局部变量开辟的内存空间；  函数调用过程 参数入栈：  参数从右往左依次压入系统栈中；">
 <meta property="og:type" content="article">
 <meta property="og:title" content="系统栈和经典栈溢出">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E7%B3%BB%E7%BB%9F%E6%A0%88%E5%92%8C%E7%BB%8F%E5%85%B8%E6%A0%88%E6%BA%A2%E5%87%BA&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="二进制安全DAY1系统栈和经典栈溢出寄存器ebp和esp 寄存器ebp指向  当前的栈帧 的底部（高地址）；  寄存器esp指向   当前的栈帧 的顶部（低地址）；   函数栈帧 函数返回地址：函数调用前的指令位置； 栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）； 局部变量：为函数局部变量开辟的内存空间；  函数调用过程 参数入栈：  参数从右往左依次">
+<meta property="og:description" content="系统栈和经典栈溢出寄存器ebp和esp 寄存器ebp指向  当前的栈帧 的底部（高地址）；  寄存器esp指向   当前的栈帧 的顶部（低地址）；   函数栈帧 函数返回地址：函数调用前的指令位置； 栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）； 局部变量：为函数局部变量开辟的内存空间；  函数调用过程 参数入栈：  参数从右往左依次压入系统栈中；">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E7%B3%BB%E7%BB%9F%E6%A0%88%E5%92%8C%E7%BB%8F%E5%85%B8%E6%A0%88%E6%BA%A2%E5%87%BA&#x2F;push%E5%8F%82%E6%95%B0.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E7%B3%BB%E7%BB%9F%E6%A0%88%E5%92%8C%E7%BB%8F%E5%85%B8%E6%A0%88%E6%BA%A2%E5%87%BA&#x2F;call.png">
@@ -93,7 +93,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E7%B3%BB%E7%BB%9F%E6%A0%88%E5%92%8C%E7%BB%8F%E5%85%B8%E6%A0%88%E6%BA%A2%E5%87%BA&#x2F;%E5%BC%80%E8%BE%9F%E7%A9%BA%E9%97%B4.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E7%B3%BB%E7%BB%9F%E6%A0%88%E5%92%8C%E7%BB%8F%E5%85%B8%E6%A0%88%E6%BA%A2%E5%87%BA&#x2F;%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88.jpg">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E7%B3%BB%E7%BB%9F%E6%A0%88%E5%92%8C%E7%BB%8F%E5%85%B8%E6%A0%88%E6%BA%A2%E5%87%BA&#x2F;%E6%A0%88%E7%BB%93%E6%9E%84.png">
-<meta property="og:updated_time" content="2019-11-30T08:47:58.060Z">
+<meta property="og:updated_time" content="2019-11-30T08:59:30.274Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E7%B3%BB%E7%BB%9F%E6%A0%88%E5%92%8C%E7%BB%8F%E5%85%B8%E6%A0%88%E6%BA%A2%E5%87%BA&#x2F;push%E5%8F%82%E6%95%B0.png">
 
@@ -300,8 +300,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
-                    <span itemprop="name">二进制安全系统</span>
+                  <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">二进制安全</span>
                   </a>
                 </span>
 
@@ -337,7 +337,7 @@
       
 
       
-        <h1 id="二进制安全DAY1"><a href="#二进制安全DAY1" class="headerlink" title="二进制安全DAY1"></a>二进制安全DAY1</h1><h1 id="系统栈和经典栈溢出"><a href="#系统栈和经典栈溢出" class="headerlink" title="系统栈和经典栈溢出"></a>系统栈和经典栈溢出</h1><h3 id="寄存器ebp和esp"><a href="#寄存器ebp和esp" class="headerlink" title="寄存器ebp和esp"></a>寄存器ebp和esp</h3><ul>
+        <h1 id="系统栈和经典栈溢出"><a href="#系统栈和经典栈溢出" class="headerlink" title="系统栈和经典栈溢出"></a>系统栈和经典栈溢出</h1><h3 id="寄存器ebp和esp"><a href="#寄存器ebp和esp" class="headerlink" title="寄存器ebp和esp"></a>寄存器ebp和esp</h3><ul>
 <li><p>寄存器ebp指向  <u>当前的栈帧</u> 的底部（高地址）；</p>
 </li>
 <li><p>寄存器esp指向  <u> 当前的栈帧</u> 的顶部（低地址）；</p>
@@ -597,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#二进制安全DAY1"><span class="nav-number">1.</span> <span class="nav-text">二进制安全DAY1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统栈和经典栈溢出"><span class="nav-number">2.</span> <span class="nav-text">系统栈和经典栈溢出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#寄存器ebp和esp"><span class="nav-number">2.0.1.</span> <span class="nav-text">寄存器ebp和esp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数栈帧"><span class="nav-number">2.0.2.</span> <span class="nav-text">函数栈帧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数调用过程"><span class="nav-number">2.0.3.</span> <span class="nav-text">函数调用过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典栈溢出"><span class="nav-number">2.0.4.</span> <span class="nav-text">经典栈溢出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一般栈溢出做法"><span class="nav-number">2.0.5.</span> <span class="nav-text">一般栈溢出做法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#寻找危险函数"><span class="nav-number">2.0.5.1.</span> <span class="nav-text">寻找危险函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#确定填充长度"><span class="nav-number">2.0.5.2.</span> <span class="nav-text">确定填充长度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖"><span class="nav-number">2.0.5.3.</span> <span class="nav-text">覆盖</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">2.0.6.</span> <span class="nav-text">参考链接</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#系统栈和经典栈溢出"><span class="nav-number">1.</span> <span class="nav-text">系统栈和经典栈溢出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#寄存器ebp和esp"><span class="nav-number">1.0.1.</span> <span class="nav-text">寄存器ebp和esp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数栈帧"><span class="nav-number">1.0.2.</span> <span class="nav-text">函数栈帧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数调用过程"><span class="nav-number">1.0.3.</span> <span class="nav-text">函数调用过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典栈溢出"><span class="nav-number">1.0.4.</span> <span class="nav-text">经典栈溢出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一般栈溢出做法"><span class="nav-number">1.0.5.</span> <span class="nav-text">一般栈溢出做法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#寻找危险函数"><span class="nav-number">1.0.5.1.</span> <span class="nav-text">寻找危险函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#确定填充长度"><span class="nav-number">1.0.5.2.</span> <span class="nav-text">确定填充长度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖"><span class="nav-number">1.0.5.3.</span> <span class="nav-text">覆盖</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">1.0.6.</span> <span class="nav-text">参考链接</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
