@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="二进制安全DAY1一、寄存器ebp和esp  寄存器ebp指向  当前的栈帧 的底部（高地址）；  寄存器esp指向   当前的栈帧 的顶部（低地址）；   二、函数栈帧  函数返回地址：函数调用前的指令位置； 栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）； 局部变量：为函数局部变量开辟的内存空间；  三、函数调用过程 1、参数入栈： 参数从右往左依次">
+<meta name="description" content="二进制安全DAY1寄存器ebp和esp 寄存器ebp指向  当前的栈帧 的底部（高地址）；  寄存器esp指向   当前的栈帧 的顶部（低地址）；   函数栈帧 函数返回地址：函数调用前的指令位置； 栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）； 局部变量：为函数局部变量开辟的内存空间；  函数调用过程1、参数入栈： 参数从右往左依次压入系统栈中； 2">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二进制安全DAY1">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="二进制安全DAY1一、寄存器ebp和esp  寄存器ebp指向  当前的栈帧 的底部（高地址）；  寄存器esp指向   当前的栈帧 的顶部（低地址）；   二、函数栈帧  函数返回地址：函数调用前的指令位置； 栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）； 局部变量：为函数局部变量开辟的内存空间；  三、函数调用过程 1、参数入栈： 参数从右往左依次">
+<meta property="og:description" content="二进制安全DAY1寄存器ebp和esp 寄存器ebp指向  当前的栈帧 的底部（高地址）；  寄存器esp指向   当前的栈帧 的顶部（低地址）；   函数栈帧 函数返回地址：函数调用前的指令位置； 栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）； 局部变量：为函数局部变量开辟的内存空间；  函数调用过程1、参数入栈： 参数从右往左依次压入系统栈中； 2">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1%5Cpush%E5%8F%82%E6%95%B0.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1%5Ccall.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1%5C%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88.jpg">
-<meta property="og:updated_time" content="2019-11-30T04:44:25.115Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;push%E5%8F%82%E6%95%B0.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;call.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88.jpg">
+<meta property="og:updated_time" content="2019-11-30T04:48:16.777Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1%5Cpush%E5%8F%82%E6%95%B0.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1&#x2F;push%E5%8F%82%E6%95%B0.png">
 
 
 
@@ -333,21 +333,18 @@
       
 
       
-        <h1 id="二进制安全DAY1"><a href="#二进制安全DAY1" class="headerlink" title="二进制安全DAY1"></a>二进制安全DAY1</h1><p>一、寄存器ebp和esp</p>
-<ul>
+        <h1 id="二进制安全DAY1"><a href="#二进制安全DAY1" class="headerlink" title="二进制安全DAY1"></a>二进制安全DAY1</h1><h3 id="寄存器ebp和esp"><a href="#寄存器ebp和esp" class="headerlink" title="寄存器ebp和esp"></a>寄存器ebp和esp</h3><ul>
 <li><p>寄存器ebp指向  <u>当前的栈帧</u> 的底部（高地址）；</p>
 </li>
 <li><p>寄存器esp指向  <u> 当前的栈帧</u> 的顶部（低地址）；</p>
 </li>
 </ul>
-<p>二、函数栈帧</p>
-<ul>
+<h3 id="函数栈帧"><a href="#函数栈帧" class="headerlink" title="函数栈帧"></a>函数栈帧</h3><ul>
 <li>函数返回地址：函数调用前的指令位置；</li>
 <li>栈帧状态值：保存前栈帧的顶部和底部（实际只保存前栈帧的底部，顶部可以通过堆栈平衡计算得出）；</li>
 <li>局部变量：为函数局部变量开辟的内存空间；</li>
 </ul>
-<p>三、函数调用过程</p>
-<p>1、参数入栈：</p>
+<h3 id="函数调用过程"><a href="#函数调用过程" class="headerlink" title="函数调用过程"></a>函数调用过程</h3><p>1、参数入栈：</p>
 <p>参数从右往左依次压入系统栈中；</p>
 <p>2、返回地址入栈：</p>
 <p>当前代码区调用的指令的下一条指令地址入栈（call中的压栈）；</p>
@@ -360,15 +357,15 @@
 <p>对应汇编（假设三个参数）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">push 参数2</span><br><span class="line"></span><br><span class="line">push 参数1</span><br><span class="line"></span><br><span class="line">push 参数0  // 至此调用第一步压参数完成</span><br><span class="line"></span><br><span class="line">call 调用地址  // 同时完成第二步和第三步，把下一条指令的地址压栈并跳转</span><br><span class="line"></span><br><span class="line">push ebp  // 保存当前栈</span><br><span class="line"></span><br><span class="line">mov ebp,esp // 设置新栈帧的底部（切换栈帧）</span><br><span class="line"></span><br><span class="line">sub esp，空间大小  // 设置新栈帧的顶部（抬高栈帧）</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2019/11/30/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1%5Cpush%E5%8F%82%E6%95%B0.png" alt></p>
+<p><img src="/2019/11/30/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1/push%E5%8F%82%E6%95%B0.png" alt></p>
 <p>上图完成了第一步，把三个参数都压入栈中</p>
-<p><img src="/2019/11/30/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1%5Ccall.png" alt></p>
+<p><img src="/2019/11/30/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1/call.png" alt></p>
 <p>上图完成了第二步和第三步。call操作把下一条指令的地址作为返回地址压入栈，eip跳转到代码区执行</p>
-<p>![](二进制安全DAY1\push ebp.png)</p>
+<p>![](二进制安全DAY1/push ebp.png)</p>
 <p>上图完成第四步中保存当前栈的操作，把当前栈的底部压入栈</p>
-<p>![](二进制安全DAY1\mov ebp,esp.png)</p>
+<p>![](二进制安全DAY1/mov ebp,esp.png)</p>
 <p>上图完成了第四步里面的更新栈底，把栈顶指针移动到当前栈的最上方</p>
-<p>![](二进制安全DAY1\sub esp.png)</p>
+<p>![](二进制安全DAY1/sub esp.png)</p>
 <p>栈顶指针自减上移，开辟了新的栈帧空间。上图到此完成了函数调用过程，形成了上图这样的调用栈</p>
 <ul>
 <li><p>除了最后一张图，其他图中称ebp为 “当前栈底” 是因为当前还没有通过sub来开辟新的栈帧，所以现在还是处在当前栈帧内。而且现在呈现出来的当前栈的  “底部在头部” 的现象是因为，我们是把当前的栈底的值拿到了顶部进行保存（），而不是改变栈底为栈顶，当前栈 “底部” 依然处在底部；</p>
@@ -377,7 +374,7 @@
 </li>
 </ul>
 <p>附上一张系统调用栈（注意下图的栈方向和上面的相反）</p>
-<p><img src="/2019/11/30/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1%5C%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88.jpg" alt></p>
+<p><img src="/2019/11/30/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8DAY1/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88.jpg" alt></p>
 <blockquote>
 <p>上图是x86的函数调用栈</p>
 </blockquote>
@@ -536,7 +533,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#二进制安全DAY1"><span class="nav-number">1.</span> <span class="nav-text">二进制安全DAY1</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#二进制安全DAY1"><span class="nav-number">1.</span> <span class="nav-text">二进制安全DAY1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#寄存器ebp和esp"><span class="nav-number">1.0.1.</span> <span class="nav-text">寄存器ebp和esp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数栈帧"><span class="nav-number">1.0.2.</span> <span class="nav-text">函数栈帧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数调用过程"><span class="nav-number">1.0.3.</span> <span class="nav-text">函数调用过程</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
