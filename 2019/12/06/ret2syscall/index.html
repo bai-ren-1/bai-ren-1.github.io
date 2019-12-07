@@ -79,12 +79,12 @@
 
 
 
-<meta name="description" content="ret2syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识： 1、x86下 ip 调用指令的过程：   从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； ip += 所读指令的长度，从而指向下一条指令； 执行指令，然后返回第一步   2、入栈 push 操作的本质：（pop就是反过来）  1、esp 寄">
+<meta name="description" content="ret2syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识： 1、x86下 ip 调用指令的过程：  1、从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； 2、ip += 所读指令的长度，从而指向下一条指令； 3、执行指令，然后返回第一步  2、入栈 push 操作的本质：（pop就是反过来）  1、e">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ret2syscall">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="ret2syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识： 1、x86下 ip 调用指令的过程：   从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； ip += 所读指令的长度，从而指向下一条指令； 执行指令，然后返回第一步   2、入栈 push 操作的本质：（pop就是反过来）  1、esp 寄">
+<meta property="og:description" content="ret2syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识： 1、x86下 ip 调用指令的过程：  1、从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； 2、ip += 所读指令的长度，从而指向下一条指令； 3、执行指令，然后返回第一步  2、入栈 push 操作的本质：（pop就是反过来）  1、e">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;ret2syscall-1.png">
@@ -92,7 +92,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall-3.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall-4.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;shell.png">
-<meta property="og:updated_time" content="2019-12-06T14:29:04.631Z">
+<meta property="og:updated_time" content="2019-12-07T04:31:35.024Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall.png">
 
@@ -340,11 +340,9 @@
 <p>先附上有点模糊了的知识：</p>
 <p>1、x86下 ip 调用指令的过程：</p>
 <blockquote>
-<ol>
-<li>从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器；</li>
-<li>ip += 所读指令的长度，从而指向下一条指令；</li>
-<li>执行指令，然后返回第一步</li>
-</ol>
+<p>1、从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器；</p>
+<p>2、ip += 所读指令的长度，从而指向下一条指令；</p>
+<p>3、执行指令，然后返回第一步</p>
 </blockquote>
 <p>2、入栈 push 操作的本质：（pop就是反过来）</p>
 <blockquote>
@@ -354,7 +352,7 @@
 <p>3、call 和 ret 的原理</p>
 <blockquote>
 <p>1、call： 先push ip（当前指令的下一条指令的地址压入栈）然后 jmp near ptr 标号</p>
-<p>2、ret ：pop ip （栈顶出栈会ip，让ip继续执行之前指令后面的指令） </p>
+<p>2、ret ：pop ip （栈顶出栈给 ip，让ip继续执行之前指令后面的指令） </p>
 </blockquote>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>ret2syscall，即控制程序执行系统调用，获取shell。</p>
 <p>贴上wiki上面关于syscall的解释：</p>
