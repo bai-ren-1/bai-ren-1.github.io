@@ -79,15 +79,17 @@
 
 
 
-<meta name="description" content="我的第一个博客“搭建”这个博客的起因是自己打会打一些比赛，经常会遇到一些问题;或者是平时学习的知识无法及时整合。当堆积较多时，就萌生了交到博客的想法，所以就有了这个简陋的博客。既然房屋已建，以后自己会时不时的更新一些关于攻防渗透的心得总结或者ctf的绕过姿势在上面。一方面是对自己知识的总结和整合，另一方面也是分享自己的所悟所得。然后时刻记得自己是一个奋斗中的热衷安全攻防的白仁，冲就完了！">
+<meta name="description" content="程序员的自我修养 Day2上一篇文章是对操作系统和计组的一些基本概念进行了复习，这一篇主要是用来学习编译和链接的过程。 gcc 编译过程我们在Linux下，对一个简单的hello.c的C文件使用命令gcc就能对其进行编译： 12gcc hello.c.&#x2F;a.out  上面的命令就是用gcc编译生成a.out，然后执行了a.out。看似很简单一气呵成，但其实gcc的过程包括了4个步骤： 预处理（Pr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我的第一个博客">
-<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;11&#x2F;14&#x2F;%E5%B0%8F%E5%8F%99&#x2F;index.html">
+<meta property="og:title" content="程序员的自我修养-DAY2">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;21&#x2F;%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="我的第一个博客“搭建”这个博客的起因是自己打会打一些比赛，经常会遇到一些问题;或者是平时学习的知识无法及时整合。当堆积较多时，就萌生了交到博客的想法，所以就有了这个简陋的博客。既然房屋已建，以后自己会时不时的更新一些关于攻防渗透的心得总结或者ctf的绕过姿势在上面。一方面是对自己知识的总结和整合，另一方面也是分享自己的所悟所得。然后时刻记得自己是一个奋斗中的热衷安全攻防的白仁，冲就完了！">
+<meta property="og:description" content="程序员的自我修养 Day2上一篇文章是对操作系统和计组的一些基本概念进行了复习，这一篇主要是用来学习编译和链接的过程。 gcc 编译过程我们在Linux下，对一个简单的hello.c的C文件使用命令gcc就能对其进行编译： 12gcc hello.c.&#x2F;a.out  上面的命令就是用gcc编译生成a.out，然后执行了a.out。看似很简单一气呵成，但其实gcc的过程包括了4个步骤： 预处理（Pr">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-27T11:23:37.701Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;21&#x2F;%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2&#x2F;gcc%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B.png">
+<meta property="og:updated_time" content="2019-12-21T08:36:58.625Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;21&#x2F;%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2&#x2F;gcc%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B.png">
 
 
 
@@ -117,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://bai-ren-1.github.io/2019/11/14/小叙/"/>
+  <link rel="canonical" href="http://bai-ren-1.github.io/2019/12/21/程序员的自我修养-DAY2/"/>
 
 
 
 
 
-  <title>我的第一个博客 | 白仁的博客</title>
+  <title>程序员的自我修养-DAY2 | 白仁的博客</title>
   
 
 
@@ -240,7 +242,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/11/14/%E5%B0%8F%E5%8F%99/">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/12/21/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白仁">
@@ -257,7 +259,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">我的第一个博客</h1>
+          <h1 class="post-title" itemprop="name headline">程序员的自我修养-DAY2</h1>
         
 
         <div class="post-meta">
@@ -269,8 +271,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-14T10:37:41+08:00">
-                2019-11-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-21T15:57:52+08:00">
+                2019-12-21
               </time>
             
 
@@ -292,8 +294,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B0%8F%E5%8F%99/" itemprop="url" rel="index">
-                    <span itemprop="name">小叙</span>
+                  <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">二进制安全</span>
                   </a>
                 </span>
 
@@ -329,7 +331,41 @@
       
 
       
-        <h1 id="我的第一个博客"><a href="#我的第一个博客" class="headerlink" title="我的第一个博客"></a>我的第一个博客</h1><p>“搭建”这个博客的起因是自己打会打一些比赛，经常会遇到一些问题;或者是平时学习的知识无法及时整合。当堆积较多时，就萌生了交到博客的想法，所以就有了这个简陋的博客。<br>既然房屋已建，以后自己会时不时的更新一些关于攻防渗透的心得总结或者ctf的绕过姿势在上面。一方面是对自己知识的总结和整合，另一方面也是分享自己的所悟所得。<br>然后时刻记得自己是一个奋斗中的热衷安全攻防的白仁，冲就完了！</p>
+        <h1 id="程序员的自我修养-Day2"><a href="#程序员的自我修养-Day2" class="headerlink" title="程序员的自我修养 Day2"></a>程序员的自我修养 Day2</h1><p>上一篇文章是对操作系统和计组的一些基本概念进行了复习，这一篇主要是用来学习编译和链接的过程。</p>
+<h2 id="gcc-编译过程"><a href="#gcc-编译过程" class="headerlink" title="gcc 编译过程"></a>gcc 编译过程</h2><p>我们在Linux下，对一个简单的hello.c的C文件使用命令gcc就能对其进行编译：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc hello.c</span><br><span class="line">./a.out</span><br></pre></td></tr></table></figure>
+
+<p>上面的命令就是用gcc编译生成a.out，然后执行了a.out。看似很简单一气呵成，但其实gcc的过程包括了4个步骤：</p>
+<p><strong>预处理</strong>（Prepressing）-&gt; <strong>编译</strong>（Compilation）-&gt; <strong>汇编</strong>（Assembly）-&gt; <strong>链接</strong>（Linking）， 这个gcc编译过程入下图所示：</p>
+<p><img src="/2019/12/21/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2/gcc%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B.png" alt></p>
+<p>我们下面分开讲解这四个步骤。</p>
+<h3 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h3><p>预编译相当于使用了下面这个命令（-E 参数代表只进行预编译）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -E hello.c -o hello.i （执行后输出hello.i文件）</span><br></pre></td></tr></table></figure>
+
+<p>预编译过程是对源代码中#开始的预编译指令进行处理：</p>
+<ul>
+<li>删除所有的”#define”，展开所有的宏定义</li>
+<li>处理所有的条件预编译指令，如”#if”、”#ifdef”、”#elif”、”#else”、”#endif”</li>
+<li>处理”#include”预编译指令，将包含文件插入到该预编译指令的位置</li>
+<li>删除注释 “//“、”/**/“</li>
+<li>保留所有的#pragma编译器指令</li>
+</ul>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>编译相当于使用了下面这个命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -S hello.i -o hello.s  （执行后输出hello.s文件）</span><br></pre></td></tr></table></figure>
+
+<p>对于C语言来说，执行预编译和编译的程序是cc1；对于C++来说，对应的程序叫做cc1plus；Objective-C则是cc1obj；Java则是jc1。所以<strong>gcc只是对这些后台程序的包装，它根据不同参数要求去调用不同的预编译编译程序cc1、汇编器as、链接器ld</strong>。</p>
+<h3 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h3><p>汇编相当于使用了下面这个命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc -c hello.s -o hello.o  （执行后输出hello.s文件）</span><br><span class="line">或者直接调用汇编器</span><br><span class="line">as hello.s -o hello.o</span><br></pre></td></tr></table></figure>
+
+<p>也可以直接一步到位，由C源码直接预编译、编译、汇编输出成<strong>目标文件</strong>（object file）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -c hello.c -o hello.o</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>如果通过调用链接器ld来执行，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ld -static crt1.o crti.o crtbeginT.o hello.o -start-group -lgcc -lgcc_eh -lc -end-group crtend.o crtn.o</span><br></pre></td></tr></table></figure>
+
+<p>需要将上面这一大堆文件链接起来才可以得到最后的a.out可执行文件。这里的过程后面补上。</p>
 
       
     </div>
@@ -354,15 +390,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/12/20/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY1/" rel="next" title="程序员的自我修养-DAY1">
+                <i class="fa fa-chevron-left"></i> 程序员的自我修养-DAY1
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/16/Windows%E6%8F%90%E6%9D%83%E4%B9%8B%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BEexp/" rel="prev" title="Windows提权之快速查找exp">
-                Windows提权之快速查找exp <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -485,7 +521,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#我的第一个博客"><span class="nav-number">1.</span> <span class="nav-text">我的第一个博客</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#程序员的自我修养-Day2"><span class="nav-number">1.</span> <span class="nav-text">程序员的自我修养 Day2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc-编译过程"><span class="nav-number">1.1.</span> <span class="nav-text">gcc 编译过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#预编译"><span class="nav-number">1.1.1.</span> <span class="nav-text">预编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译"><span class="nav-number">1.1.2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编"><span class="nav-number">1.1.3.</span> <span class="nav-text">汇编</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接"><span class="nav-number">1.1.4.</span> <span class="nav-text">链接</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
