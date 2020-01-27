@@ -89,9 +89,9 @@
 <meta property="og:description" content="PHP反序列化从放假回到家里就一直没有学习，过年后突然感到空虚，就来总结一下反序列化的内容 序列化和反序列化 序列化：将对象或者数组（变量）转换为一个（可保存&#x2F;传输）字符串 反序列化：将序列化后的得到的字符串反序列化为其原始的对象结构  php中常用的序列化和反序列化的函数有： serialize、unserialize、json_encode、json_decode 序列化的作用通过序列化操作，">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;01&#x2F;27&#x2F;PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;%E7%BB%93%E6%9E%9C.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;01&#x2F;27&#x2F;PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;D:%5Cgitblog%5Csec%5Csource_posts%5CPHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%5C%E5%AD%97%E7%AC%A6%E4%B8%B2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;01&#x2F;27&#x2F;PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;%E5%AD%97%E7%AC%A6%E4%B8%B2.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;01&#x2F;27&#x2F;PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;demo%E7%BB%93%E6%9E%9C.png">
-<meta property="og:updated_time" content="2020-01-27T09:55:45.667Z">
+<meta property="og:updated_time" content="2020-01-27T10:00:45.802Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;01&#x2F;27&#x2F;PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;%E7%BB%93%E6%9E%9C.png">
 
@@ -359,7 +359,7 @@
 <p>分析一下上面出现结果的顺序原因：</p>
 <p>首先我调用了new实例化了一个<code>对象 $a</code> ，这时候就会自动调用了construct；</p>
 <p>其次我对实例化出来的<code>对象 $a</code> 进行序列化操作，在序列化操作前会先执行 sleep函数，然后在对对象进行序列化得到<code>字符串$s_a</code>；</p>
-<p><img src="/2020/01/27/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/D:%5Cgitblog%5Csec%5Csource_posts%5CPHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%5C%E5%AD%97%E7%AC%A6%E4%B8%B2.png" alt></p>
+<p><img src="/2020/01/27/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E5%AD%97%E7%AC%A6%E4%B8%B2.png" alt></p>
 <blockquote>
 <p>注：上图中出现的字符串结果是去掉源码中注释符后重新运行代码由 var_dump($s_a) 所得</p>
 </blockquote>
