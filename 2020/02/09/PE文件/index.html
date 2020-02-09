@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="PE文件继续二进制的研究。读了挺多书了，但还没做笔记。因为研究的是windows平台的逆向，先简单写一下PE文件的格式总结。 PE概念PE是windows平台下可执行文件的格式 32位的可执行文件称为PE文件或者PE32 64位的可执行文件称为PE+或者PE32+ PE文件格式不同PE文件的主拓展名  可执行系列 ：EXE 、SCR 库系列的 ：DLL、OCX、CPL、DRV 驱动程序系列 ：SY">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PE文件">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="PE文件继续二进制的研究。读了挺多书了，但还没做笔记。因为研究的是windows平台的逆向，先简单写一下PE文件的格式总结。 PE概念PE是windows平台下可执行文件的格式 32位的可执行文件称为PE文件或者PE32 64位的可执行文件称为PE+或者PE32+ PE文件格式不同PE文件的主拓展名  可执行系列 ：EXE 、SCR 库系列的 ：DLL、OCX、CPL、DRV 驱动程序系列 ：SY">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;dos%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E7%9A%84DOS%E5%A4%B4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E7%9A%84dos%E5%AD%98%E6%A0%B9.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;NT%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;nt%E5%A4%B4%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B41.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B42.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;%E8%8A%82%E5%8C%BA%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png">
+<meta property="og:updated_time" content="2020-02-09T08:30:20.376Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/02/09/PE文件/"/>
+
+
+
+
+
+  <title>PE文件 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/02/09/PE%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PE文件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T14:34:22+08:00">
+                2020-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">二进制安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="PE文件"><a href="#PE文件" class="headerlink" title="PE文件"></a>PE文件</h1><p>继续二进制的研究。读了挺多书了，但还没做笔记。因为研究的是windows平台的逆向，先简单写一下PE文件的格式总结。</p>
+<h2 id="PE概念"><a href="#PE概念" class="headerlink" title="PE概念"></a>PE概念</h2><p>PE是windows平台下可执行文件的格式</p>
+<p>32位的可执行文件称为<strong>PE文件或者PE32</strong></p>
+<p>64位的可执行文件称为<strong>PE+或者PE32+</strong></p>
+<h2 id="PE文件格式"><a href="#PE文件格式" class="headerlink" title="PE文件格式"></a>PE文件格式</h2><p>不同PE文件的主拓展名</p>
+<ul>
+<li>可执行系列 ：EXE 、SCR</li>
+<li>库系列的 ：DLL、OCX、CPL、DRV</li>
+<li>驱动程序系列 ：SYS、VXD</li>
+<li>对象文件系列 ：OBJ</li>
+</ul>
+<h2 id="PE文件基本结构"><a href="#PE文件基本结构" class="headerlink" title="PE文件基本结构"></a>PE文件基本结构</h2><ul>
+<li>PE头：DOS头到节区头的部分</li>
+<li>PE体：PE头下的节区合称PE体</li>
+<li>文件的内容一般可以分为<strong>代码 .text 、数据 .data 、资源 .rsrc节</strong>分别保存</li>
+<li>各节区头定义了各节区在文件或者内存中的大小、位置、属性等</li>
+</ul>
+<p>文件中使用<strong>偏移</strong>来表示位置，而在内存中使用<strong>VA(虚拟地址)</strong>来表示位置。</p>
+<p>下面放一张notepad被加载到内存中的情形：</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png" alt></p>
+<h2 id="PE头结构"><a href="#PE头结构" class="headerlink" title="PE头结构"></a>PE头结构</h2><h3 id="1、DOS头（IMAGE-DOS-HEADER）"><a href="#1、DOS头（IMAGE-DOS-HEADER）" class="headerlink" title="1、DOS头（IMAGE_DOS_HEADER）"></a>1、DOS头（IMAGE_DOS_HEADER）</h3><p>DOS头即是在PE头的最前面添加一个 IMAGE_DOS_HEADER 结构体，用来拓展已有的DOS EXE头。结构体如下：</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/dos%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
+<p>其中最重要的两个成员变量：</p>
+<ul>
+<li>e_magic : <strong>DOS签名</strong>。</li>
+<li>e_lfanew ：<strong>指示NT头的偏移</strong>。</li>
+</ul>
+<p>下面是notepad++的DOS头：</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E7%9A%84DOS%E5%A4%B4.png" alt></p>
+<p>可以看出：</p>
+<ul>
+<li>开头WORD型的4D5A，即是e_magic，代表签名MZ；</li>
+<li>末尾LONG型的00000110，即是e_lfanew，指向NT头；（Intel的小端序标识）</li>
+</ul>
+<h3 id="2、DOS存根"><a href="#2、DOS存根" class="headerlink" title="2、DOS存根"></a>2、DOS存根</h3><p>位于DOS头的下方，为可选项且大小不固定。</p>
+<p>下面是notepad++的DOS存根：</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E7%9A%84dos%E5%AD%98%E6%A0%B9.png" alt></p>
+<blockquote>
+<p>由于PE头中的DOS头中的e_lfanew指向的是NT头，说明中间的DOS存根是00000030 - 00000110的内容</p>
+</blockquote>
+<h3 id="3、NT头（IMAGE-NT-HEADERS）"><a href="#3、NT头（IMAGE-NT-HEADERS）" class="headerlink" title="3、NT头（IMAGE_NT_HEADERS）"></a>3、NT头（IMAGE_NT_HEADERS）</h3><p>NT头 IMAGE_NT_HEADERS 的结构体如下：</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
+<p>具有三个成员：</p>
+<ul>
+<li>签名 (504500，即PE00)</li>
+<li>文件头</li>
+<li>可选头</li>
+</ul>
+<h4 id="3-1、NT头中的文件头（IMAGE-FILE-HEADER）"><a href="#3-1、NT头中的文件头（IMAGE-FILE-HEADER）" class="headerlink" title="3.1、NT头中的文件头（IMAGE_FILE_HEADER）"></a>3.1、NT头中的文件头（IMAGE_FILE_HEADER）</h4><p>NT头中的文件头结构 IMAGE_FILE_HEADER 的结构体如下：</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/nt%E5%A4%B4%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4.png" alt></p>
+<p>具有四个重要的成员：</p>
+<ul>
+<li>Machine：用于标识Machine码</li>
+<li>NumberOfSections：用于指出文件中存在的节区数量</li>
+<li>SizeOfOptionalHeader：用于指出 IMAGE_OPTIONAL_HEADER32 结构体的长度，其中IMAGE_OPTIONAL_HEADER32 是NT头最后一个成员</li>
+<li>Characterstics：用于标识文件的属性，文件是否是可运行的形态，是否为DLL文件等信息</li>
+</ul>
+<p>下面是notepad的文件头：</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4.png" alt></p>
+<h4 id="3-2、NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><a href="#3-2、NT头中的可选头（IMAGE-OPTIONAL-HEADER32）" class="headerlink" title="3.2、NT头中的可选头（IMAGE_OPTIONAL_HEADER32）"></a>3.2、NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</h4><p>IMAGE_OPTIONAL_HEADER32是PE头结构中最大的结构体</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B41.png" alt></p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B42.png" alt></p>
+<p>其中重要的成员：</p>
+<ul>
+<li>Magic：Magic为10B-20B</li>
+<li>AddressOfEntryPoint：持有EP的RVA值，指出<strong>程序最先执行的代码的起始地址</strong></li>
+<li>ImageBase：指出<strong>文件的优先装入地址</strong></li>
+<li>SectionAlignment，FileAlignment：分别指出节区在磁盘中的最小单位和节区在内存中最小单位</li>
+<li>SizeOfImage：指出了PE Image在虚拟内存中所占空间大小</li>
+<li>SizeOfHeader：指出整个PE头的大小</li>
+<li>Subsystem：区分系统驱动和普通的可执行文件</li>
+<li>NumberOfRvaAndSize：指出DataDirectory数组的个数</li>
+<li>DataDirectory：IMAGE_DATA_DIRECTORY结构体组成的数组</li>
+</ul>
+<h3 id="4、节区头（-IMAGE-SECTION-HEADER）"><a href="#4、节区头（-IMAGE-SECTION-HEADER）" class="headerlink" title="4、节区头（ IMAGE_SECTION_HEADER）"></a>4、节区头（ IMAGE_SECTION_HEADER）</h3><p>节区头是由 IMAGE_SECTION_HEADER 结构体组成的数组。每个结构体对应着一个节区</p>
+<p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/%E8%8A%82%E5%8C%BA%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
+<p>其中重要的成员：</p>
+<ul>
+<li>VirtualSize：内存中节区所占大小</li>
+<li>VirtualAddress：<strong>内存中节区起始地址（RVA）</strong></li>
+<li>SizeOfRawData：磁盘文件中节区所占大小</li>
+<li>PointerToRawData：<strong>磁盘文件中节区起始位置</strong></li>
+<li>Charaterstics：节区属性（bit OR）</li>
+</ul>
+<blockquote>
+<p>VirtualAddress与PointerToRawData不带任何值，分别由SectionAlignment和FileAlignment确定</p>
+</blockquote>
+<blockquote>
+<p>一般来说VirtualSize和SizeOfRawData具有不同的值，即磁盘中节区大小与加载到内存中的节区大小是不同的</p>
+</blockquote>
+<h2 id="PE由磁盘映射到内存"><a href="#PE由磁盘映射到内存" class="headerlink" title="PE由磁盘映射到内存"></a>PE由磁盘映射到内存</h2><p>PE文件加载到内存，每个<strong>节区</strong>都能完成<strong>内存地址与文件偏移</strong>之间的映射。这种映射一般叫做 RVA to RAW </p>
+<p>计算这种映射的方法：</p>
+<ul>
+<li>查找RVA所在的节区</li>
+<li>使用下面公式计算文件偏移RAW</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RAW - PointerToRawData = RVA - VirtualAddress</span><br><span class="line">即</span><br><span class="line">RAW = RVA - VirtualAddress + PpinterToRawData</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>暂时先写到这里，后面还有好多…等慢慢补充</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/27/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="next" title="PHP反序列化">
+                <i class="fa fa-chevron-left"></i> PHP反序列化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PE文件"><span class="nav-number">1.</span> <span class="nav-text">PE文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PE概念"><span class="nav-number">1.1.</span> <span class="nav-text">PE概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件格式"><span class="nav-number">1.2.</span> <span class="nav-text">PE文件格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件基本结构"><span class="nav-number">1.3.</span> <span class="nav-text">PE文件基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE头结构"><span class="nav-number">1.4.</span> <span class="nav-text">PE头结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、DOS头（IMAGE-DOS-HEADER）"><span class="nav-number">1.4.1.</span> <span class="nav-text">1、DOS头（IMAGE_DOS_HEADER）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、DOS存根"><span class="nav-number">1.4.2.</span> <span class="nav-text">2、DOS存根</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、NT头（IMAGE-NT-HEADERS）"><span class="nav-number">1.4.3.</span> <span class="nav-text">3、NT头（IMAGE_NT_HEADERS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1、NT头中的文件头（IMAGE-FILE-HEADER）"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">3.1、NT头中的文件头（IMAGE_FILE_HEADER）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2、NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">3.2、NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、节区头（-IMAGE-SECTION-HEADER）"><span class="nav-number">1.4.4.</span> <span class="nav-text">4、节区头（ IMAGE_SECTION_HEADER）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE由磁盘映射到内存"><span class="nav-number">1.5.</span> <span class="nav-text">PE由磁盘映射到内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.6.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

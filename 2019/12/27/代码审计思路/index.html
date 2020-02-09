@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="代码审计思路面试的时候问到了关于代码审计的思路，这里就简单总结一下。 常见的代码审计思路有以下四种：  根据敏感关键字回溯参数传递过程；  （PS：即找敏感函数逆向回溯参数是否可控） 查找可控变量，正向追踪变量传递过程； （PS：即直接找可控参数正向追踪到漏洞处） 寻找敏感功能点，通读功能点代码；   （PS：即分业务功能去审计，重点关注易出现漏洞的功能如upload等） 直接通读全文代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码审计思路">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E6%80%9D%E8%B7%AF&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="代码审计思路面试的时候问到了关于代码审计的思路，这里就简单总结一下。 常见的代码审计思路有以下四种：  根据敏感关键字回溯参数传递过程；  （PS：即找敏感函数逆向回溯参数是否可控） 查找可控变量，正向追踪变量传递过程； （PS：即直接找可控参数正向追踪到漏洞处） 寻找敏感功能点，通读功能点代码；   （PS：即分业务功能去审计，重点关注易出现漏洞的功能如upload等） 直接通读全文代码。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-02-09T06:33:13.985Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2019/12/27/代码审计思路/"/>
+
+
+
+
+
+  <title>代码审计思路 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/12/27/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E6%80%9D%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">代码审计思路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T22:57:56+08:00">
+                2019-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="代码审计思路"><a href="#代码审计思路" class="headerlink" title="代码审计思路"></a>代码审计思路</h1><p>面试的时候问到了关于代码审计的思路，这里就简单总结一下。</p>
+<p>常见的代码审计思路有以下四种：</p>
+<ul>
+<li>根据敏感关键字回溯参数传递过程；  （PS：即找敏感函数逆向回溯参数是否可控）</li>
+<li>查找可控变量，正向追踪变量传递过程； （PS：即直接找可控参数正向追踪到漏洞处）</li>
+<li>寻找敏感功能点，通读功能点代码；   （PS：即分业务功能去审计，重点关注易出现漏洞的功能如upload等）</li>
+<li>直接通读全文代码。   （PS：直接怼项目所有文件，重点放在通防文件、配置文件、入口文件、通用函数文件等）</li>
+</ul>
+<h2 id="一、敏感函数回溯参数过程"><a href="#一、敏感函数回溯参数过程" class="headerlink" title="一、敏感函数回溯参数过程"></a>一、敏感函数回溯参数过程</h2><p>根据敏感函数来逆向追踪参数的传递过程，是目前使用的最多的一种方式，因为大多数漏洞是由于函数的使用不当造成的。另外非函数使用不当的漏洞，如SQL注入，等以后学习再详细介绍。这种方式的优缺点如下：</p>
+<ul>
+<li>优点：只需搜索相应敏感关键字，即可快速挖掘想要的漏洞，可定向挖掘，高效、高质量；</li>
+<li>缺点：由于没有通读代码，对程序整体架构了解不够深入，在挖掘漏洞时定位利用会花点时间，另外对逻辑漏洞挖掘覆盖不到。</li>
+</ul>
+<h2 id="二、通读全文代码"><a href="#二、通读全文代码" class="headerlink" title="二、通读全文代码"></a>二、通读全文代码</h2><p>通读全文代码也有一定的技巧，否则很难读懂Web程序的，也很难理解代码的业务逻辑。首先我们要看程序的大体结构，如主目录有哪些文件，模块目录有哪些文件，插件目录有哪些文件，另外还要注意文件的大小，创建时间，就可以大概知道这个程序实现了那些功能，核心文件有哪些。</p>
+<p>在看目录结构的时候，特别注意以下几个文件：</p>
+<ul>
+<li><strong>函数集文件</strong><br>函数集文件通常命名中包含<strong>functions或者common等关键字</strong>，这些文件里面是一些公共的函数，提供给其他文件统一调用，所以大多数文件都会在文件头部包含到其他文件。寻找这些文件的一个技巧就是打开index.php或者一些功能性文件。</li>
+<li><strong>配置文件</strong><br>配置文件通常命名中包含config关键字，配置文件包括Web程序运行必须的<strong>功能性配置选项以及数据库等配置信息</strong>。从这个文件可以了解程序的小部分功能，另外看这个文件的时候注意观察配置文件中参数是用单引号还是双引号，如果是双引号，则很可能会存在代码执行漏洞。</li>
+<li><strong>安全过滤文件</strong><br>安全过滤文件对我们做代码审计至关重要，通常命名中有<strong>filter、safe、check</strong>等关键字，这类文件主要是对参数进行过滤，比较常见的是针对SQL注入和XSS过滤，还有文件路径、执行的系统命令的参数。</li>
+<li><strong>index文件</strong><br>index是一个程序的<strong>入口文件</strong>，所以我们只要读一遍index文件就可以大致了解整个程序的架构、运行的流程、包含到的文件。</li>
+</ul>
+<h2 id="三、根据功能点定向审计"><a href="#三、根据功能点定向审计" class="headerlink" title="三、根据功能点定向审计"></a>三、根据功能点定向审计</h2><p>根据经验我们简单介绍几个功能点会出现的漏洞：</p>
+<ul>
+<li><strong>文件上传功能</strong><br>这里说的文件上传在很多功能点都会出现，比如像<strong>文章编辑、资料编辑、头像上传、附件上传</strong>，这个功能最常见的漏洞就是任意文件上传了，后端程序没有严格地限制上传的格式，导致可以上传或者存在绕过的情况，而除了文件上传功能外，还经常发生SQL注入漏洞。</li>
+</ul>
+<ul>
+<li><strong>文件管理功能</strong><br>在文件管理功能中，如果程序将文件名或者文件路径直接在参数中传递，则很有可能会存在任意文件的操作漏洞，比如任意文件读取等，利用的方法是在路径中使用../或者..\跳转目录。<br>除了任意文件操作漏洞外，还可能会存在XSS漏洞，程序会在页面中输出文件名，而通常会疏忽对文件名进行过滤，导致可以在数据库中存入带有尖括号等特殊符号的文件名，最后在页面显示的时候就会被执行。</li>
+</ul>
+<ul>
+<li><strong>登录认证功能</strong><br>登录认证功能不是指一个过程，而是整个操作过程中的认证，目前的认证方式大多是基于Cookie和Session，不少程序会把当前登陆的用户账号等认证信息放到Cookie中，或许是加密方式。进行操作的时候直接从Cookie中读取当前用户信息，这里就存在一个算法可信的问题，如果这段Cookie信息没有加salt一类的东西，就可以导致任意用户登录漏洞，只要知道用户的不扥信息，即可生成认证令牌，甚至有的程序会直接把用户名放到Cookie中，操作的时候直接读取这个用户名的数据，这也是常说的越权漏洞。</li>
+</ul>
+<ul>
+<li><strong>找回密码功能</strong><br>找回密码虽然看起来不像任意文件上传这种可以危害到服务器安全的漏洞，但是如果可以重置管理员的密码，也是可以间接控制业务权限甚至拿到服务权限的。找回密码功能的漏洞有很多利用场景，最常见的是验证码爆破。目前特别是APP应用，请求后端验证码的时候大多是4位，并且没有限制验证码的错误次数和有效时间，于是就出现了爆破的漏洞。</li>
+</ul>
+<p>下面再总结一下容易出现RCE的几个敏感点：</p>
+<h2 id="四、PHP容易导致RCE的敏感函数"><a href="#四、PHP容易导致RCE的敏感函数" class="headerlink" title="四、PHP容易导致RCE的敏感函数"></a>四、PHP容易导致RCE的敏感函数</h2><p><strong>PHP代码执行函数</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">eval</span>()</span><br><span class="line">assert()</span><br><span class="line">preg_replace()</span><br><span class="line">call_user_func()</span><br><span class="line">call_user_func_array()</span><br><span class="line">array_map()</span><br><span class="line">create_function()</span><br></pre></td></tr></table></figure>
+
+<p>这些函数会将参数当做php代码或者php函数和参数进行执行,下面进行具体的利用解释：</p>
+<ol>
+<li><p><strong>eval (PHP 4, PHP 5, PHP 7)</strong> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">eval</span> (string $code):mixed</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用：将参数字符串 $code 作为PHP代码执行</p>
+</blockquote>
+</li>
+</ol>
+<ol start="2">
+<li><p><strong>assert (PHP 4, PHP 5, PHP 7)</strong> </p>
+<ul>
+<li>PHP 5</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assert ( mixed $assertion [, string $description ] ) : bool</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>PHP 7</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assert ( mixed $assertion [, Throwable $exception ] ) : bool</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用：判断一个断言是否为FALSE。当传入的参数assertion是字符串时，它将会被assert()当做php代码执行。</p>
+</blockquote>
+</li>
+</ol>
+<ol start="3">
+<li><p><strong>preg_replace(PHP 4, PHP 5, PHP 7)</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mixed preg_replace ( mixed pattern, mixed replacement, mixed subject [, int limit])</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用： <strong>/e 修正符</strong>使 preg_replace() 将 replacement 参数当作 PHP 代码</p>
+<p>PS： PHP 7.0.0 起，会产生 E_WARNING错误，同时 “\e” 也无法起效</p>
+</blockquote>
+</li>
+</ol>
+<ol start="4">
+<li><p><strong>call_user_func(PHP 4, PHP 5, PHP 7)</strong>   </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call_user_func ( callable $callback [, mixed $parameter [, mixed $... ]] ) : mixed</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用： 第一个参数callback是被调用的<strong>回调函数</strong>，其余参数是回调函数的参数</p>
+</blockquote>
+</li>
+</ol>
+<ol start="5">
+<li><p><strong>call_user_func_array (PHP 4 &gt;= 4.0.4, PHP 5, PHP 7)</strong> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call_user_func_array ( callable $callback , <span class="keyword">array</span> $param_arr ) : mixed</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用：把第一个参数作为回调函数（callback）调用，把参数数组作（param_arr）为回调函数的的参数传入；</p>
+</blockquote>
+</li>
+</ol>
+<ol start="6">
+<li><p><strong>array_map (PHP 4 &gt;= 4.0.6, PHP 5, PHP 7)</strong> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array_map ( callable $callback , <span class="keyword">array</span> $array1 [, <span class="keyword">array</span> $... ] ) : <span class="keyword">array</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 作用：即将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。 </p>
+</blockquote>
+<blockquote>
+<p>PS：回调函数接受的参数数目应该和传递给 array_map() 函数的数组数目一致</p>
+</blockquote>
+</li>
+</ol>
+<ol start="7">
+<li><p><strong>create_function (PHP 4 &gt;= 4.0.1, PHP 5, PHP 7)</strong> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create_function ( string $args , string $code ) : string</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用： 从传递的参数创建一个匿名函数，并返回一个唯一的名称</p>
+<p>PS：该函数是会在内部执行eval，所以安全性和eval一致</p>
+</blockquote>
+</li>
+</ol>
+<p>常见的利用payload如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">eval</span>(<span class="string">"system('ls');"</span>);</span><br><span class="line"></span><br><span class="line">assert(<span class="string">'phpinfo()'</span>);</span><br><span class="line"></span><br><span class="line">preg_replace(<span class="string">"/&lt;php&gt;(.*?)&lt;\/php&gt;/e"</span>, <span class="string">'\1'</span>, <span class="string">"&lt;php&gt;phpinfo()&lt;/php&gt;"</span>);</span><br><span class="line"></span><br><span class="line">call_user_func(<span class="string">'assert'</span>,<span class="string">'phpinfo()'</span>);</span><br><span class="line"></span><br><span class="line">call_user_func_array(<span class="string">'assert'</span>,<span class="keyword">array</span>(<span class="string">'phpinfo()'</span>));</span><br><span class="line"></span><br><span class="line">array_map(<span class="string">'assert'</span>,<span class="keyword">array</span>(<span class="string">'phpinfo()'</span>));</span><br><span class="line"></span><br><span class="line">create_function(<span class="string">'$a'</span>, <span class="string">'assert($a);'</span>));</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、PHP中变量覆盖"><a href="#五、PHP中变量覆盖" class="headerlink" title="五、PHP中变量覆盖"></a>五、PHP中变量覆盖</h2><p><strong>1、全局变量覆盖</strong></p>
+<p>当<strong>register_global=ON</strong>时，变量来源可能是各个不同的地方，比如页面的表单，Cookie等都可以,那么就可能产生变量覆盖：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line"><span class="keyword">echo</span> <span class="string">"Register_globals: "</span>.(int)ini_get(<span class="string">"register_globals"</span>).<span class="string">"&lt;br/&gt;"</span>;   </span><br><span class="line"><span class="keyword">if</span> ($shabi)&#123;  </span><br><span class="line">   <span class="keyword">echo</span> <span class="string">"you are not shabi!"</span>;  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们直接提交 shabi 参数即可覆盖到原有的变量$shabi /test.php?shabi=1</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you are not shabi!</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>2、$$导致的变量覆盖问题</strong> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">foreach</span> (<span class="keyword">array</span>(<span class="string">'_COOKIE'</span>,<span class="string">'_POST'</span>,<span class="string">'_GET'</span>) <span class="keyword">as</span> $_request)  </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">foreach</span> ($$_request <span class="keyword">as</span> $_key=&gt;$_value)  </span><br><span class="line">    &#123;</span><br><span class="line">        $$_key=  $_value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$id = <span class="keyword">isset</span>($id) ? $id : <span class="number">2</span>;</span><br><span class="line"><span class="keyword">if</span>($id == <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"flag&#123;xxxxxxxxxx&#125;"</span>;</span><br><span class="line">    <span class="keyword">die</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> $id;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面是一个简单的例子，我们直接提交 id 参数，就能覆盖到原变量 $id。原因在于循环中在遍历到id参数时，会因为$$产生赋值操作：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$id = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>这样就导致了变量的覆盖</p>
+<p><strong>3、extract()变量覆盖</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extract ( <span class="keyword">array</span> &amp;$array [, int $flags = EXTR_OVERWRITE [, string $prefix = <span class="keyword">NULL</span> ]] ) : int</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用：从数组中将变量导入到当前的符号表</p>
+</blockquote>
+<p>在调用extract()时使用在flag选项使用EXTR_SKIP保证已有变量不会被覆盖 ，flag字段的可用选项：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">EXTR_OVERWRITE如果有冲突，覆盖已有的变量。</span><br><span class="line">EXTR_SKIP如果有冲突，不覆盖已有的变量。</span><br><span class="line">EXTR_PREFIX_SAME如果有冲突，在变量名前加上前缀 prefix。EXTR_PREFIX_ALL给所有变量名加上前缀 prefix。</span><br><span class="line">EXTR_PREFIX_INVALID仅在非法／数字的变量名前加上前缀 prefix。EXTR_IF_EXISTS仅在当前符号表中已有同名变量时，覆盖它们的值。其它的都不处理。</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>4、parse_str()变量覆盖</strong> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parse_str ( string $encoded_string [, <span class="keyword">array</span> &amp;$result ] ) : void</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用： 如果 encoded_string 是 URL 传递入的查询字符串（query string），则将它解析为变量并设置到当前作用域（如果提供了 result 则会设置到该数组里 ） </p>
+</blockquote>
+<blockquote>
+<p>PS： 不赞同没有 result参数的情况下使用此函数，并且在 PHP 7.2 中将<em>废弃</em>不设置参数的行为。 </p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$var=<span class="string">'shabi'</span>;  </span><br><span class="line">parse_str($_SERVER[<span class="string">'QUERY_STRING'</span>]);  </span><br><span class="line"><span class="keyword">print</span> $var;  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的代码很简单，就是定义一个 $var 变量，然后用parse_str来近些URL查询字符串，那我就可以通过查询 var 参数来覆盖到原来的 $var 变量，payload：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">test.php?<span class="keyword">var</span> = congming</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>5、import_request_variables变量覆盖</strong> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(PHP <span class="number">4</span> &gt;= <span class="number">4.1</span><span class="number">.0</span>, PHP <span class="number">5</span> &lt; <span class="number">5.4</span><span class="number">.0</span>)  </span><br><span class="line">import_request_variables ( string $types [, string $prefix ] ) : bool</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作用：将 GET／POST／Cookie 变量导入到全局作用域中</p>
+</blockquote>
+<blockquote>
+<p>PS：第一个参数 types 指定需要导入的变量。可以用字母‘G’、‘P’和‘C’分别表示 GET、POST 和 Cookie。</p>
+<p>这些字母不区分大小写，所以你可以使用‘g’、‘p’和‘c’的任何组合。POST 包含了通过 POST 方法上传的文件信息。</p>
+<p>注意这些字母的顺序，当使用“gp”时，POST 变量将使用相同的名字覆盖 GET 变量。</p>
+<p>任何 GPC 以外的字母都将被忽略。</p>
+</blockquote>
+<blockquote>
+<p>PPS：第二个参数 prefix 作为变量名的前缀，置于所有被导入到全局作用域的变量之前。若没有指定第二个参数很容易导致变量覆盖。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> <span class="string">"flag.php"</span>;</span><br><span class="line">import_request_variables(<span class="string">"g"</span>);</span><br><span class="line"><span class="keyword">if</span>($radish==<span class="string">"radish"</span>)&#123;    </span><br><span class="line">    <span class="keyword">echo</span> $flag;</span><br><span class="line">	&#125;</span><br><span class="line">show_source(<span class="keyword">__FIlE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>因为没有指定前缀，并且函数指定了可以通过GET方式进行全局导入，我们能轻易覆盖变量，提交payload：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">test.php?radish=radish</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="六、反序列化"><a href="#六、反序列化" class="headerlink" title="六、反序列化"></a>六、反序列化</h2><p><strong>1、基本概念：</strong></p>
+<ul>
+<li>序列化：把对象转换为字节序列的过程称为对象的序列化</li>
+<li>反序列化：把字节序列恢复为对象的过程称为对象的反序列化</li>
+</ul>
+<p><strong>2、漏洞成因：</strong></p>
+<p><strong>反序列化对象</strong>中存在<strong>魔术方法</strong>，而且魔术方法中的<strong>代码</strong>可以被控制，漏洞根据不同的代码可以导致各种攻击，如代码注入，sql注入，目录遍历等等 </p>
+<p><strong>3、漏洞本质：</strong></p>
+<p>unserialize函数的变量可控，php文件中存在可利用的类，类中有魔术方法 </p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>关于反序列化的内容已经补齐，在“PHP反序列化”一篇中；关于代码审计具体关注点和关注函数在“代码审计关注点”中</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/21/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2/" rel="next" title="程序员的自我修养-DAY2">
+                <i class="fa fa-chevron-left"></i> 程序员的自我修养-DAY2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/27/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%87%BD%E6%95%B0/" rel="prev" title="代码审计函数">
+                代码审计函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#代码审计思路"><span class="nav-number">1.</span> <span class="nav-text">代码审计思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、敏感函数回溯参数过程"><span class="nav-number">1.1.</span> <span class="nav-text">一、敏感函数回溯参数过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、通读全文代码"><span class="nav-number">1.2.</span> <span class="nav-text">二、通读全文代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、根据功能点定向审计"><span class="nav-number">1.3.</span> <span class="nav-text">三、根据功能点定向审计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、PHP容易导致RCE的敏感函数"><span class="nav-number">1.4.</span> <span class="nav-text">四、PHP容易导致RCE的敏感函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、PHP中变量覆盖"><span class="nav-number">1.5.</span> <span class="nav-text">五、PHP中变量覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、反序列化"><span class="nav-number">1.6.</span> <span class="nav-text">六、反序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
