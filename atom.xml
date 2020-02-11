@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://bai-ren-1.github.io/"/>
-  <updated>2020-02-09T08:30:20.376Z</updated>
+  <updated>2020-02-11T09:02:00.914Z</updated>
   <id>http://bai-ren-1.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>OD操作和RE基本思路</title>
+    <link href="http://bai-ren-1.github.io/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/"/>
+    <id>http://bai-ren-1.github.io/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/</id>
+    <published>2020-02-11T07:58:51.000Z</published>
+    <updated>2020-02-11T09:02:00.914Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="OD基本操作和RE基本思想"><a href="#OD基本操作和RE基本思想" class="headerlink" title="OD基本操作和RE基本思想"></a>OD基本操作和RE基本思想</h1><p>这篇写一些比较简单的知识，主要用来记录od的一些操作和介绍一些RE基本的操作和思想</p><h2 id="OD操作"><a href="#OD操作" class="headerlink" title="OD操作"></a>OD操作</h2><ul><li><p>F2 ：下断点</p></li><li><p>F4 :  执行到光标所在的位置</p></li><li><p>F9 ：debug程序</p></li><li><p>F7 :   单步步进（step into）</p></li><li><p>F8 :   单步步过（step over）</p></li></ul><ul><li><p>ctrl + F9 ：一直在函数代码内部运行，直到遇到RETN</p></li><li><p>ctrl + F2 ：重新开始调试</p></li><li><p>ctrl + G : 移动到指定位置</p></li><li><p>ctrl + E ：编辑数据</p></li></ul><ul><li><p>； ： 用来添加注释（得把输入法改为英文才可以用）</p></li><li><p>： ： 用来添加标签（得把输入法改为英文才可以用）</p></li><li><p>space ：修改汇编代码</p></li><li><p>enter ：若光标处有call/jmp等指令，则跟踪并显示相关地址</p></li></ul><h2 id="快速回到“据点”方法"><a href="#快速回到“据点”方法" class="headerlink" title="快速回到“据点”方法"></a>快速回到“据点”方法</h2><ul><li>ctrl + G 输入据点地址，直接回到据点的位置</li><li>在每个据点 F2 设置断点</li><li>在每个据点处 ：添加注释</li><li>在每个据点处 ；添加标签</li></ul><h2 id="EP概念"><a href="#EP概念" class="headerlink" title="EP概念"></a>EP概念</h2><p>EP是<strong>windows可执行文件的代码入口点</strong>。</p><p>是执行应用程序时最先执行的代码的起始位置，依赖于CPU。</p><blockquote><p>重点：EP并不是main函数入口。调试代码时，出现在EP位置的是开发工具（Visual C++等）生成的启动函数。</p></blockquote><h2 id="快速找到指定代码的四种方法"><a href="#快速找到指定代码的四种方法" class="headerlink" title="快速找到指定代码的四种方法"></a>快速找到指定代码的四种方法</h2><p>如何快速找到需要的代码（如main入口等），有下面四种方法。下面的例子假设都是为了找到程序中的 main 函数。而 main 的内容是调用了系统的 MessageBoxW() API 然后弹出 helloworld： </p><h3 id="1、代码执行法"><a href="#1、代码执行法" class="headerlink" title="1、代码执行法"></a>1、代码执行法</h3><p><strong>不断按 F8（不跟踪进函数内部）执行程序</strong>。</p><p>当函数执行到某一时刻程序弹出了窗口显示hello world，就可以判断该函数就是所找的 main 函数。</p><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%B3%95.png" alt></p><h3 id="2、字符串检索法"><a href="#2、字符串检索法" class="headerlink" title="2、字符串检索法"></a>2、字符串检索法</h3><p><strong>右键 -&gt; Search for -&gt; All referenced text strings</strong>，这样就能看到程序代码引用的字符串并整理到列表中。</p><p>那么我们就可以检索 hello world 然后定位到 main 函数的位置。</p><blockquote><p>吾爱破解版的可以使用 <strong>右键 -&gt; 中文搜索引擎 -&gt; 智能搜索</strong>  实现检索字符串。如果使用上面的选项是无法得到预期结果的。</p></blockquote><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/%E6%99%BA%E8%83%BD%E6%90%9C%E7%B4%A2.png" alt></p><h3 id="3、API检索法-1"><a href="#3、API检索法-1" class="headerlink" title="3、API检索法-1"></a>3、API检索法-1</h3><p><strong>右键 -&gt; Search for -&gt; All intermodular calls</strong>，这样就能看到程序代码运行时调用的 API 函数列表。</p><p>那么我们知道 main 函数调用了一个窗口显示hello world，我们就能对应找到窗口调用API MessageBoxW，然后定位到 main 。</p><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/api%E6%A3%80%E7%B4%A2-1.png" alt></p><h3 id="4、API检索法-2"><a href="#4、API检索法-2" class="headerlink" title="4、API检索法-2"></a>4、API检索法-2</h3><p><strong>右键 -&gt; Search for -&gt; Name in all calls</strong>。od不能给所有可执行文件都列出API函数列表(压缩或者保护器等)，使用这个命令可以列出被加载的DLL文件提供的所有API。</p><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/api%E6%A3%80%E7%B4%A2-2.png" alt></p><h2 id="打补丁修改字符串"><a href="#打补丁修改字符串" class="headerlink" title="打补丁修改字符串"></a>打补丁修改字符串</h2><h3 id="1、直接修改字符串缓冲区"><a href="#1、直接修改字符串缓冲区" class="headerlink" title="1、直接修改字符串缓冲区"></a>1、直接修改字符串缓冲区</h3><p>由od我们能看出 hello world 字符串的内存位置 0x4092A0</p><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%BD%8D%E7%BD%AE.png" alt></p><p>直接到dump窗口中 ctrl + G 定位到字符串，选中修改的字符串段并用 <strong>ctrl + E</strong> 打开编辑</p><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/%E7%BC%96%E8%BE%91.png" alt></p><p>将字符串 world 修改为 shabi 并保存 </p><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/%E4%BF%AE%E6%94%B9.png" alt></p><p>再次F9运行可以看到结果已经改变了</p><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/%E6%94%B9%E5%8F%98.png" alt></p><h3 id="2、在其他区域生成新字符串并传递给消息函数"><a href="#2、在其他区域生成新字符串并传递给消息函数" class="headerlink" title="2、在其他区域生成新字符串并传递给消息函数"></a>2、在其他区域生成新字符串并传递给消息函数</h3><p>通过od我们能看到 main 函数中，0x401007地址的地方有一条 push 004092A0 的命令，它是将 4092A0 地址的 hello world 字符串以参数传递给 MessageBoxW函数。所以我们可以<strong>修改字符串地址</strong>指向我们新建的位置。</p><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/%E4%BF%AE%E6%94%B9%E5%86%85%E5%AD%98.png" alt></p><p>这里在dump窗口中找到 409F50的位置，选中需要的位置并加入字符串</p><blockquote><p>值得注意的是 unicode 字符在内存中保存每个字符后面都得加上 0x00 ；</p><p>并且 unicode 字符串结尾需要 NULL 即需要两个 0x00；</p></blockquote><p><img src="/2020/02/11/OD%E6%93%8D%E4%BD%9C%E5%92%8CRE%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF/%E6%88%90%E5%8A%9F.png" alt></p><p>可见参数被我们修改为指向新建立的那一段内存中的字符串，函数成功执行为显示其他的内容。</p><h2 id="保存"><a href="#保存" class="headerlink" title="保存"></a>保存</h2><p>选中修改内容 -&gt; 右键 -&gt; Copy to executable file -&gt; 在弹出的窗口中右键 -&gt; Save file -&gt; 保存为exe文件</p><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这一篇知识简单的介绍了od的一些操作，并介绍了定位关键函数和修改字符串参数的一些具体操作，打好基础。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;OD基本操作和RE基本思想&quot;&gt;&lt;a href=&quot;#OD基本操作和RE基本思想&quot; class=&quot;headerlink&quot; title=&quot;OD基本操作和RE基本思想&quot;&gt;&lt;/a&gt;OD基本操作和RE基本思想&lt;/h1&gt;&lt;p&gt;这篇写一些比较简单的知识，主要用来记录od的一些操作
+      
+    
+    </summary>
+    
+    
+      <category term="二进制安全" scheme="http://bai-ren-1.github.io/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>PE文件</title>
