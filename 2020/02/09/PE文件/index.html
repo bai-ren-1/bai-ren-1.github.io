@@ -98,7 +98,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B41.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B42.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;%E8%8A%82%E5%8C%BA%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png">
-<meta property="og:updated_time" content="2020-02-09T08:30:20.376Z">
+<meta property="og:updated_time" content="2020-02-12T04:36:14.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png">
 
@@ -362,7 +362,7 @@
 <p>文件中使用<strong>偏移</strong>来表示位置，而在内存中使用<strong>VA(虚拟地址)</strong>来表示位置。</p>
 <p>下面放一张notepad被加载到内存中的情形：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png" alt></p>
-<h2 id="PE头结构"><a href="#PE头结构" class="headerlink" title="PE头结构"></a>PE头结构</h2><h3 id="1、DOS头（IMAGE-DOS-HEADER）"><a href="#1、DOS头（IMAGE-DOS-HEADER）" class="headerlink" title="1、DOS头（IMAGE_DOS_HEADER）"></a>1、DOS头（IMAGE_DOS_HEADER）</h3><p>DOS头即是在PE头的最前面添加一个 IMAGE_DOS_HEADER 结构体，用来拓展已有的DOS EXE头。结构体如下：</p>
+<h2 id="PE头结构（DOS头-DOS存根-NT头-节区头）"><a href="#PE头结构（DOS头-DOS存根-NT头-节区头）" class="headerlink" title="PE头结构（DOS头+DOS存根+NT头+节区头）"></a>PE头结构（DOS头+DOS存根+NT头+节区头）</h2><h3 id="1-DOS头（IMAGE-DOS-HEADER）"><a href="#1-DOS头（IMAGE-DOS-HEADER）" class="headerlink" title="1. DOS头（IMAGE_DOS_HEADER）"></a>1. DOS头（IMAGE_DOS_HEADER）</h3><p>DOS头即是在PE头的最前面添加一个 IMAGE_DOS_HEADER 结构体，用来拓展已有的DOS EXE头。结构体如下：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/dos%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
 <p>其中最重要的两个成员变量：</p>
 <ul>
@@ -376,13 +376,13 @@
 <li>开头WORD型的4D5A，即是e_magic，代表签名MZ；</li>
 <li>末尾LONG型的00000110，即是e_lfanew，指向NT头；（Intel的小端序标识）</li>
 </ul>
-<h3 id="2、DOS存根"><a href="#2、DOS存根" class="headerlink" title="2、DOS存根"></a>2、DOS存根</h3><p>位于DOS头的下方，为可选项且大小不固定。</p>
+<h3 id="2-DOS存根"><a href="#2-DOS存根" class="headerlink" title="2. DOS存根"></a>2. DOS存根</h3><p>位于DOS头的下方，为可选项且大小不固定。</p>
 <p>下面是notepad++的DOS存根：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E7%9A%84dos%E5%AD%98%E6%A0%B9.png" alt></p>
 <blockquote>
 <p>由于PE头中的DOS头中的e_lfanew指向的是NT头，说明中间的DOS存根是00000030 - 00000110的内容</p>
 </blockquote>
-<h3 id="3、NT头（IMAGE-NT-HEADERS）"><a href="#3、NT头（IMAGE-NT-HEADERS）" class="headerlink" title="3、NT头（IMAGE_NT_HEADERS）"></a>3、NT头（IMAGE_NT_HEADERS）</h3><p>NT头 IMAGE_NT_HEADERS 的结构体如下：</p>
+<h3 id="3-NT头（IMAGE-NT-HEADERS）"><a href="#3-NT头（IMAGE-NT-HEADERS）" class="headerlink" title="3. NT头（IMAGE_NT_HEADERS）"></a>3. NT头（IMAGE_NT_HEADERS）</h3><p>NT头 IMAGE_NT_HEADERS 的结构体如下：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
 <p>具有三个成员：</p>
 <ul>
@@ -390,7 +390,7 @@
 <li>文件头</li>
 <li>可选头</li>
 </ul>
-<h4 id="3-1、NT头中的文件头（IMAGE-FILE-HEADER）"><a href="#3-1、NT头中的文件头（IMAGE-FILE-HEADER）" class="headerlink" title="3.1、NT头中的文件头（IMAGE_FILE_HEADER）"></a>3.1、NT头中的文件头（IMAGE_FILE_HEADER）</h4><p>NT头中的文件头结构 IMAGE_FILE_HEADER 的结构体如下：</p>
+<h4 id="3-1-NT头中的文件头（IMAGE-FILE-HEADER）"><a href="#3-1-NT头中的文件头（IMAGE-FILE-HEADER）" class="headerlink" title="3-1. NT头中的文件头（IMAGE_FILE_HEADER）"></a>3-1. NT头中的文件头（IMAGE_FILE_HEADER）</h4><p>NT头中的文件头结构 IMAGE_FILE_HEADER 的结构体如下：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/nt%E5%A4%B4%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4.png" alt></p>
 <p>具有四个重要的成员：</p>
 <ul>
@@ -401,7 +401,7 @@
 </ul>
 <p>下面是notepad的文件头：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4.png" alt></p>
-<h4 id="3-2、NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><a href="#3-2、NT头中的可选头（IMAGE-OPTIONAL-HEADER32）" class="headerlink" title="3.2、NT头中的可选头（IMAGE_OPTIONAL_HEADER32）"></a>3.2、NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</h4><p>IMAGE_OPTIONAL_HEADER32是PE头结构中最大的结构体</p>
+<h4 id="3-2-NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><a href="#3-2-NT头中的可选头（IMAGE-OPTIONAL-HEADER32）" class="headerlink" title="3-2. NT头中的可选头（IMAGE_OPTIONAL_HEADER32）"></a>3-2. NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</h4><p>IMAGE_OPTIONAL_HEADER32是PE头结构中最大的结构体</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B41.png" alt></p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B42.png" alt></p>
 <p>其中重要的成员：</p>
@@ -416,7 +416,7 @@
 <li>NumberOfRvaAndSize：指出DataDirectory数组的个数</li>
 <li>DataDirectory：IMAGE_DATA_DIRECTORY结构体组成的数组</li>
 </ul>
-<h3 id="4、节区头（-IMAGE-SECTION-HEADER）"><a href="#4、节区头（-IMAGE-SECTION-HEADER）" class="headerlink" title="4、节区头（ IMAGE_SECTION_HEADER）"></a>4、节区头（ IMAGE_SECTION_HEADER）</h3><p>节区头是由 IMAGE_SECTION_HEADER 结构体组成的数组。每个结构体对应着一个节区</p>
+<h3 id="4-节区头（-IMAGE-SECTION-HEADER）"><a href="#4-节区头（-IMAGE-SECTION-HEADER）" class="headerlink" title="4. 节区头（ IMAGE_SECTION_HEADER）"></a>4. 节区头（ IMAGE_SECTION_HEADER）</h3><p>节区头是由 IMAGE_SECTION_HEADER 结构体组成的数组。每个结构体对应着一个节区</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/%E8%8A%82%E5%8C%BA%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
 <p>其中重要的成员：</p>
 <ul>
@@ -442,8 +442,7 @@
 
 
 
-
-
+<h2 id="IAT"><a href="#IAT" class="headerlink" title="IAT"></a>IAT</h2><p>Import Address Table，导入地址表</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>暂时先写到这里，后面还有好多…等慢慢补充</p>
 
       
@@ -558,7 +557,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -611,7 +610,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PE文件"><span class="nav-number">1.</span> <span class="nav-text">PE文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PE概念"><span class="nav-number">1.1.</span> <span class="nav-text">PE概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件格式"><span class="nav-number">1.2.</span> <span class="nav-text">PE文件格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件基本结构"><span class="nav-number">1.3.</span> <span class="nav-text">PE文件基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE头结构"><span class="nav-number">1.4.</span> <span class="nav-text">PE头结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、DOS头（IMAGE-DOS-HEADER）"><span class="nav-number">1.4.1.</span> <span class="nav-text">1、DOS头（IMAGE_DOS_HEADER）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、DOS存根"><span class="nav-number">1.4.2.</span> <span class="nav-text">2、DOS存根</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、NT头（IMAGE-NT-HEADERS）"><span class="nav-number">1.4.3.</span> <span class="nav-text">3、NT头（IMAGE_NT_HEADERS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1、NT头中的文件头（IMAGE-FILE-HEADER）"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">3.1、NT头中的文件头（IMAGE_FILE_HEADER）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2、NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">3.2、NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、节区头（-IMAGE-SECTION-HEADER）"><span class="nav-number">1.4.4.</span> <span class="nav-text">4、节区头（ IMAGE_SECTION_HEADER）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE由磁盘映射到内存"><span class="nav-number">1.5.</span> <span class="nav-text">PE由磁盘映射到内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.6.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PE文件"><span class="nav-number">1.</span> <span class="nav-text">PE文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PE概念"><span class="nav-number">1.1.</span> <span class="nav-text">PE概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件格式"><span class="nav-number">1.2.</span> <span class="nav-text">PE文件格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件基本结构"><span class="nav-number">1.3.</span> <span class="nav-text">PE文件基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE头结构（DOS头-DOS存根-NT头-节区头）"><span class="nav-number">1.4.</span> <span class="nav-text">PE头结构（DOS头+DOS存根+NT头+节区头）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-DOS头（IMAGE-DOS-HEADER）"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. DOS头（IMAGE_DOS_HEADER）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-DOS存根"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. DOS存根</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-NT头（IMAGE-NT-HEADERS）"><span class="nav-number">1.4.3.</span> <span class="nav-text">3. NT头（IMAGE_NT_HEADERS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-NT头中的文件头（IMAGE-FILE-HEADER）"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">3-1. NT头中的文件头（IMAGE_FILE_HEADER）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">3-2. NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-节区头（-IMAGE-SECTION-HEADER）"><span class="nav-number">1.4.4.</span> <span class="nav-text">4. 节区头（ IMAGE_SECTION_HEADER）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE由磁盘映射到内存"><span class="nav-number">1.5.</span> <span class="nav-text">PE由磁盘映射到内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IAT"><span class="nav-number">1.6.</span> <span class="nav-text">IAT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.7.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
             
 
           </div>
