@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
 
@@ -81,18 +83,19 @@
 
 
 
-<meta name="description" content="虚拟内存与物理内存的联系与区别物理内存与虚拟内存操作系统有虚拟内存与物理内存的概念。 在很久以前，还没有虚拟内存概念的时候，程序寻址用的都是物理地址。程序能寻址的范围是有限的，这取决于CPU的地址线条数。比如在32位平台下，寻址的范围是2^32也就是4G。并且这是固定的，如果没有虚拟内存，且每次开启一个进程都给4G的物理内存，就可能会出现很多问题：  因为我的物理内存时有限的，当有多个进程要执行的">
+<meta name="description" content="虚拟内存与物理内存的联系与区别重要的概念，需要弄清楚。 物理内存与虚拟内存操作系统有虚拟内存与物理内存的概念。 在很久以前，还没有虚拟内存概念的时候，程序寻址用的都是物理地址。程序能寻址的范围是有限的，这取决于CPU的地址线条数。比如在32位平台下，寻址的范围是2^32也就是4G。并且这是固定的，如果没有虚拟内存，且每次开启一个进程都给4G的物理内存，就可能会出现很多问题：  因为我的物理内存时有">
 <meta property="og:type" content="article">
 <meta property="og:title" content="物理内存和虚拟内存的联系与区别">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;13&#x2F;%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="虚拟内存与物理内存的联系与区别物理内存与虚拟内存操作系统有虚拟内存与物理内存的概念。 在很久以前，还没有虚拟内存概念的时候，程序寻址用的都是物理地址。程序能寻址的范围是有限的，这取决于CPU的地址线条数。比如在32位平台下，寻址的范围是2^32也就是4G。并且这是固定的，如果没有虚拟内存，且每次开启一个进程都给4G的物理内存，就可能会出现很多问题：  因为我的物理内存时有限的，当有多个进程要执行的">
+<meta property="og:description" content="虚拟内存与物理内存的联系与区别重要的概念，需要弄清楚。 物理内存与虚拟内存操作系统有虚拟内存与物理内存的概念。 在很久以前，还没有虚拟内存概念的时候，程序寻址用的都是物理地址。程序能寻址的范围是有限的，这取决于CPU的地址线条数。比如在32位平台下，寻址的范围是2^32也就是4G。并且这是固定的，如果没有虚拟内存，且每次开启一个进程都给4G的物理内存，就可能会出现很多问题：  因为我的物理内存时有">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;13&#x2F;%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB&#x2F;linux%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;13&#x2F;%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB&#x2F;%E7%BD%AE%E6%8D%A2%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;13&#x2F;%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB&#x2F;win32%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;13&#x2F;%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB&#x2F;D:%5Cgitblog%5Csec%5Csource_posts%5C%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB%5Clinux%E5%86%85%E5%AD%98.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;13&#x2F;%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB&#x2F;Linux%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4.png">
-<meta property="og:updated_time" content="2020-02-13T03:54:40.676Z">
+<meta property="og:updated_time" content="2020-02-21T08:02:19.015Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;13&#x2F;%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB&#x2F;linux%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98.png">
 
@@ -336,7 +339,8 @@
       
 
       
-        <h1 id="虚拟内存与物理内存的联系与区别"><a href="#虚拟内存与物理内存的联系与区别" class="headerlink" title="虚拟内存与物理内存的联系与区别"></a>虚拟内存与物理内存的联系与区别</h1><h2 id="物理内存与虚拟内存"><a href="#物理内存与虚拟内存" class="headerlink" title="物理内存与虚拟内存"></a>物理内存与虚拟内存</h2><p>操作系统有虚拟内存与物理内存的概念。</p>
+        <h1 id="虚拟内存与物理内存的联系与区别"><a href="#虚拟内存与物理内存的联系与区别" class="headerlink" title="虚拟内存与物理内存的联系与区别"></a>虚拟内存与物理内存的联系与区别</h1><p>重要的概念，需要弄清楚。</p>
+<h2 id="物理内存与虚拟内存"><a href="#物理内存与虚拟内存" class="headerlink" title="物理内存与虚拟内存"></a>物理内存与虚拟内存</h2><p>操作系统有虚拟内存与物理内存的概念。</p>
 <p>在很久以前，还没有虚拟内存概念的时候，程序寻址用的都是物理地址。程序能寻址的范围是有限的，这取决于CPU的地址线条数。比如在<strong>32位平台下，寻址的范围是2^32也就是4G</strong>。并且这是固定的，如果没有虚拟内存，且每次开启一个进程都给4G的物理内存，就可能会出现很多问题：</p>
 <ul>
 <li>因为我的物理内存时有限的，当有多个进程要执行的时候，都要给4G内存，很显然你内存小一点，这很快就分配完了，于是没有得到分配资源的进程就只能等待。当一个进程执行完了以后，再将等待的进程装入内存。这种频繁的装入内存的操作是很没效率的</li>
@@ -372,25 +376,33 @@
 <li>当不同的进程使用同一段代码时，比如库文件的代码，在物理内存中可以只存储一份这样的代码，不同进程只要将自己的虚拟内存映射过去就好了，这样可以节省物理内存</li>
 <li>在程序需要分配连续空间的时候，只需要在虚拟内存分配连续空间，而不需要物理内存时连续的，实际上，往往物理内存都是断断续续的内存碎片。这样就可以有效地利用我们的物理内存</li>
 </ul>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>然后我附上windows 32下的虚拟地址空间：</p>
-<p><img src="/2020/02/13/%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB/win32%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98.jpg" alt></p>
-<p>Linux下的4GB虚拟内存空间：</p>
+<h2 id="不同系统的虚拟空间"><a href="#不同系统的虚拟空间" class="headerlink" title="不同系统的虚拟空间"></a>不同系统的虚拟空间</h2><h3 id="windows-32下的虚拟地址空间"><a href="#windows-32下的虚拟地址空间" class="headerlink" title="windows 32下的虚拟地址空间"></a>windows 32下的虚拟地址空间</h3><p><img src="/2020/02/13/%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB/win32%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98.jpg" alt></p>
+<p>在 Windows 系统下，虚拟地址空间被分成了 4 部分： <strong>NULL 指针区、用户区、 64KB 禁入区、内核区</strong>。</p>
+<ul>
+<li><strong>用户区</strong>每个进程私有使用的，大约 2GB 左右 ( 最大可以调整到 3GB，3GB模式) ，称为用户地址空间。用户区存放的是<strong>程序代码和数据, 堆, 共享库, 栈</strong>。</li>
+<li><strong>内核区</strong>是所有进程共享的，为 2GB ，称为系统地址空间。内核区保存的是系统线程调度、内存管理、设备驱动等数据，这部分数据供所有的进程共享以及操作系统的使用——程序在运行的时候处于操作系统的监管下，监管进程的虚拟空间，当进程进行非法访问时强制结束程序。（2GB的内核区是所有的进程都是同一个2GB吗）</li>
+<li>上述的2GB+2GB称为2GB模式，是在默认的windows配置下。可以修改windows配置，可以设置3GB用户地址空间+1GB的系统地址空间，称为3GB模式。</li>
+</ul>
+<h3 id="Linux下的4GB虚拟内存空间"><a href="#Linux下的4GB虚拟内存空间" class="headerlink" title="Linux下的4GB虚拟内存空间"></a>Linux下的4GB虚拟内存空间</h3><p><img src="/2020/02/13/%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB/D:%5Cgitblog%5Csec%5Csource_posts%5C%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB%5Clinux%E5%86%85%E5%AD%98.png" alt></p>
+<blockquote>
+<p>上图由上往下是高地址到低地址；下图由上往下是低地址到高地址；</p>
+</blockquote>
 <p><img src="/2020/02/13/%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB/Linux%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4.png" alt></p>
 <p>每个段的存放内容如下：</p>
 <ul>
-<li><p>.reserve(预留)段<br>一共占用128M，属于预留空间，进程是禁止访问的</p>
+<li><p><strong>.reserve(预留)段</strong><br>一共占用128M，属于预留空间，进程是禁止访问的</p>
 </li>
-<li><p>.text(代码段)<br>可执行文件加载到内存中的只有数据和指令之分，而指令被存放在.text段中，一般是共享的，编译时确定,只读，不允许修改</p>
+<li><p><strong>.text(代码段)</strong><br>可执行文件加载到内存中的只有数据和指令之分，而指令被存放在.text段中，一般是共享的，编译时确定,只读，不允许修改</p>
 </li>
-<li><p>.data<br>存放在编译阶段(而非运行时)就能确定的数据,可读可写。也就是通常所说的静态存储区,赋了初值的全局变量和赋初值的静态变量存放在这个区域,常量也存放在这个区域</p>
+<li><p><strong>.data</strong><br>存放在编译阶段(而非运行时)就能确定的数据,可读可写。也就是通常所说的静态存储区,赋了初值的全局变量和赋初值的静态变量存放在这个区域,常量也存放在这个区域</p>
 </li>
-<li><p>.bss段<br>通常用来存放程序中未初始化以及初始化为0的全局/静态变量的一块内存区域，在程序载入时由内核清0</p>
+<li><p><strong>.bss段</strong><br>通常用来存放程序中未初始化以及初始化为0的全局/静态变量的一块内存区域，在程序载入时由内核清0</p>
 </li>
-<li><p>.heap(堆)<br>用于存放进程运行时动态分配的内存，可动态扩张或缩减，这块内存由程序员自己管理，通过malloc/new可以申请内存，free/delete用来释放内存，heap的地址从低向高扩展，是不连续的空间</p>
+<li><p><strong>.heap(堆)</strong><br>用于存放进程运行时动态分配的内存，可动态扩张或缩减，这块内存由程序员自己管理，通过malloc/new可以申请内存，free/delete用来释放内存，heap的地址从低向高扩展，是不连续的空间</p>
 </li>
-<li><p>.stack(栈)<br>记录函数调用过程相关的维护性信息，栈的地址从高地址向低地址扩展，是连续的内存区域</p>
+<li><p><strong>.stack(栈)</strong><br>记录函数调用过程相关的维护性信息，栈的地址从高地址向低地址扩展，是连续的内存区域</p>
 </li>
-<li><p>共享库(libc.so)</p>
+<li><p><strong>共享库(libc.so)</strong></p>
 </li>
 </ul>
 <h2 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h2><p>转载自 ： <a href="https://blog.csdn.net/wyq_5/article/details/77481136" target="_blank" rel="noopener">https://blog.csdn.net/wyq_5/article/details/77481136</a> </p>
@@ -428,6 +440,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/02/MYSQL%E6%8F%90%E6%9D%83/" rel="prev" title="MYSQL提权">
+                MYSQL提权 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -504,7 +520,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -557,7 +573,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟内存与物理内存的联系与区别"><span class="nav-number">1.</span> <span class="nav-text">虚拟内存与物理内存的联系与区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理内存与虚拟内存"><span class="nav-number">1.1.</span> <span class="nav-text">物理内存与虚拟内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再来总结一下虚拟内存是怎么工作的"><span class="nav-number">1.2.</span> <span class="nav-text">再来总结一下虚拟内存是怎么工作的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用虚拟内存机制的优点"><span class="nav-number">1.3.</span> <span class="nav-text">利用虚拟内存机制的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考连接"><span class="nav-number">1.5.</span> <span class="nav-text">参考连接</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟内存与物理内存的联系与区别"><span class="nav-number">1.</span> <span class="nav-text">虚拟内存与物理内存的联系与区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理内存与虚拟内存"><span class="nav-number">1.1.</span> <span class="nav-text">物理内存与虚拟内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再来总结一下虚拟内存是怎么工作的"><span class="nav-number">1.2.</span> <span class="nav-text">再来总结一下虚拟内存是怎么工作的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用虚拟内存机制的优点"><span class="nav-number">1.3.</span> <span class="nav-text">利用虚拟内存机制的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同系统的虚拟空间"><span class="nav-number">1.4.</span> <span class="nav-text">不同系统的虚拟空间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#windows-32下的虚拟地址空间"><span class="nav-number">1.4.1.</span> <span class="nav-text">windows 32下的虚拟地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux下的4GB虚拟内存空间"><span class="nav-number">1.4.2.</span> <span class="nav-text">Linux下的4GB虚拟内存空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考连接"><span class="nav-number">1.5.</span> <span class="nav-text">参考连接</span></a></li></ol></li></ol></div>
             
 
           </div>

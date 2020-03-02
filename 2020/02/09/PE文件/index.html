@@ -81,12 +81,12 @@
 
 
 
-<meta name="description" content="PE文件继续二进制的研究。读了挺多书了，但还没做笔记。因为研究的是windows平台的逆向，先简单写一下PE文件的格式总结。 PE概念PE是windows平台下可执行文件的格式 32位的可执行文件称为PE文件或者PE32 64位的可执行文件称为PE+或者PE32+ PE文件格式不同PE文件的主拓展名  可执行系列 ：EXE 、SCR 库系列的 ：DLL、OCX、CPL、DRV 驱动程序系列 ：SY">
+<meta name="description" content="PE文件继续二进制的研究。读了挺多书了，但还没做笔记。因为研究的是windows平台的逆向，先简单写一下PE文件的格式总结。  实例都是十六进制表示，就不标注0x或者h了  PE概念PE是windows平台下可执行文件的格式 32位的可执行文件称为PE文件或者PE32 64位的可执行文件称为PE+或者PE32+ PE文件格式不同PE文件的主拓展名  可执行系列 ：EXE 、SCR 库系列的 ：DL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PE文件">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="PE文件继续二进制的研究。读了挺多书了，但还没做笔记。因为研究的是windows平台的逆向，先简单写一下PE文件的格式总结。 PE概念PE是windows平台下可执行文件的格式 32位的可执行文件称为PE文件或者PE32 64位的可执行文件称为PE+或者PE32+ PE文件格式不同PE文件的主拓展名  可执行系列 ：EXE 、SCR 库系列的 ：DLL、OCX、CPL、DRV 驱动程序系列 ：SY">
+<meta property="og:description" content="PE文件继续二进制的研究。读了挺多书了，但还没做笔记。因为研究的是windows平台的逆向，先简单写一下PE文件的格式总结。  实例都是十六进制表示，就不标注0x或者h了  PE概念PE是windows平台下可执行文件的格式 32位的可执行文件称为PE文件或者PE32 64位的可执行文件称为PE+或者PE32+ PE文件格式不同PE文件的主拓展名  可执行系列 ：EXE 、SCR 库系列的 ：DL">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;dos%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png">
@@ -98,7 +98,8 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B41.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B42.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;%E8%8A%82%E5%8C%BA%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png">
-<meta property="og:updated_time" content="2020-02-12T04:36:14.191Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png">
+<meta property="og:updated_time" content="2020-02-16T09:20:12.446Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;02&#x2F;09&#x2F;PE%E6%96%87%E4%BB%B6&#x2F;notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png">
 
@@ -343,6 +344,9 @@
 
       
         <h1 id="PE文件"><a href="#PE文件" class="headerlink" title="PE文件"></a>PE文件</h1><p>继续二进制的研究。读了挺多书了，但还没做笔记。因为研究的是windows平台的逆向，先简单写一下PE文件的格式总结。</p>
+<blockquote>
+<p>实例都是十六进制表示，就不标注0x或者h了</p>
+</blockquote>
 <h2 id="PE概念"><a href="#PE概念" class="headerlink" title="PE概念"></a>PE概念</h2><p>PE是windows平台下可执行文件的格式</p>
 <p>32位的可执行文件称为<strong>PE文件或者PE32</strong></p>
 <p>64位的可执行文件称为<strong>PE+或者PE32+</strong></p>
@@ -359,37 +363,54 @@
 <li>文件的内容一般可以分为<strong>代码 .text 、数据 .data 、资源 .rsrc节</strong>分别保存</li>
 <li>各节区头定义了各节区在文件或者内存中的大小、位置、属性等</li>
 </ul>
-<p>文件中使用<strong>偏移</strong>来表示位置，而在内存中使用<strong>VA(虚拟地址)</strong>来表示位置。</p>
-<p>下面放一张notepad被加载到内存中的情形：</p>
+<p>notepad加载到内存中：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png" alt></p>
-<h2 id="PE头结构（DOS头-DOS存根-NT头-节区头）"><a href="#PE头结构（DOS头-DOS存根-NT头-节区头）" class="headerlink" title="PE头结构（DOS头+DOS存根+NT头+节区头）"></a>PE头结构（DOS头+DOS存根+NT头+节区头）</h2><h3 id="1-DOS头（IMAGE-DOS-HEADER）"><a href="#1-DOS头（IMAGE-DOS-HEADER）" class="headerlink" title="1. DOS头（IMAGE_DOS_HEADER）"></a>1. DOS头（IMAGE_DOS_HEADER）</h3><p>DOS头即是在PE头的最前面添加一个 IMAGE_DOS_HEADER 结构体，用来拓展已有的DOS EXE头。结构体如下：</p>
+<h2 id="VA-amp-RVA-amp-ImageBase"><a href="#VA-amp-RVA-amp-ImageBase" class="headerlink" title="VA &amp; RVA &amp; ImageBase"></a>VA &amp; RVA &amp; ImageBase</h2><p>概念：</p>
+<ul>
+<li><strong>VA：进程虚拟内存的绝对地址</strong></li>
+<li><strong>RVA：相对虚拟地址</strong></li>
+<li><strong>ImageBase：RVA = VA - ImageBase</strong></li>
+</ul>
+<p>位置的不同表述：</p>
+<ul>
+<li>文件：使用偏移表示位置</li>
+<li>内存：使用VA表示位置</li>
+</ul>
+<blockquote>
+<p>32位windows中，每个进程分配有4GB的虚拟内存，因此进程中VA的范围是 00000000~FFFFFFFF</p>
+</blockquote>
+<h2 id="PE头结构"><a href="#PE头结构" class="headerlink" title="PE头结构"></a>PE头结构</h2><p><strong>PE头=DOS头+DOS存根+NT头（文件头+可选头）+节区头</strong></p>
+<hr>
+<h3 id="1-DOS头（IMAGE-DOS-HEADER）"><a href="#1-DOS头（IMAGE-DOS-HEADER）" class="headerlink" title="1. DOS头（IMAGE_DOS_HEADER）"></a>1. DOS头（IMAGE_DOS_HEADER）</h3><p>DOS头即是在PE头的最前面添加一个 IMAGE_DOS_HEADER 结构体，用来拓展已有的DOS EXE头。结构体如下：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/dos%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
 <p>其中最重要的两个成员变量：</p>
 <ul>
-<li>e_magic : <strong>DOS签名</strong>。</li>
-<li>e_lfanew ：<strong>指示NT头的偏移</strong>。</li>
+<li><strong>e_magic : DOS签名</strong>。</li>
+<li><strong>e_lfanew ：指示NT头的偏移（即指向真正的PE头）</strong>。</li>
 </ul>
-<p>下面是notepad++的DOS头：</p>
+<p>notepad++的DOS头：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E7%9A%84DOS%E5%A4%B4.png" alt></p>
-<p>可以看出：</p>
 <ul>
 <li>开头WORD型的4D5A，即是e_magic，代表签名MZ；</li>
 <li>末尾LONG型的00000110，即是e_lfanew，指向NT头；（Intel的小端序标识）</li>
 </ul>
+<hr>
 <h3 id="2-DOS存根"><a href="#2-DOS存根" class="headerlink" title="2. DOS存根"></a>2. DOS存根</h3><p>位于DOS头的下方，为可选项且大小不固定。</p>
-<p>下面是notepad++的DOS存根：</p>
+<p>notepad++的DOS存根：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E7%9A%84dos%E5%AD%98%E6%A0%B9.png" alt></p>
 <blockquote>
 <p>由于PE头中的DOS头中的e_lfanew指向的是NT头，说明中间的DOS存根是00000030 - 00000110的内容</p>
 </blockquote>
-<h3 id="3-NT头（IMAGE-NT-HEADERS）"><a href="#3-NT头（IMAGE-NT-HEADERS）" class="headerlink" title="3. NT头（IMAGE_NT_HEADERS）"></a>3. NT头（IMAGE_NT_HEADERS）</h3><p>NT头 IMAGE_NT_HEADERS 的结构体如下：</p>
+<hr>
+<h3 id="3-NT头（PE真正的头-IMAGE-NT-HEADERS）"><a href="#3-NT头（PE真正的头-IMAGE-NT-HEADERS）" class="headerlink" title="3. NT头（PE真正的头 - IMAGE_NT_HEADERS）"></a>3. NT头（PE真正的头 - IMAGE_NT_HEADERS）</h3><p>NT头 IMAGE_NT_HEADERS 的结构体如下：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
 <p>具有三个成员：</p>
 <ul>
-<li>签名 (504500，即PE00)</li>
-<li>文件头</li>
-<li>可选头</li>
+<li><strong>签名 (504500，即PE00)</strong></li>
+<li><strong>文件头</strong></li>
+<li><strong>可选头</strong></li>
 </ul>
+<hr>
 <h4 id="3-1-NT头中的文件头（IMAGE-FILE-HEADER）"><a href="#3-1-NT头中的文件头（IMAGE-FILE-HEADER）" class="headerlink" title="3-1. NT头中的文件头（IMAGE_FILE_HEADER）"></a>3-1. NT头中的文件头（IMAGE_FILE_HEADER）</h4><p>NT头中的文件头结构 IMAGE_FILE_HEADER 的结构体如下：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/nt%E5%A4%B4%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4.png" alt></p>
 <p>具有四个重要的成员：</p>
@@ -399,16 +420,17 @@
 <li>SizeOfOptionalHeader：用于指出 IMAGE_OPTIONAL_HEADER32 结构体的长度，其中IMAGE_OPTIONAL_HEADER32 是NT头最后一个成员</li>
 <li>Characterstics：用于标识文件的属性，文件是否是可运行的形态，是否为DLL文件等信息</li>
 </ul>
-<p>下面是notepad的文件头：</p>
+<p>notepad的文件头：</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4.png" alt></p>
+<hr>
 <h4 id="3-2-NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><a href="#3-2-NT头中的可选头（IMAGE-OPTIONAL-HEADER32）" class="headerlink" title="3-2. NT头中的可选头（IMAGE_OPTIONAL_HEADER32）"></a>3-2. NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</h4><p>IMAGE_OPTIONAL_HEADER32是PE头结构中最大的结构体</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B41.png" alt></p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/NT%E5%A4%B4%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E5%A4%B42.png" alt></p>
 <p>其中重要的成员：</p>
 <ul>
 <li>Magic：Magic为10B-20B</li>
-<li>AddressOfEntryPoint：持有EP的RVA值，指出<strong>程序最先执行的代码的起始地址</strong></li>
-<li>ImageBase：指出<strong>文件的优先装入地址</strong></li>
+<li><strong>AddressOfEntryPoint：持有EP的RVA值，指出程序最先执行的代码的起始地址</strong></li>
+<li><strong>ImageBase：指出文件的优先装入地址</strong></li>
 <li>SectionAlignment，FileAlignment：分别指出节区在磁盘中的最小单位和节区在内存中最小单位</li>
 <li>SizeOfImage：指出了PE Image在虚拟内存中所占空间大小</li>
 <li>SizeOfHeader：指出整个PE头的大小</li>
@@ -416,14 +438,15 @@
 <li>NumberOfRvaAndSize：指出DataDirectory数组的个数</li>
 <li>DataDirectory：IMAGE_DATA_DIRECTORY结构体组成的数组</li>
 </ul>
+<hr>
 <h3 id="4-节区头（-IMAGE-SECTION-HEADER）"><a href="#4-节区头（-IMAGE-SECTION-HEADER）" class="headerlink" title="4. 节区头（ IMAGE_SECTION_HEADER）"></a>4. 节区头（ IMAGE_SECTION_HEADER）</h3><p>节区头是由 IMAGE_SECTION_HEADER 结构体组成的数组。每个结构体对应着一个节区</p>
 <p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/%E8%8A%82%E5%8C%BA%E5%A4%B4%E7%BB%93%E6%9E%84%E4%BD%93.png" alt></p>
 <p>其中重要的成员：</p>
 <ul>
 <li>VirtualSize：内存中节区所占大小</li>
-<li>VirtualAddress：<strong>内存中节区起始地址（RVA）</strong></li>
+<li><strong>VirtualAddress：内存中节区起始地址（其实是RVA）</strong></li>
 <li>SizeOfRawData：磁盘文件中节区所占大小</li>
-<li>PointerToRawData：<strong>磁盘文件中节区起始位置</strong></li>
+<li><strong>PointerToRawData：磁盘文件中节区起始位置</strong></li>
 <li>Charaterstics：节区属性（bit OR）</li>
 </ul>
 <blockquote>
@@ -436,13 +459,34 @@
 <p>计算这种映射的方法：</p>
 <ul>
 <li>查找RVA所在的节区</li>
-<li>使用下面公式计算文件偏移RAW</li>
+<li>根据<strong>节区头</strong>使用下面公式计算文件偏移RAW</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RAW - PointerToRawData = RVA - VirtualAddress</span><br><span class="line">即</span><br><span class="line">RAW = RVA - VirtualAddress + PpinterToRawData</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RAW - PointerToRawData = RVA - VirtualAddress</span><br><span class="line">即</span><br><span class="line">RAW = RVA - VirtualAddress + PpinterToRawData</span><br><span class="line">文件相对偏移 = 内存地址偏移 - 所在节区起始地址偏移 + 文件节区起始地址</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="IAT"><a href="#IAT" class="headerlink" title="IAT"></a>IAT</h2><p>Import Address Table，导入地址表</p>
+<h2 id="RVA-转-RAW-练习"><a href="#RVA-转-RAW-练习" class="headerlink" title="RVA 转 RAW 练习"></a>RVA 转 RAW 练习</h2><p><img src="/2020/02/09/PE%E6%96%87%E4%BB%B6/notepad%E8%A2%AB%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98.png" alt></p>
+<p><strong>Q1. RVA=5000,File Offset=?</strong></p>
+<p>答：由RVA = 5000，加上内存中的基址可以得到该位置的VA是 01005000，对照内存地址可以知道它位于第一个节区即 .text 段。所以我们用该位置的偏移地址大小 RVA 减去 .text 段的偏移地址大小 1000 可以得到该位置在 .text 段的偏移大小为 4000。随后在文件中找到 .text 在文件中的起始位置并加上计算所得的 4000 得到在该位置在文件在文件中的偏移 RAW = 4000+400 = 4400</p>
+<p><strong>Q2. RVA=13314,File Offset=?</strong></p>
+<p>答：同上。RVA 找到对应节区为第三个节区即 .rsrc 段。减去内存中 .rsrc 的段偏移即 13314 - B000 =  8314。然后在文件找到 .rsrc 的起始位置为 8400 。加上刚刚所得的偏移即 8400 + 8314 = 10714</p>
+<p><strong>Q3. RVA=ABA8,File Offset=?</strong></p>
+<p>答：继续同上。RVA 找到对应的节区为第二个节区即 .data段。减去内存中 .data 的段偏移即 ABA8 - 9000 = 1BA8。然后在文件找到 .data 的起始位置为 7C00 。加上刚刚所得的偏移即 7C00 + 1BA8 = 97A8。</p>
+<p>但是我们可以看到这样计算的话，这个位置在内存中位于第二个节区而在文件中却是位于第三个节区。这显然是错误的答案。这种情况表明 <strong>“无法定位与RVA相对应的RAW值”</strong>。</p>
+<p>原因是：<strong>第二个节区的 VirtualSize 值比 SizeOfRawData 值大</strong>，具体的原因就在下面揭晓。</p>
+<h2 id="IAT"><a href="#IAT" class="headerlink" title="IAT"></a>IAT</h2><p>Import Address Table，导入地址表。IAT 是一个表格，用来记录程序正在使用哪些库中的函数。</p>
+<h2 id="DLL"><a href="#DLL" class="headerlink" title="DLL"></a>DLL</h2><p>Dynamic Linked Library，动态链接库。</p>
+<ul>
+<li>不要把库包含到程序中，单独组成DLL代码，需要时调用即可</li>
+<li>内存映射技术使得加载后的DLL代码资源可以共享</li>
+<li>更新库时只需要替换相关DLL即可</li>
+</ul>
+<p>加载DLL的方式</p>
+<ul>
+<li>显式链接：程序<strong>使用DLL时</strong>加载，使用完毕就释放内存</li>
+<li>隐式链接：程序<strong>开始一同加载</strong>DLL，程序终止释放内存（IAT机制于此有关）</li>
+</ul>
+<h2 id="IMAGE-IMPORT-DESCRIPTOR"><a href="#IMAGE-IMPORT-DESCRIPTOR" class="headerlink" title="IMAGE__IMPORT_DESCRIPTOR"></a>IMAGE__IMPORT_DESCRIPTOR</h2><p>该结构体记录了PE文件需要导入那些库文件</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>暂时先写到这里，后面还有好多…等慢慢补充</p>
 
       
@@ -557,7 +601,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -610,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PE文件"><span class="nav-number">1.</span> <span class="nav-text">PE文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PE概念"><span class="nav-number">1.1.</span> <span class="nav-text">PE概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件格式"><span class="nav-number">1.2.</span> <span class="nav-text">PE文件格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件基本结构"><span class="nav-number">1.3.</span> <span class="nav-text">PE文件基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE头结构（DOS头-DOS存根-NT头-节区头）"><span class="nav-number">1.4.</span> <span class="nav-text">PE头结构（DOS头+DOS存根+NT头+节区头）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-DOS头（IMAGE-DOS-HEADER）"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. DOS头（IMAGE_DOS_HEADER）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-DOS存根"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. DOS存根</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-NT头（IMAGE-NT-HEADERS）"><span class="nav-number">1.4.3.</span> <span class="nav-text">3. NT头（IMAGE_NT_HEADERS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-NT头中的文件头（IMAGE-FILE-HEADER）"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">3-1. NT头中的文件头（IMAGE_FILE_HEADER）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">3-2. NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-节区头（-IMAGE-SECTION-HEADER）"><span class="nav-number">1.4.4.</span> <span class="nav-text">4. 节区头（ IMAGE_SECTION_HEADER）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE由磁盘映射到内存"><span class="nav-number">1.5.</span> <span class="nav-text">PE由磁盘映射到内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IAT"><span class="nav-number">1.6.</span> <span class="nav-text">IAT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.7.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PE文件"><span class="nav-number">1.</span> <span class="nav-text">PE文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PE概念"><span class="nav-number">1.1.</span> <span class="nav-text">PE概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件格式"><span class="nav-number">1.2.</span> <span class="nav-text">PE文件格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE文件基本结构"><span class="nav-number">1.3.</span> <span class="nav-text">PE文件基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VA-amp-RVA-amp-ImageBase"><span class="nav-number">1.4.</span> <span class="nav-text">VA &amp; RVA &amp; ImageBase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE头结构"><span class="nav-number">1.5.</span> <span class="nav-text">PE头结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-DOS头（IMAGE-DOS-HEADER）"><span class="nav-number">1.5.1.</span> <span class="nav-text">1. DOS头（IMAGE_DOS_HEADER）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-DOS存根"><span class="nav-number">1.5.2.</span> <span class="nav-text">2. DOS存根</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-NT头（PE真正的头-IMAGE-NT-HEADERS）"><span class="nav-number">1.5.3.</span> <span class="nav-text">3. NT头（PE真正的头 - IMAGE_NT_HEADERS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-NT头中的文件头（IMAGE-FILE-HEADER）"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">3-1. NT头中的文件头（IMAGE_FILE_HEADER）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-NT头中的可选头（IMAGE-OPTIONAL-HEADER32）"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">3-2. NT头中的可选头（IMAGE_OPTIONAL_HEADER32）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-节区头（-IMAGE-SECTION-HEADER）"><span class="nav-number">1.5.4.</span> <span class="nav-text">4. 节区头（ IMAGE_SECTION_HEADER）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE由磁盘映射到内存"><span class="nav-number">1.6.</span> <span class="nav-text">PE由磁盘映射到内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RVA-转-RAW-练习"><span class="nav-number">1.7.</span> <span class="nav-text">RVA 转 RAW 练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IAT"><span class="nav-number">1.8.</span> <span class="nav-text">IAT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DLL"><span class="nav-number">1.9.</span> <span class="nav-text">DLL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IMAGE-IMPORT-DESCRIPTOR"><span class="nav-number">1.10.</span> <span class="nav-text">IMAGE__IMPORT_DESCRIPTOR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.11.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
             
 
           </div>
