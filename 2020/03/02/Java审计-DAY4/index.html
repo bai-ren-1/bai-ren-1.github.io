@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Java审计-DAY4转载自 https:&#x2F;&#x2F;blog.csdn.net&#x2F;niexinming&#x2F;article&#x2F;details&#x2F;84595405  外部文件访问(Android)漏洞特征：ANDROID_EXTERNAL_FILE_ACCESS应用经常往外部存储上写数据（可能是SD卡），这个操作可能会有多个安全问题。首先应用可以可以通过READ_EXTERNAL_STORAGE 获取SD卡上存储的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java审计-DAY4">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;02&#x2F;Java%E5%AE%A1%E8%AE%A1-DAY4&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="Java审计-DAY4转载自 https:&#x2F;&#x2F;blog.csdn.net&#x2F;niexinming&#x2F;article&#x2F;details&#x2F;84595405  外部文件访问(Android)漏洞特征：ANDROID_EXTERNAL_FILE_ACCESS应用经常往外部存储上写数据（可能是SD卡），这个操作可能会有多个安全问题。首先应用可以可以通过READ_EXTERNAL_STORAGE 获取SD卡上存储的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-03-03T03:51:19.331Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/02/Java审计-DAY4/"/>
+
+
+
+
+
+  <title>Java审计-DAY4 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/02/Java%E5%AE%A1%E8%AE%A1-DAY4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java审计-DAY4</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-02T14:57:00+08:00">
+                2020-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java审计-DAY4"><a href="#Java审计-DAY4" class="headerlink" title="Java审计-DAY4"></a>Java审计-DAY4</h1><p>转载自 <a href="https://blog.csdn.net/niexinming/article/details/84595405" target="_blank" rel="noopener">https://blog.csdn.net/niexinming/article/details/84595405</a> </p>
+<h1 id="外部文件访问-Android"><a href="#外部文件访问-Android" class="headerlink" title="外部文件访问(Android)"></a>外部文件访问(Android)</h1><p>漏洞特征：ANDROID_EXTERNAL_FILE_ACCESS<br>应用经常往外部存储上写数据（可能是SD卡），这个操作可能会有多个安全问题。首先应用可以可以通过<a href="http://developer.android.com/reference/android/Manifest.permission.html#READ_EXTERNAL_STORAGE" target="_blank" rel="noopener">READ_EXTERNAL_STORAGE</a> 获取SD卡上存储的文件。而且如果数据中包含用户的敏感信息的话，那么需要把这些数据加密。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">file file = new File(getExternalFilesDir(TARGET_TYPE), filename);</span><br><span class="line">fos = new FileOutputStream(file);</span><br><span class="line">fos.write(confidentialData.getBytes());</span><br><span class="line">fos.flush();</span><br></pre></td></tr></table></figure>
+
+<p>更好的措施：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fos = openFileOutput(filename, Context.MODE_PRIVATE);</span><br><span class="line">fos.write(string.getBytes());</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="http://developer.android.com/training/articles/security-tips.html#ExternalStorage" target="_blank" rel="noopener">Android Official Doc: Security Tips</a><br><a href="https://www.securecoding.cert.org/confluence/display/java/DRD00-J.+Do+not+store+sensitive+information+on+external+storage+(SD+card)+unless+encrypted+first" target="_blank" rel="noopener">CERT: DRD00-J: Do not store sensitive information on external storage</a><br><a href="http://developer.android.com/guide/topics/data/data-storage.html#filesExternal" target="_blank" rel="noopener">Android Official Doc: Using the External Storage</a><br><a href="https://www.owasp.org/index.php/Mobile_Top_10_2014-M2" target="_blank" rel="noopener">OWASP Mobile Top 10 2014-M2: Insecure Data Storage</a><br><a href="https://cwe.mitre.org/data/definitions/312.html" target="_blank" rel="noopener">CWE-312: Cleartext Storage of Sensitive Information</a></p>
+<h1 id="Broadcast漏洞-Android"><a href="#Broadcast漏洞-Android" class="headerlink" title="Broadcast漏洞(Android)"></a>Broadcast漏洞(Android)</h1><p>漏洞规则：ANDROID_BROADCAST<br>所有应用通过申请适当权限就可以监听Broadcast的意图，所以尽量不要通过Broadcast传输敏感数据。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Intent i = new Intent();</span><br><span class="line">i.setAction(&quot;com.insecure.action.UserConnected&quot;);</span><br><span class="line">i.putExtra(&quot;username&quot;, user);</span><br><span class="line">i.putExtra(&quot;email&quot;, email);</span><br><span class="line">i.putExtra(&quot;session&quot;, newSessionId);</span><br><span class="line"></span><br><span class="line">this.sendBroadcast(v1);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案（如果有可能的话）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Intent i = new Intent();</span><br><span class="line">i.setAction(&quot;com.secure.action.UserConnected&quot;);</span><br><span class="line"></span><br><span class="line">sendBroadcast(v1);</span><br></pre></td></tr></table></figure>
+
+<p>配置（接收者）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;manifest ...&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- Permission declaration --&gt;</span><br><span class="line">    &lt;permission android:name=&quot;my.app.PERMISSION&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;receiver</span><br><span class="line">        android:name=&quot;my.app.BroadcastReceiver&quot;</span><br><span class="line">        android:permission=&quot;my.app.PERMISSION&quot;&gt; &lt;!-- Permission enforcement --&gt;</span><br><span class="line">        &lt;intent-filter&gt;</span><br><span class="line">            &lt;action android:name=&quot;com.secure.action.UserConnected&quot; /&gt;</span><br><span class="line">        &lt;/intent-filter&gt;</span><br><span class="line">    &lt;/receiver&gt;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&lt;/manifest&gt;</span><br></pre></td></tr></table></figure>
+
+<p>配置（发送者）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;manifest&gt;</span><br><span class="line">    &lt;!-- We declare we own the permission to send broadcast to the above receiver --&gt;</span><br><span class="line">    &lt;uses-permission android:name=&quot;my.app.PERMISSION&quot;/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- With the following configuration, both the sender and the receiver apps need to be signed by the same developer certificate. --&gt;</span><br><span class="line">    &lt;permission android:name=&quot;my.app.PERMISSION&quot; android:protectionLevel=&quot;signature&quot;/&gt;</span><br><span class="line">&lt;/manifest&gt;</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="https://www.securecoding.cert.org/confluence/display/java/DRD03-J.+Do+not+broadcast+sensitive+information+using+an+implicit+intent" target="_blank" rel="noopener">CERT: DRD03-J. Do not broadcast sensitive information using an implicit intent</a><br><a href="http://developer.android.com/reference/android/content/BroadcastReceiver.html#Security" target="_blank" rel="noopener">Android Official Doc: BroadcastReceiver (Security)</a><br><a href="http://developer.android.com/guide/topics/manifest/receiver-element.html" target="_blank" rel="noopener">Android Official Doc: Receiver configuration (see android:permission)</a><br>[1] <a href="http://stackoverflow.com/a/21513368/89769" target="_blank" rel="noopener">StackOverflow: How to set permissions in broadcast sender and receiver in android</a><br><a href="https://cwe.mitre.org/data/definitions/925.html" target="_blank" rel="noopener">CWE-925: Improper Verification of Intent by Broadcast Receiver</a><br><a href="https://cwe.mitre.org/data/definitions/927.html" target="_blank" rel="noopener">CWE-927: Use of Implicit Intent for Sensitive Communication</a></p>
+<h1 id="任意文件写-Android"><a href="#任意文件写-Android" class="headerlink" title="任意文件写 (Android)"></a>任意文件写 (Android)</h1><p>创建文件使用MODE_WORLD_READABLE模式，可以让文件写入环境中的任意位置。一些文件文件被改写的话，可能会发生一些不希望发生的事情。<br>有漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fos = openFileOutput(filename, MODE_WORLD_READABLE);</span><br><span class="line">fos.write(userInfo.getBytes());</span><br></pre></td></tr></table></figure>
+
+<p>解决方案（使用MODE_PRIVATE）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fos = openFileOutput(filename, MODE_PRIVATE);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案（使用本地SQLite数据库）<br>使用本地SQLite数据库可能是存储结构数据最好的解决方案了。要确定数据库文件不会被创建到外部存储中。见下面的开发文档引用</p>
+<p>引用：<br><a href="https://www.securecoding.cert.org/confluence/display/java/DRD11-J.+Ensure+that+sensitive+data+is+kept+secure" target="_blank" rel="noopener">CERT: DRD11-J. Ensure that sensitive data is kept secure</a><br><a href="http://developer.android.com/training/articles/security-tips.html#InternalStorage" target="_blank" rel="noopener">Android Official Doc: Security Tips</a><br><a href="http://developer.android.com/reference/android/content/Context.html#MODE_PRIVATE" target="_blank" rel="noopener">Android Official Doc: Context.MODE_PRIVATE</a><br><a href="http://www.vogella.com/tutorials/AndroidSQLite/article.html#databasetutorial_database" target="_blank" rel="noopener">vogella.com: Android SQLite database and content provider - Tutorial</a><br><a href="https://www.owasp.org/index.php/Mobile_Top_10_2014-M2" target="_blank" rel="noopener">OWASP Mobile Top 10 2014-M2: Insecure Data Storage</a><br><a href="https://cwe.mitre.org/data/definitions/312.html" target="_blank" rel="noopener">CWE-312: Cleartext Storage of Sensitive Information</a></p>
+<h1 id="已激活地理位置的WebView-Android"><a href="#已激活地理位置的WebView-Android" class="headerlink" title="已激活地理位置的WebView(Android)"></a>已激活地理位置的WebView(Android)</h1><p>漏洞特征：ANDROID_GEOLOCATION<br>建议去询问用户是否能获取他们的位置信息<br>漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">webView.setWebChromeClient(new WebChromeClient() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) &#123;</span><br><span class="line">        callback.invoke(origin, true, false);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>建议代码：<br>限制使用地理位置的例子，并且要得到用户的确认</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">webView.setWebChromeClient(new WebChromeClient() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) &#123;</span><br><span class="line">        callback.invoke(origin, true, false);</span><br><span class="line"></span><br><span class="line">        //Ask the user for confirmation</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="https://www.securecoding.cert.org/confluence/display/java/DRD15-J.+Consider+privacy+concerns+when+using+Geolocation+API" target="_blank" rel="noopener">CERT: DRD15-J. Consider privacy concerns when using Geolocation API</a><br><a href="http://en.wikipedia.org/wiki/W3C_Geolocation_API" target="_blank" rel="noopener">Wikipedia: W3C Geolocation API</a><br><a href="http://dev.w3.org/geo/api/spec-source.html" target="_blank" rel="noopener">W3C: Geolocation Specification</a></p>
+<h1 id="允许JavaScript脚本运行的webview-Android"><a href="#允许JavaScript脚本运行的webview-Android" class="headerlink" title="允许JavaScript脚本运行的webview (Android)"></a>允许JavaScript脚本运行的webview (Android)</h1><p>漏洞特征：ANDROID_WEB_VIEW_JAVASCRIPT<br>WebView如果允许允许JavaScript脚本的话，就意味着它会受到xss的影响。应该检查页面的渲染，以避免潜在的反射型xss，存储型xss，dom型xss。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WebView myWebView = (WebView) findViewById(R.id.webView);</span><br><span class="line">WebSettings webSettings = myWebView.getSettings();</span><br><span class="line">webSettings.setJavaScriptEnabled(true);</span><br></pre></td></tr></table></figure>
+
+<p>有漏洞的代码：<br>允许JavaScript运行是一个坏的习惯。这就意味着后端代码需要被审计，以避免xss。xss也会使用dom xss的形式引入到客户端。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function updateDescription(newDescription) &#123;</span><br><span class="line">    $(&quot;#userDescription&quot;).html(&quot;&lt;p&gt;&quot;+newDescription+&quot;&lt;/p&gt;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="http://www.technotalkative.com/issue-using-setjavascriptenabled-can-introduce-xss-vulnerabilities-application-review-carefully/" target="_blank" rel="noopener">Issue: Using setJavaScriptEnabled can introduce XSS vulnerabilities</a><br><a href="http://developer.android.com/guide/webapps/webview.html#UsingJavaScript" target="_blank" rel="noopener">Android Official Doc: WebView</a><br>[WASC-8: Cross Site Scripting](<a href="http://projects.webappsec.org/w/page/13246920/Cross" target="_blank" rel="noopener">http://projects.webappsec.org/w/page/13246920/Cross</a> Site Scripting)<br><a href="https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet" target="_blank" rel="noopener">OWASP: XSS Prevention Cheat Sheet</a><br><a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_(XSS)" target="_blank" rel="noopener">OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)</a><br><a href="http://cwe.mitre.org/data/definitions/79.html" target="_blank" rel="noopener">CWE-79: Improper Neutralization of Input During Web Page Generation (‘Cross-site Scripting’)</a></p>
+<h1 id="带有JavaScript接口的WebView-Android"><a href="#带有JavaScript接口的WebView-Android" class="headerlink" title="带有JavaScript接口的WebView (Android)"></a>带有JavaScript接口的WebView (Android)</h1><p>漏洞特征:ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE<br>使用JavaScript接口可能会将WebView暴露给有危害的api。如果在WebView中触发xss的话，恶意的JavaScript代码会钓鱼一些敏感的类。<br>有漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">WebView myWebView = (WebView) findViewById(R.id.webView);</span><br><span class="line"></span><br><span class="line">myWebView.addJavascriptInterface(new FileWriteUtil(this), &quot;fileWriteUtil&quot;);</span><br><span class="line"></span><br><span class="line">WebSettings webSettings = myWebView.getSettings();</span><br><span class="line">webSettings.setJavaScriptEnabled(true);</span><br><span class="line"></span><br><span class="line">[...]</span><br><span class="line">class FileWriteUtil &#123;</span><br><span class="line">    Context mContext;</span><br><span class="line"></span><br><span class="line">    FileOpenUtil(Context c) &#123;</span><br><span class="line">        mContext = c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void writeToFile(String data, String filename, String tag) &#123;</span><br><span class="line">        [...]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br>[Android Official Doc: WebView.addJavascriptInterface()](<a href="http://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface" target="_blank" rel="noopener">http://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface</a>(java.lang.Object, java.lang.String))<br><a href="https://cwe.mitre.org/data/definitions/749.html" target="_blank" rel="noopener">CWE-749: Exposed Dangerous Method or Function</a></p>
+<h1 id="没有用secure标志的cookie"><a href="#没有用secure标志的cookie" class="headerlink" title="没有用secure标志的cookie"></a>没有用secure标志的cookie</h1><p>漏洞特征：INSECURE_COOKIE<br>一个新的cookie的创建应该设置Secure标志。Secure标志命令浏览器确保cookie不会通过不安全的链路发送(http://)<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cookie cookie = new Cookie(&quot;userName&quot;,userName);</span><br><span class="line">response.addCookie(cookie);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案（特殊的设置):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Cookie cookie = new Cookie(&quot;userName&quot;,userName);</span><br><span class="line">cookie.setSecure(true); // Secure flag</span><br><span class="line">cookie.setHttpOnly(true);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案（Servlet 3.0 配置）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; version=&quot;3.0&quot;&gt;</span><br><span class="line">[...]</span><br><span class="line">&lt;session-config&gt;</span><br><span class="line"> &lt;cookie-config&gt;</span><br><span class="line">  &lt;http-only&gt;true&lt;/http-only&gt;</span><br><span class="line">  &lt;secure&gt;true&lt;/secure&gt;</span><br><span class="line"> &lt;/cookie-config&gt;</span><br><span class="line">&lt;/session-config&gt;</span><br><span class="line">&lt;/web-app&gt;</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="https://cwe.mitre.org/data/definitions/614.html" target="_blank" rel="noopener">CWE-614: Sensitive Cookie in HTTPS Session Without ‘Secure’ Attribute</a><br><a href="https://cwe.mitre.org/data/definitions/315.html" target="_blank" rel="noopener">CWE-315: Cleartext Storage of Sensitive Information in a Cookie</a><br><a href="https://cwe.mitre.org/data/definitions/311.html" target="_blank" rel="noopener">CWE-311: Missing Encryption of Sensitive Data</a><br><a href="https://www.owasp.org/index.php/SecureFlag" target="_blank" rel="noopener">OWASP: Secure Flag</a><br><a href="https://www.rapid7.com/db/vulnerabilities/http-cookie-secure-flag" target="_blank" rel="noopener">Rapid7: Missing Secure Flag From SSL Cookie</a></p>
+<h1 id="没有用HttpOnly标志的cookie"><a href="#没有用HttpOnly标志的cookie" class="headerlink" title="没有用HttpOnly标志的cookie"></a>没有用HttpOnly标志的cookie</h1><p>漏洞特征：HTTPONLY_COOKIE<br>一个新的cookie的创建应该设置Secure标志。Secure标志命令浏览器确保cookie不会被恶意脚本读取。当用户是“跨站脚本攻击”的目标的时候，攻击者会获得用户的session id，从而能够接管用户的账户。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cookie cookie = new Cookie(&quot;email&quot;,userName);</span><br><span class="line">response.addCookie(cookie);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案（特殊的设置):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Cookie cookie = new Cookie(&quot;email&quot;,userName);</span><br><span class="line">cookie.setSecure(true);</span><br><span class="line">cookie.setHttpOnly(true); //HttpOnly flag</span><br></pre></td></tr></table></figure>
+
+<p>解决方案（Servlet 3.0 配置）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; version=&quot;3.0&quot;&gt;</span><br><span class="line">[...]</span><br><span class="line">&lt;session-config&gt;</span><br><span class="line"> &lt;cookie-config&gt;</span><br><span class="line">  &lt;http-only&gt;true&lt;/http-only&gt;</span><br><span class="line">  &lt;secure&gt;true&lt;/secure&gt;</span><br><span class="line"> &lt;/cookie-config&gt;</span><br><span class="line">&lt;/session-config&gt;</span><br><span class="line">&lt;/web-app&gt;</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="http://blog.codinghorror.com/protecting-your-cookies-httponly/" target="_blank" rel="noopener">Coding Horror blog: Protecting Your Cookies: HttpOnly</a><br><a href="https://www.owasp.org/index.php/HttpOnly" target="_blank" rel="noopener">OWASP: HttpOnly</a><br><a href="https://www.rapid7.com/db/vulnerabilities/http-cookie-http-only-flag" target="_blank" rel="noopener">Rapid7: Missing HttpOnly Flag From Cookie</a></p>
+<h1 id="使用反序列化对象"><a href="#使用反序列化对象" class="headerlink" title="使用反序列化对象"></a>使用反序列化对象</h1><p>漏洞特征：OBJECT_DESERIALIZATION<br>反序列化不受信任的数据可能会导致远程命令执行，如果有可用的执行链，那么就会触发恶意操作。库的开发者在逐渐提高防御策略，以避免潜在的恶意利用。但是还是有一些已知的类可以触发dos攻击。<br>反序列化是一个敏感的操作，因为历史上曾经有很多比较有名的漏洞都是出自它。web应用是很脆弱的，因为很快java虚拟机里面将会爆发出一波新的漏洞。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public UserData deserializeObject(InputStream receivedFile) throws IOException, ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">    try (ObjectInputStream in = new ObjectInputStream(receivedFile)) &#123;</span><br><span class="line">        return (UserData) in.readObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免反序列从远程用户输入的数据<br>引用：<br><a href="https://cwe.mitre.org/data/definitions/502.html" target="_blank" rel="noopener">CWE-502: Deserialization of Untrusted Data</a><br><a href="https://www.owasp.org/index.php/Deserialization_of_untrusted_data" target="_blank" rel="noopener">Deserialization of untrusted data</a><br><a href="http://www.oracle.com/technetwork/java/seccodeguide-139067.html#8" target="_blank" rel="noopener">Serialization and Deserialization</a><br><a href="https://github.com/frohoff/ysoserial" target="_blank" rel="noopener">A tool for generating payloads that exploit unsafe Java object deserialization</a><br>[1] <a href="https://gist.github.com/coekie/a27cc406fc9f3dc7a70d" target="_blank" rel="noopener">Example of Denial of Service using the class java.util.HashSet</a><br>[2] <a href="https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2015-2590" target="_blank" rel="noopener">OpenJDK: Deserialization issue in ObjectInputStream.readSerialData() (CVE-2015-2590)</a><br>[3] <a href="https://www.rapid7.com/db/modules/exploit/multi/browser/java_calendar_deserialize" target="_blank" rel="noopener">Rapid7: Sun Java Calendar Deserialization Privilege Escalation (CVE-2008-5353)</a></p>
+<h1 id="不安全的Jackson发序列化配置"><a href="#不安全的Jackson发序列化配置" class="headerlink" title="不安全的Jackson发序列化配置"></a>不安全的Jackson发序列化配置</h1><p>漏洞特征：JACKSON_UNSAFE_DESERIALIZATION<br>如果Jackson databind库被用来反序列不受信任的数据的话，就会导致远程命令执行。如果有可用的执行链，那么就会触发恶意操作。<br>解决方案：<br>当通过JsonTypeInfo.Id.NAME使用多态性时，应该明确定义想要的类型和子类型。并且不要调用ObjectMapper.enableDefaultTyping（readValue包含Object 或 Serializable 或 Comparable 或 已知的反序列化类型）<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class Example &#123;</span><br><span class="line">    static class ABean &#123;</span><br><span class="line">        public int id;</span><br><span class="line">        public Object obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class AnotherBean &#123;</span><br><span class="line">        @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS) // or JsonTypeInfo.Id.MINIMAL_CLASS</span><br><span class="line">        public Object obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void example(String json) throws JsonMappingException &#123;</span><br><span class="line">         ObjectMapper mapper = new ObjectMapper();</span><br><span class="line">         mapper.enableDefaultTyping();</span><br><span class="line">         mapper.readValue(json, ABean.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void exampleTwo(String json) throws JsonMappingException &#123;</span><br><span class="line">         ObjectMapper mapper = new ObjectMapper();</span><br><span class="line">         mapper.readValue(json, AnotherBean.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="https://github.com/FasterXML/jackson-databind/issues/1599" target="_blank" rel="noopener">Jackson Deserializer security vulnerability</a><br><a href="https://github.com/mbechler/marshalsec" target="_blank" rel="noopener">Java Unmarshaller Security - Turning your data into code execution</a></p>
+<h1 id="在反序列化漏洞中被利用的类"><a href="#在反序列化漏洞中被利用的类" class="headerlink" title="在反序列化漏洞中被利用的类"></a>在反序列化漏洞中被利用的类</h1><p>漏洞特征：DESERIALIZATION_GADGET<br>反序列化利用链是一些可以被攻击者利用的类，这些类通常存在于远程api中。这些类也会被添自定义行为，目的是用readObject方法去反序列化 (Serializable)或者调用来自序列化对象中的方法(InvocationHandler).<br>这个检查工具主要用于研究人员。真实的场景是反序列化会被用于远程操作。为了减少恶意代码的利用，必须要强制移除利用链中所使用的类。<br>引用：<br><a href="https://cwe.mitre.org/data/definitions/502.html" target="_blank" rel="noopener">CWE-502: Deserialization of Untrusted Data</a><br><a href="https://www.owasp.org/index.php/Deserialization_of_untrusted_data" target="_blank" rel="noopener">Deserialization of untrusted data</a><br><a href="http://www.oracle.com/technetwork/java/seccodeguide-139067.html#8" target="_blank" rel="noopener">Serialization and Deserialization</a><br><a href="https://github.com/frohoff/ysoserial" target="_blank" rel="noopener">A tool for generating payloads that exploit unsafe Java object deserialization</a><br>[1] <a href="https://gist.github.com/coekie/a27cc406fc9f3dc7a70d" target="_blank" rel="noopener">Example of Denial of Service using the class java.util.HashSet</a><br>[2] <a href="https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2015-2590" target="_blank" rel="noopener">OpenJDK: Deserialization issue in ObjectInputStream.readSerialData() (CVE-2015-2590)</a><br>[3] <a href="https://www.rapid7.com/db/modules/exploit/multi/browser/java_calendar_deserialize" target="_blank" rel="noopener">Rapid7: Sun Java Calendar Deserialization Privilege Escalation (CVE-2008-5353)</a></p>
+<h1 id="违反信任边界"><a href="#违反信任边界" class="headerlink" title="违反信任边界"></a>违反信任边界</h1><p>漏洞特征：TRUST_BOUNDARY_VIOLATION<br>信任边界被认为是通过程序画的一根线。在线的一边，数据是不可信的。在线的另一边，数据是被可信任的。身份效验的目的是为了数据能够安全的通过信任边界-从不信任的一遍到信任的一边。当程序模糊了信任数据和不信任数据的边界时就会导致违反信任边界的事情发生。把信任数据和不信任数据组合成相同的数据结构时，就会让程序员更容易在边界上的犯错。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public void doSomething(HttpServletRequest req, String activateProperty) &#123;</span><br><span class="line">    //..</span><br><span class="line"></span><br><span class="line">    req.getSession().setAttribute(activateProperty,&quot;true&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">123456</span><br><span class="line">public void loginEvent(HttpServletRequest req, String userSubmitted) &#123;</span><br><span class="line">    //..</span><br><span class="line"></span><br><span class="line">    req.getSession().setAttribute(&quot;user&quot;,userSubmitted);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>解决方案是在设置新的session属性前要添加验证。如果有可能，最好数据是来自安全的地方而不是用户提供的输入数据<br>引用：<br>[1] <a href="https://cwe.mitre.org/data/definitions/501.html" target="_blank" rel="noopener">CWE-501: Trust Boundary Violation</a><br><a href="https://www.owasp.org/index.php/Trust_Boundary_Violation" target="_blank" rel="noopener">OWASP : Trust Boundary Violation</a></p>
+<h1 id="恶意的XSLT"><a href="#恶意的XSLT" class="headerlink" title="恶意的XSLT"></a>恶意的XSLT</h1><p>漏洞特征：JSP_XSLT<br>XSLT(可扩展样式表转换语言)是一种用于将XML 文档转换为其他XML 文档的语言。<br>xslt的样式表中可能会携带恶意的行为。所以，如果一个攻击者控制了源样式表的内容，那么它可能会触发远程代码执行<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;x:transform xml=&quot;$&#123;xmlData&#125;&quot; xslt=&quot;$&#123;xsltControlledByUser&#125;&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>解决方案确保源样式表来自安全的源，并且保证不会有类似于路径穿透的漏洞。<br>引用<br>[1] <a href="https://en.wikipedia.org/wiki/XSLT" target="_blank" rel="noopener">Wikipedia: XSLT (Extensible Stylesheet Language Transformations)</a><br><a href="https://prezi.com/y_fuybfudgnd/offensive-xslt/" target="_blank" rel="noopener">Offensive XSLT</a> by Nicolas Gregoire<br>[2] <a href="http://www.agarri.fr/kom/archives/2012/07/02/from_xslt_code_execution_to_meterpreter_shells/index.html" target="_blank" rel="noopener">From XSLT code execution to Meterpreter shells</a> by Nicolas Gregoire<br><a href="http://xhe.myxwiki.org/xwiki/bin/view/Main/" target="_blank" rel="noopener">XSLT Hacking Encyclopedia</a> by Nicolas Gregoire<br><a href="http://www.acunetix.com/blog/articles/the-hidden-dangers-of-xsltprocessor-remote-xsl-injection/" target="_blank" rel="noopener">Acunetix.com : The hidden dangers of XSLTProcessor - Remote XSL injection</a><br><a href="https://www.w3.org/TR/xslt" target="_blank" rel="noopener">w3.org XSL Transformations (XSLT) Version 1.0</a> : w3c specification<br>[3] [WASC: Path Traversal](<a href="http://projects.webappsec.org/w/page/13246952/Path" target="_blank" rel="noopener">http://projects.webappsec.org/w/page/13246952/Path</a> Traversal)<br>[4] <a href="https://www.owasp.org/index.php/Path_Traversal" target="_blank" rel="noopener">OWASP: Path Traversal</a></p>
+<h1 id="恶意的XSLT-1"><a href="#恶意的XSLT-1" class="headerlink" title="恶意的XSLT"></a>恶意的XSLT</h1><p>漏洞特征：MALICIOUS_XSLT<br>XSLT(可扩展样式表转换语言)是一种用于将XML 文档转换为其他XML 文档的语言。<br>xslt的样式表中可能会携带恶意的行为。所以，如果一个攻击者控制了源样式表的内容，那么它可能会触发远程代码执行<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Source xslt = new StreamSource(new FileInputStream(inputUserFile)); //Dangerous source to validate</span><br><span class="line"></span><br><span class="line">Transformer transformer = TransformerFactory.newInstance().newTransformer(xslt);</span><br><span class="line"></span><br><span class="line">Source text = new StreamSource(new FileInputStream(&quot;/data_2_process.xml&quot;));</span><br><span class="line">transformer.transform(text, new StreamResult(...));</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>解决方案确保源样式表来自安全的源，并且保证不会有类似于路径穿透的漏洞。<br>引用<br>[1] <a href="https://en.wikipedia.org/wiki/XSLT" target="_blank" rel="noopener">Wikipedia: XSLT (Extensible Stylesheet Language Transformations)</a><br><a href="https://prezi.com/y_fuybfudgnd/offensive-xslt/" target="_blank" rel="noopener">Offensive XSLT</a> by Nicolas Gregoire<br>[2] <a href="http://www.agarri.fr/kom/archives/2012/07/02/from_xslt_code_execution_to_meterpreter_shells/index.html" target="_blank" rel="noopener">From XSLT code execution to Meterpreter shells</a> by Nicolas Gregoire<br><a href="http://xhe.myxwiki.org/xwiki/bin/view/Main/" target="_blank" rel="noopener">XSLT Hacking Encyclopedia</a> by Nicolas Gregoire<br><a href="http://www.acunetix.com/blog/articles/the-hidden-dangers-of-xsltprocessor-remote-xsl-injection/" target="_blank" rel="noopener">Acunetix.com : The hidden dangers of XSLTProcessor - Remote XSL injection</a><br><a href="https://www.w3.org/TR/xslt" target="_blank" rel="noopener">w3.org XSL Transformations (XSLT) Version 1.0</a> : w3c specification<br>[3] [WASC: Path Traversal](<a href="http://projects.webappsec.org/w/page/13246952/Path" target="_blank" rel="noopener">http://projects.webappsec.org/w/page/13246952/Path</a> Traversal)<br>[4] <a href="https://www.owasp.org/index.php/Path_Traversal" target="_blank" rel="noopener">OWASP: Path Traversal</a></p>
+<h1 id="潜藏在Scala-Play中的信息泄露"><a href="#潜藏在Scala-Play中的信息泄露" class="headerlink" title="潜藏在Scala Play中的信息泄露"></a>潜藏在Scala Play中的信息泄露</h1><p>漏洞特征：SCALA_SENSITIVE_DATA_EXPOSURE<br>应用总是无意识的泄露一些配置信息，比如内部结构或者通过各种应用问题侵犯隐私。<br>基于各种有效的输入数据页面会返回不同的返回数据，尤其当机密数据被当成结果被web应用展示出来的时候，就会导致信息的泄露。<br>敏感数据包括（不仅仅是列出来的这些）：api密钥，密码，产品版本，环境配置。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def doGet(value:String) = Action &#123;</span><br><span class="line">  val configElement = configuration.underlying.getString(value)</span><br><span class="line"></span><br><span class="line">  Ok(&quot;Hello &quot;+ configElement +&quot; !&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>应用配置的关键部分不应该被输出到返回数据报文中，并且用户也不能操作那些被用于代码的关键配置。<br>引用：<br><a href="https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure" target="_blank" rel="noopener">OWASP: Top 10 2013-A6-Sensitive Data Exposure</a><br>[1] <a href="https://www.owasp.org/index.php/Top_10_2007-Information_Leakage_and_Improper_Error_Handling" target="_blank" rel="noopener">OWASP: Top 10 2007-Information Leakage and Improper Error Handling</a><br>[2] [WASC-13: Information Leakage](<a href="http://projects.webappsec.org/w/page/13246936/Information" target="_blank" rel="noopener">http://projects.webappsec.org/w/page/13246936/Information</a> Leakage)<br><a href="https://cwe.mitre.org/data/definitions/200.html" target="_blank" rel="noopener">CWE-200: Information Exposure</a></p>
+<h1 id="Scala-Play服务器端请求伪造-SSRF"><a href="#Scala-Play服务器端请求伪造-SSRF" class="headerlink" title="Scala Play服务器端请求伪造(SSRF)"></a>Scala Play服务器端请求伪造(SSRF)</h1><p>漏洞特征：SCALA_PLAY_SSRF<br>当服务器端发送一个请求，这个请求的目标地址是用户输入指定的，且这个请求没有被严格的效验时，就会发生服务器端请求伪造漏洞。这个漏洞允许攻击者用你的web服务器访问网络上的任何一台服务器或者攻击其他服务器。<br>有漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def doGet(value:String) = Action &#123;</span><br><span class="line">    WS.url(value).get().map &#123; response =&gt;</span><br><span class="line">        Ok(response.body)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解决方案/对策</p>
+<ul>
+<li>不要让用户控制请求的目的地址</li>
+<li>接受一个目的地址的key，使用这个key去查找合法的目的地址</li>
+<li>urls地址白名单（如果可能的话）</li>
+<li>用白名单校验url地址开头的部分</li>
+</ul>
+<p>引用：<br><a href="https://cwe.mitre.org/data/definitions/918.html" target="_blank" rel="noopener">CWE-918: Server-Side Request Forgery (SSRF)</a><br><a href="https://www.bishopfox.com/blog/2015/04/vulnerable-by-design-understanding-server-side-request-forgery/" target="_blank" rel="noopener">Understanding Server-Side Request Forgery</a></p>
+<h1 id="URLConnection中的服务器端请求伪造-SSRF-和任意文件访问"><a href="#URLConnection中的服务器端请求伪造-SSRF-和任意文件访问" class="headerlink" title="URLConnection中的服务器端请求伪造(SSRF) 和任意文件访问"></a>URLConnection中的服务器端请求伪造(SSRF) 和任意文件访问</h1><p>漏洞特征：SCALA_PLAY_SSRF<br>当服务器端发送一个请求，这个请求的目标地址是用户输入指定的，且这个请求没有被严格的效验时，就会发生服务器端请求伪造漏洞。这个漏洞允许攻击者用你的web服务器访问网络上的任何一台服务器或者攻击其他服务器。<br>URLConnection能够使用file://协议获取其他的协议去访问本地的文件系统和其他的服务<br>有漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">new URL(String url).openConnection()</span><br><span class="line">new URL(String url).openStream()</span><br><span class="line">new URL(String url).getContent()</span><br></pre></td></tr></table></figure>
+
+<p>解决方案/对策</p>
+<ul>
+<li>不要让用户控制请求的目的地址</li>
+<li>接受一个目的地址的key，使用这个key去查找合法的目的地址</li>
+<li>urls地址白名单（如果可能的话）</li>
+<li>用白名单校验url地址开头的部分</li>
+</ul>
+<p>引用：<br><a href="https://cwe.mitre.org/data/definitions/918.html" target="_blank" rel="noopener">CWE-918: Server-Side Request Forgery (SSRF)</a><br><a href="https://www.bishopfox.com/blog/2015/04/vulnerable-by-design-understanding-server-side-request-forgery/" target="_blank" rel="noopener">Understanding Server-Side Request Forgery</a><br><a href="https://cwe.mitre.org/data/definitions/73.html" target="_blank" rel="noopener">CWE-73: External Control of File Name or Path</a><br><a href="https://www.pwntester.com/blog/2013/11/28/abusing-jar-downloads/" target="_blank" rel="noopener">Abusing jar:// downloads</a></p>
+<h1 id="在Scala-Twirl模板引擎里面潜在的xss"><a href="#在Scala-Twirl模板引擎里面潜在的xss" class="headerlink" title="在Scala Twirl模板引擎里面潜在的xss"></a>在Scala Twirl模板引擎里面潜在的xss</h1><p>漏洞规则：SCALA_XSS_TWIRL<br>可能会有潜在的xss漏洞。这可能会在客户端执行未期望的JavaScript。（见引用）<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@(value: Html)</span><br><span class="line"></span><br><span class="line">@value</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@(value: String)</span><br><span class="line"></span><br><span class="line">@value</span><br></pre></td></tr></table></figure>
+
+<p>抵御xss最好的方式是像上面在输出中编码特殊的字符。有4种环境类型要考虑：HTML, JavaScript, CSS (styles), 和URLs.请遵守OWASP XSS Prevention备忘录中定义的xss保护规则，里面会介绍一些重要的防御细节。<br>引用：<br>[WASC-8: Cross Site Scripting](<a href="http://projects.webappsec.org/w/page/13246920/Cross" target="_blank" rel="noopener">http://projects.webappsec.org/w/page/13246920/Cross</a> Site Scripting)<br><a href="https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet" target="_blank" rel="noopener">OWASP: XSS Prevention Cheat Sheet</a><br><a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_(XSS)" target="_blank" rel="noopener">OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)</a><br><a href="http://cwe.mitre.org/data/definitions/79.html" target="_blank" rel="noopener">CWE-79: Improper Neutralization of Input During Web Page Generation (‘Cross-site Scripting’)</a><br><a href="https://code.google.com/p/owasp-java-encoder/" target="_blank" rel="noopener">OWASP Java Encoder</a></p>
+<h1 id="在Scala-MVC-API引擎里面潜在的xss"><a href="#在Scala-MVC-API引擎里面潜在的xss" class="headerlink" title="在Scala MVC API引擎里面潜在的xss"></a>在Scala MVC API引擎里面潜在的xss</h1><p>漏洞规则： SCALA_XSS_MVC_API<br>可能会有潜在的xss漏洞。这可能会在客户端执行未期望的JavaScript。（见引用）<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def doGet(value:String) = Action &#123;</span><br><span class="line">    Ok(&quot;Hello &quot; + value + &quot; !&quot;).as(&quot;text/html&quot;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def doGet(value:String) = Action &#123;</span><br><span class="line">    Ok(&quot;Hello &quot; + Encode.forHtml(value) + &quot; !&quot;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>抵御xss最好的方式是像上面在输出中编码特殊的字符。有4种环境类型要考虑：HTML, JavaScript, CSS (styles), 和URLs.请遵守OWASP XSS Prevention备忘录中定义的xss保护规则，里面会介绍一些重要的防御细节。<br>引用：<br>[WASC-8: Cross Site Scripting](<a href="http://projects.webappsec.org/w/page/13246920/Cross" target="_blank" rel="noopener">http://projects.webappsec.org/w/page/13246920/Cross</a> Site Scripting)<br><a href="https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet" target="_blank" rel="noopener">OWASP: XSS Prevention Cheat Sheet</a><br><a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_(XSS)" target="_blank" rel="noopener">OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)</a><br><a href="http://cwe.mitre.org/data/definitions/79.html" target="_blank" rel="noopener">CWE-79: Improper Neutralization of Input During Web Page Generation (‘Cross-site Scripting’)</a><br><a href="https://code.google.com/p/owasp-java-encoder/" target="_blank" rel="noopener">OWASP Java Encoder</a></p>
+<h1 id="在Velocity中潜在的模板注入"><a href="#在Velocity中潜在的模板注入" class="headerlink" title="在Velocity中潜在的模板注入"></a>在Velocity中潜在的模板注入</h1><p>漏洞特征：TEMPLATE_INJECTION_VELOCITY<br>Velocity模板引擎非常强大。你可以在模板中使用条件判断，循环，外部函数调用等逻辑代码。它里面也没有一个沙箱去限制操作。一个恶意的用户如果可以控制模板，那么他就可以在服务器端运行恶意代码。Velocity模板应被视为脚本。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[...]</span><br><span class="line"></span><br><span class="line">Velocity.evaluate(context, swOut, &quot;test&quot;, userInput);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免让终端用户操作Velocity中的模板。如果你需要让你的用户去操作模板，那么最好限制模板引擎的能力，就像Handlebars 或 Moustache 一样（见引用）<br>引用：<br><a href="http://blog.portswigger.net/2015/08/server-side-template-injection.html" target="_blank" rel="noopener">PortSwigger: Server-Side Template Injection</a><br><a href="https://jknack.github.io/handlebars.java/" target="_blank" rel="noopener">Handlebars.java</a></p>
+<h1 id="在Freemarker中潜在的模板注入"><a href="#在Freemarker中潜在的模板注入" class="headerlink" title="在Freemarker中潜在的模板注入"></a>在Freemarker中潜在的模板注入</h1><p>漏洞特征：TEMPLATE_INJECTION_FREEMARKER<br>Freemarker模板引擎非常强大。你可以在模板中使用条件判断，循环，外部函数调用等逻辑代码。它里面也没有一个沙箱去限制操作。一个恶意的用户如果可以控制模板，那么他就可以在服务器端运行恶意代码。Velocity模板应被视为脚本。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Template template = cfg.getTemplate(inputTemplate);</span><br><span class="line">[...]</span><br><span class="line">template.process(data, swOut);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免让终端用户操作Freemarker中的模板。如果你需要让你的用户去操作模板，那么最好限制模板引擎的能力，就像Handlebars 或 Moustache 一样（见引用）<br>引用：<br><a href="http://blog.portswigger.net/2015/08/server-side-template-injection.html" target="_blank" rel="noopener">PortSwigger: Server-Side Template Injection</a><br><a href="https://jknack.github.io/handlebars.java/" target="_blank" rel="noopener">Handlebars.java</a></p>
+<h1 id="过度宽松的cors策略"><a href="#过度宽松的cors策略" class="headerlink" title="过度宽松的cors策略"></a>过度宽松的cors策略</h1><p>漏洞规则：PERMISSIVE_CORS<br>在html5之前，web浏览器强制使用同源策略，目的是保证JavaScript能够访问web页面的内容，JavaScript和web页面的起源必须来自于同一个域下。如果没有同源策略，那么恶意网站就可以用JavaScript脚本加载客户端的用户凭据，从而读取用户保存在其他网站的中敏感信息，然后把数据传送给攻击者。如果http返回头定义了Access-Control-Allow-Origin字段，那么就可以让JavaScript跨域访问数据。有了这个头，web服务器就可以定义哪些其他域可以跨域来访问这个服务器。可是应该小心定义这个头，因为过度宽松的cors策略可以让恶意的应用通过这样的方式去读取受害者应用中的敏感数据，这样就会导致欺骗，数据失窃，数据修改等其他的攻击行为。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.addHeader(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免在Access-Control-Allow-Origin这个头中使用*，这表示运行在其他域下的任何JavaScript都可以访问这个域下的应用数据<br>引用：<br><a href="https://www.w3.org/TR/cors/" target="_blank" rel="noopener">W3C Cross-Origin Resource Sharing</a><br><a href="http://enable-cors.org/" target="_blank" rel="noopener">Enable Cross-Origin Resource Sharing</a></p>
+<h1 id="匿名的LDAP绑定"><a href="#匿名的LDAP绑定" class="headerlink" title="匿名的LDAP绑定"></a>匿名的LDAP绑定</h1><p>漏洞特征：LDAP_ANONYMOUS<br>没有做合适的访问控制，攻击者可以滥用ldap配置，让ldap服务器执行一段包含用户控制的代码。所有依赖ctx的ldap查询都可以以不需要用户认证和访问控制的方式去执行。攻击者可以操作其中的查询语句来获取被directory服务器保护的数据。<br>有漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">env.put(Context.SECURITY_AUTHENTICATION, &quot;none&quot;);</span><br><span class="line">DirContext ctx = new InitialDirContext(env);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>考虑ldap中其他的用户认证模式并且确保有合适的访问控制</p>
+<p>引用：<br><a href="https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html" target="_blank" rel="noopener">Ldap Authentication Mechanisms</a></p>
+<h1 id="ldap-入口投毒"><a href="#ldap-入口投毒" class="headerlink" title="ldap 入口投毒"></a>ldap 入口投毒</h1><p>漏洞特征： LDAP_ENTRY_POISONING<br>JNDI api支持在ldap目录上绑定序列化对象。如果提供确定的属性，反序列化对象将会被用于应用数据的查询（详细信息见Black Hat USA 2016 白皮书）。反序列化对象是一个有风险的操作，他可能会导致远程代码执行。<br>如果攻击者获得ldap基本查询的入口点，那么这个漏洞就可能会被利用。通过添加一个属性给已存在的ldap入口或者通过配置应用，就可以恶意的使用ldap服务器了。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DirContext ctx = new InitialDirContext();</span><br><span class="line">//[...]</span><br><span class="line"></span><br><span class="line">ctx.search(query, filter,</span><br><span class="line">        new SearchControls(scope, countLimit, timeLimit, attributes,</span><br><span class="line">            true, //Enable object deserialization if bound in directory</span><br><span class="line">            deref));</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DirContext ctx = new InitialDirContext();</span><br><span class="line">//[...]</span><br><span class="line"></span><br><span class="line">ctx.search(query, filter,</span><br><span class="line">        new SearchControls(scope, countLimit, timeLimit, attributes,</span><br><span class="line">            false, //Disable</span><br><span class="line">            deref));</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE-wp.pdf" target="_blank" rel="noopener">Black Hat USA 2016: A Journey From JNDI/LDAP Manipulation to Remote Code Execution Dream Land (slides &amp; video) by Alvaro Muñoz and Oleksandr Mirosh</a></p>
+<p><a href="https://community.hpe.com/t5/Security-Research/Introducing-JNDI-Injection-and-LDAP-Entry-Poisoning/ba-p/6885118" target="_blank" rel="noopener">HP Enterprise: Introducing JNDI Injection and LDAP Entry Poisoning by Alvaro Muñoz</a></p>
+<p><a href="http://blog.trendmicro.com/trendlabs-security-intelligence/new-headaches-how-the-pawn-storm-zero-day-evaded-javas-click-to-play-protection/" target="_blank" rel="noopener">TrendMicro: How The Pawn Storm Zero-Day Evaded Java’s Click-to-Play Protection by Jack Tang</a></p>
+<h1 id="使用持久性的cookie"><a href="#使用持久性的cookie" class="headerlink" title="使用持久性的cookie"></a>使用持久性的cookie</h1><p>漏洞特征：COOKIE_PERSISTENT<br>将敏感数据存储在持久性的cookie中会危害到数据的保密性和账户的安全性<br>解释：<br>如果隐私信息被存储在持久性的cookie中，攻击者就会利用这个巨大的时间窗口来窃取数据，尤其持久性cookie会在用户的电脑中保存非常长的一段时间。持久性cookie一般是以文本的形式存储在客户端，攻击者可以同年哥哥访问受害者的机器来获取到这些信息。<br>持久性cookie会被经常使用，目的是为了在用户和网站互动时能够分析用户的行为。依靠持久性cookie去追踪数据，这可能已经侵犯了用户的隐私<br>有漏洞的代码：下面的代码可以让cookie保存一年</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[...]</span><br><span class="line">Cookie cookie = new Cookie(&quot;email&quot;, email);</span><br><span class="line">cookie.setMaxAge(60*60*24*365);</span><br><span class="line">[...]</span><br></pre></td></tr></table></figure>
+
+<p>解决方案:</p>
+<ul>
+<li>在有必要的时候使用持久性cookie，并且要限制最大过期时间</li>
+<li>不要在敏感上使用持久性cookie</li>
+</ul>
+<p>引用：<br><a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/Cookie.html#setMaxAge(int)" target="_blank" rel="noopener">Class Cookie setMaxAge documentation</a><br><a href="https://cwe.mitre.org/data/definitions/539.html" target="_blank" rel="noopener">CWE-539: Information Exposure Through Persistent Cookies</a></p>
+<h1 id="url重写方法"><a href="#url重写方法" class="headerlink" title="url重写方法"></a>url重写方法</h1><p>漏洞规则：URL_REWRITING<br>该方法的实现包括确定是否需要在URL中编码session ID的逻辑。<br>url重写已经是非常严重的安全问题了，因为session ID 出现在url中，这就很容易被第三方获取到。在url中的session ID会以很多种的方式被暴露。</p>
+<ul>
+<li>日志</li>
+<li>浏览器历史</li>
+<li>复制粘贴到邮件中或者文章中</li>
+<li>http的Referrer头中</li>
+</ul>
+<p>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">out.println(&quot;Click &lt;a href=&quot; + </span><br><span class="line">                res.encodeURL(HttpUtils.getRequestURL(req).toString()) + </span><br><span class="line">                &quot;&gt;here&lt;/a&gt;&quot;);</span><br><span class="line">123</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免使用这些方法，如果您要编码URL字符串或表单参数，请不要将URL重写方法与URLEncoder类混淆。<br>引用：<br>[OWASP Top 10 2010-A3-Broken Authentication and Session Management](OWASP Top 10 2010-A3-Broken Authentication and Session Management)</p>
+<h1 id="不安全的SMTP-SSL链接"><a href="#不安全的SMTP-SSL链接" class="headerlink" title="不安全的SMTP SSL链接"></a>不安全的SMTP SSL链接</h1><p>漏洞特征：INSECURE_SMTP_SSL<br>当进行ssl连接时，服务器会禁用身份验证。一些启用ssl连接的邮件库默认情况下不会验证服务器的证书。这就等于信任所有的证书。当试图去连接服务器的时候，应用会很乐意的接收由”<a href="http://hackedserver.com/" target="_blank" rel="noopener">hackedserver.com</a>“签发的证书。当应用连接到黑客的邮件服务器时会有泄露用户敏感信息的风险。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">Email email = new SimpleEmail();</span><br><span class="line">email.setHostName(&quot;smtp.servermail.com&quot;);</span><br><span class="line">email.setSmtpPort(465);</span><br><span class="line">email.setAuthenticator(new DefaultAuthenticator(username, password));</span><br><span class="line">email.setSSLOnConnect(true);</span><br><span class="line">email.setFrom(&quot;user@gmail.com&quot;);</span><br><span class="line">email.setSubject(&quot;TestMail&quot;);</span><br><span class="line">email.setMsg(&quot;This is a test mail ... :-)&quot;);</span><br><span class="line">email.addTo(&quot;foo@bar.com&quot;);</span><br><span class="line">email.send();</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>请添加验证服务器证书的模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">email.setSSLCheckServerIdentity(true);</span><br></pre></td></tr></table></figure>
+
+<p>引用：<br><a href="https://cwe.mitre.org/data/definitions/297.html" target="_blank" rel="noopener">CWE-297: Improper Validation of Certificate with Host Mismatch</a></p>
+<h1 id="AWS查询注入"><a href="#AWS查询注入" class="headerlink" title="AWS查询注入"></a>AWS查询注入</h1><p>漏洞特征：AWS_QUERY_INJECTION<br>如果SimpleDB数据库查询字符串中包含用户输入的话就会让攻击者查看未授权的记录。<br>下面这个例子就是动态的创建查询字符串并且执行SimpleDB的select()查询，这个查询中允许用户指定productCategory。攻击者可以修改查询，绕过customerID的身份验证从而查看所有消费者的记录。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">String customerID = getAuthenticatedCustomerID(customerName, customerCredentials);</span><br><span class="line">String productCategory = request.getParameter(&quot;productCategory&quot;);</span><br><span class="line">...</span><br><span class="line">AmazonSimpleDBClient sdbc = new AmazonSimpleDBClient(appAWSCredentials);</span><br><span class="line">String query = &quot;select * from invoices where productCategory = &apos;&quot;</span><br><span class="line">            + productCategory + &quot;&apos; and customerID = &apos;&quot;</span><br><span class="line">            + customerID + &quot;&apos; order by &apos;&quot;</span><br><span class="line">            + sortColumn + &quot;&apos; asc&quot;;</span><br><span class="line">SelectResult sdbResult = sdbc.select(new SelectRequest(query));</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>这个问题类似于sql注入，在进入SimpleDB数据库查询语句的之前要过滤用户的输入<br>引用：<br><a href="https://cwe.mitre.org/data/definitions/943.html" target="_blank" rel="noopener">CWE-943: Improper Neutralization of Special Elements in Data Query Logic</a></p>
+<h1 id="JavaBeans属性注入"><a href="#JavaBeans属性注入" class="headerlink" title="JavaBeans属性注入"></a>JavaBeans属性注入</h1><p>漏洞特征：BEAN_PROPERTY_INJECTION<br>攻击者可以设置任意bean的属性，这样会降低系统的完整性。Bean的population函数允许设置bean的属性或者嵌套属性。<br>攻击者会影响这个函数从而去访问特殊的bean属性，比如class。类加载器允许他去操控系统属性并且会有潜在的执行任意代码的可能性。<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MyBean bean = ...;</span><br><span class="line">HashMap map = new HashMap();</span><br><span class="line">Enumeration names = request.getParameterNames();</span><br><span class="line">while (names.hasMoreElements()) &#123;</span><br><span class="line">    String name = (String) names.nextElement();</span><br><span class="line">    map.put(name, request.getParameterValues(name));</span><br><span class="line">&#125;</span><br><span class="line">BeanUtils.populate(bean, map);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免使用用户能够控制的数据去设置Bean属性的名称</p>
+<p>引用：<br><a href="https://cwe.mitre.org/data/definitions/15.html" target="_blank" rel="noopener">CWE-15: External Control of System or Configuration Setting</a></p>
+<h1 id="Struts敏感文件暴露"><a href="#Struts敏感文件暴露" class="headerlink" title="Struts敏感文件暴露"></a>Struts敏感文件暴露</h1><p>漏洞特征：STRUTS_FILE_DISCLOSURE<br>用户通过输入去访问服务器端的任意路径，这样会允许攻击者下载服务器端的任意文件（包含应用的类文件或者jar文件），或者直接查看在保护目录下的文件。<br>攻击者可能会伪造请求去寻找服务器中敏感的文件。例如，请求”<a href="http://example.com/?returnURL=WEB-INF/applicationContext.xml&quot;，服务器就会展示出applicationContext.xml的内容。攻击者就能通过applicationContext.xml精确的定位其他配置文件的位置，并且下载这些配置文件，甚至是类文件或者jar文件。获取到敏感信息之后，攻击者就会进行其他类型的攻击了。" target="_blank" rel="noopener">http://example.com/?returnURL=WEB-INF/applicationContext.xml&quot;，服务器就会展示出applicationContext.xml的内容。攻击者就能通过applicationContext.xml精确的定位其他配置文件的位置，并且下载这些配置文件，甚至是类文件或者jar文件。获取到敏感信息之后，攻击者就会进行其他类型的攻击了。</a><br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">... </span><br><span class="line">String returnURL = request.getParameter(&quot;returnURL&quot;); </span><br><span class="line">Return new ActionForward(returnURL); </span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免把用户输入的数据放入路径查询字符串之中。</p>
+<p>引用：<br><a href="https://cwe.mitre.org/data/definitions/552.html" target="_blank" rel="noopener">CWE-552: Files or Directories Accessible to External Parties</a></p>
+<h1 id="Spring敏感文件暴露"><a href="#Spring敏感文件暴露" class="headerlink" title="Spring敏感文件暴露"></a>Spring敏感文件暴露</h1><p>漏洞特征：SPRING_FILE_DISCLOSURE<br>用户通过输入去访问服务器端的任意路径，这样会允许攻击者下载服务器端的任意文件（包含应用的类文件或者jar文件），或者直接查看在保护目录下的文件。<br>攻击者可能会伪造请求去寻找服务器中敏感的文件。例如，请求”<a href="http://example.com/?returnURL=WEB-INF/applicationContext.xml&quot;，服务器就会展示出applicationContext.xml的内容。攻击者就能通过applicationContext.xml精确的定位其他配置文件的位置，并且下载这些配置文件，甚至是类文件或者jar文件。获取到敏感信息之后，攻击者就会进行其他类型的攻击了。" target="_blank" rel="noopener">http://example.com/?returnURL=WEB-INF/applicationContext.xml&quot;，服务器就会展示出applicationContext.xml的内容。攻击者就能通过applicationContext.xml精确的定位其他配置文件的位置，并且下载这些配置文件，甚至是类文件或者jar文件。获取到敏感信息之后，攻击者就会进行其他类型的攻击了。</a><br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">... </span><br><span class="line">String returnURL = request.getParameter(&quot;returnURL&quot;);</span><br><span class="line">return new ModelAndView(returnURL); </span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免把用户输入的数据放入路径查询字符串之中。</p>
+<p>引用：<br><a href="https://cwe.mitre.org/data/definitions/552.html" target="_blank" rel="noopener">CWE-552: Files or Directories Accessible to External Parties</a></p>
+<h1 id="RequestDispatcher敏感文件暴露"><a href="#RequestDispatcher敏感文件暴露" class="headerlink" title="RequestDispatcher敏感文件暴露"></a>RequestDispatcher敏感文件暴露</h1><p>漏洞特征：REQUESTDISPATCHER_FILE_DISCLOSURE<br>用户通过输入去访问服务器端的任意路径，这样会允许攻击者下载服务器端的任意文件（包含应用的类文件或者jar文件），或者直接查看在保护目录下的文件。<br>攻击者可能会伪造请求去寻找服务器中敏感的文件。例如，请求<a href="http://example.com/?jspFile=…/applicationContext.xml%3F&quot;，服务器就会展示出applicationContext.xml的内容。攻击者就能通过applicationContext.xml精确的定位其他配置文件的位置，并且下载这些配置文件，甚至是类文件或者jar文件。获取到敏感信息之后，攻击者就会进行其他类型的攻击了。" target="_blank" rel="noopener">http://example.com/?jspFile=…/applicationContext.xml%3F&quot;，服务器就会展示出applicationContext.xml的内容。攻击者就能通过applicationContext.xml精确的定位其他配置文件的位置，并且下载这些配置文件，甚至是类文件或者jar文件。获取到敏感信息之后，攻击者就会进行其他类型的攻击了。</a><br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">String jspFile = request.getParameter(&quot;jspFile&quot;);</span><br><span class="line">request.getRequestDispatcher(&quot;/WEB-INF/jsps/&quot; + jspFile + &quot;.jsp&quot;).include(request, response);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免把用户输入的数据放入路径查询字符串之中。</p>
+<p>引用：<br><a href="https://cwe.mitre.org/data/definitions/552.html" target="_blank" rel="noopener">CWE-552: Files or Directories Accessible to External Parties</a></p>
+<h1 id="格式化字符串操作"><a href="#格式化字符串操作" class="headerlink" title="格式化字符串操作"></a>格式化字符串操作</h1><p>漏洞特征：FORMAT_STRING_MANIPULATION<br>如果用户输入能够控制格式化字符串参数的话，那么攻击者这个漏洞让应用抛出异常或者泄露信息。<br>攻击者可能会改变格式化字符串的参数，比如可以让应用抛出错误。如果错误没有被捕获，那么应用就会崩溃。<br>此外，如果敏感信息保留在内存中的话，那么攻击者就会改变格式化字符串去泄露敏感数据。<br>下面这个示例代码是让用户指定一个浮点数来展示余额，实际上，用户输入任何东西都会让应用抛出异常从而导致显示失败。甚至，更有害的例子是，如果攻击者输入”2f %3ss %4<em>s</em>.2”，那么格式化字符串就会变成”The customer: %s %s has the balance %4.2f.2f %3.2<em>f</em>s %4$.2”。这就会导致在输出结果中显示敏感的账户ID。<br>有漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Formatter formatter = new Formatter(Locale.US);</span><br><span class="line">String format = &quot;The customer: %s %s has the balance %4$.&quot; + userInput + &quot;f&quot;;</span><br><span class="line">formatter.format(format, firstName, lastName, accountNo, balance);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>避免让用户输入控制格式化字符串参数<br>引用:<br><a href="http://cwe.mitre.org/data/definitions/134.html" target="_blank" rel="noopener">CWE-134: Use of Externally-Controlled Format String</a></p>
+<h1 id="http参数被污染"><a href="#http参数被污染" class="headerlink" title="http参数被污染"></a>http参数被污染</h1><p>漏洞特征：HTTP_PARAMETER_POLLUTION<br>将未验证的用户输入直接拼接到url中，这会让攻击者操控请求参数的值。攻击者可能会操控已存在参数的值，注入新的参数或者利用非变量字典中的参数。http参数污染 (HPP) 攻击包含将已编码的查询字符串分隔符注入其他现有参数。如果应用没有过滤用户输入，那么恶意的用户就可以构造特殊的输入攻击服务器端或者客户端程序。<br>在下面的例子中，程序员可能没有考虑到攻击者会给参数lang输入en&amp;user_id=1，这可能会让他的用户id发生改变。<br>有漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String lang = request.getParameter(&quot;lang&quot;);</span><br><span class="line">GetMethod get = new GetMethod(&quot;http://www.host.com&quot;);</span><br><span class="line">get.setQueryString(&quot;lang=&quot; + lang + &quot;&amp;user_id=&quot; + user_id);</span><br><span class="line">get.execute();</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>在使用http参数之前过滤用户输入数据<br>引用：<br><a href="https://capec.mitre.org/data/definitions/460.html" target="_blank" rel="noopener">CAPEC-460: HTTP Parameter Pollution (HPP)</a></p>
+<h1 id="通过报错泄露敏感信息"><a href="#通过报错泄露敏感信息" class="headerlink" title="通过报错泄露敏感信息"></a>通过报错泄露敏感信息</h1><p>漏洞特征：INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE<br>在用户看来敏感信息是非常有价值的（比如密码），或者它可能会对其他平台有用，更多的情况下，会引发非常致命的攻击。如果攻击失败，攻击者就会参考服务器提供的错误信息来做更针对性的攻击。比如，试图利用目录穿越漏洞(CWE-22)可能会显示出应用安装的绝对路径。反过来，这样就可以选择合适数量的”…”去跳转到目标文件上。攻击者使用的sql注入(CWE-89)可能在一开始的时候不会成功，但是错误信息可能会展示畸形的查询，这可能会暴露查询逻辑，甚至密码或者包含在数据库中的其他敏感信息<br>有漏洞的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  out = httpResponse.getOutputStream()</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">  e.printStackTrace(out);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引用:<br><a href="https://cwe.mitre.org/data/definitions/209.html" target="_blank" rel="noopener">CWE-209: Information Exposure Through an Error Message</a></p>
+<h1 id="SMTP-头部注入"><a href="#SMTP-头部注入" class="headerlink" title="SMTP 头部注入"></a>SMTP 头部注入</h1><p>漏洞特征：SMTP_HEADER_INJECTION<br>简单邮件传输协议 (SMTP) 是基于纯文本协议来投递邮件的。就像http，头部字段被new line 所分割。如果用户输入被放置到邮件的头部，那么应用应该删除或者替换掉new line字符串(CR / LF)。你应该使用安全的封装，比如 <a href="https://commons.apache.org/proper/commons-email/userguide.html" target="_blank" rel="noopener">Apache Common Email</a> 和<a href="http://www.simplejavamail.org/" target="_blank" rel="noopener">Simple Java Mail</a> ，这些库会过滤掉那些会导致头部注入的特殊字符。<br>有漏洞代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Message message = new MimeMessage(session);</span><br><span class="line">message.setFrom(new InternetAddress(&quot;noreply@your-organisation.com&quot;));</span><br><span class="line">message.setRecipients(Message.RecipientType.TO, new InternetAddress[] &#123;new InternetAddress(&quot;target@gmail.com&quot;)&#125;);</span><br><span class="line">message.setSubject(usernameDisplay + &quot; has sent you notification&quot;); //Injectable API</span><br><span class="line">message.setText(&quot;Visit your ACME Corp profile for more info.&quot;);</span><br><span class="line">Transport.send(message);</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：<br>使用<a href="https://commons.apache.org/proper/commons-email/userguide.html" target="_blank" rel="noopener">Apache Common Email</a> 或<a href="http://www.simplejavamail.org/" target="_blank" rel="noopener">Simple Java Mail</a></p>
+<p>引用：<br><a href="https://www.owasp.org/index.php/Testing_for_IMAP/SMTP_Injection_(OTG-INPVAL-011)" target="_blank" rel="noopener">OWASP SMTP Injection</a><br><a href="https://cwe.mitre.org/data/definitions/93.html" target="_blank" rel="noopener">CWE-93: Improper Neutralization of CRLF Sequences (‘CRLF Injection’)</a><br><a href="https://commons.apache.org/proper/commons-email/userguide.html" target="_blank" rel="noopener">Commons Email: User Guide</a><br><a href="http://www.simplejavamail.org/" target="_blank" rel="noopener">Simple Java Mail Website</a><br><a href="https://security.stackexchange.com/a/54100/24973" target="_blank" rel="noopener">StackExchange InfoSec: What threats come from CRLF in email generation?</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/02/Java%E5%AE%A1%E8%AE%A1-DAY3/" rel="next" title="Java审计-DAY3">
+                <i class="fa fa-chevron-left"></i> Java审计-DAY3
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/02/MYSQL%E6%8F%90%E6%9D%83/" rel="prev" title="MYSQL提权">
+                MYSQL提权 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java审计-DAY4"><span class="nav-number">1.</span> <span class="nav-text">Java审计-DAY4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#外部文件访问-Android"><span class="nav-number">2.</span> <span class="nav-text">外部文件访问(Android)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Broadcast漏洞-Android"><span class="nav-number">3.</span> <span class="nav-text">Broadcast漏洞(Android)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任意文件写-Android"><span class="nav-number">4.</span> <span class="nav-text">任意文件写 (Android)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#已激活地理位置的WebView-Android"><span class="nav-number">5.</span> <span class="nav-text">已激活地理位置的WebView(Android)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#允许JavaScript脚本运行的webview-Android"><span class="nav-number">6.</span> <span class="nav-text">允许JavaScript脚本运行的webview (Android)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#带有JavaScript接口的WebView-Android"><span class="nav-number">7.</span> <span class="nav-text">带有JavaScript接口的WebView (Android)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#没有用secure标志的cookie"><span class="nav-number">8.</span> <span class="nav-text">没有用secure标志的cookie</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#没有用HttpOnly标志的cookie"><span class="nav-number">9.</span> <span class="nav-text">没有用HttpOnly标志的cookie</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用反序列化对象"><span class="nav-number">10.</span> <span class="nav-text">使用反序列化对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不安全的Jackson发序列化配置"><span class="nav-number">11.</span> <span class="nav-text">不安全的Jackson发序列化配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在反序列化漏洞中被利用的类"><span class="nav-number">12.</span> <span class="nav-text">在反序列化漏洞中被利用的类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#违反信任边界"><span class="nav-number">13.</span> <span class="nav-text">违反信任边界</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#恶意的XSLT"><span class="nav-number">14.</span> <span class="nav-text">恶意的XSLT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#恶意的XSLT-1"><span class="nav-number">15.</span> <span class="nav-text">恶意的XSLT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#潜藏在Scala-Play中的信息泄露"><span class="nav-number">16.</span> <span class="nav-text">潜藏在Scala Play中的信息泄露</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scala-Play服务器端请求伪造-SSRF"><span class="nav-number">17.</span> <span class="nav-text">Scala Play服务器端请求伪造(SSRF)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#URLConnection中的服务器端请求伪造-SSRF-和任意文件访问"><span class="nav-number">18.</span> <span class="nav-text">URLConnection中的服务器端请求伪造(SSRF) 和任意文件访问</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在Scala-Twirl模板引擎里面潜在的xss"><span class="nav-number">19.</span> <span class="nav-text">在Scala Twirl模板引擎里面潜在的xss</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在Scala-MVC-API引擎里面潜在的xss"><span class="nav-number">20.</span> <span class="nav-text">在Scala MVC API引擎里面潜在的xss</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在Velocity中潜在的模板注入"><span class="nav-number">21.</span> <span class="nav-text">在Velocity中潜在的模板注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在Freemarker中潜在的模板注入"><span class="nav-number">22.</span> <span class="nav-text">在Freemarker中潜在的模板注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过度宽松的cors策略"><span class="nav-number">23.</span> <span class="nav-text">过度宽松的cors策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#匿名的LDAP绑定"><span class="nav-number">24.</span> <span class="nav-text">匿名的LDAP绑定</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ldap-入口投毒"><span class="nav-number">25.</span> <span class="nav-text">ldap 入口投毒</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用持久性的cookie"><span class="nav-number">26.</span> <span class="nav-text">使用持久性的cookie</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#url重写方法"><span class="nav-number">27.</span> <span class="nav-text">url重写方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不安全的SMTP-SSL链接"><span class="nav-number">28.</span> <span class="nav-text">不安全的SMTP SSL链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AWS查询注入"><span class="nav-number">29.</span> <span class="nav-text">AWS查询注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaBeans属性注入"><span class="nav-number">30.</span> <span class="nav-text">JavaBeans属性注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Struts敏感文件暴露"><span class="nav-number">31.</span> <span class="nav-text">Struts敏感文件暴露</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring敏感文件暴露"><span class="nav-number">32.</span> <span class="nav-text">Spring敏感文件暴露</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RequestDispatcher敏感文件暴露"><span class="nav-number">33.</span> <span class="nav-text">RequestDispatcher敏感文件暴露</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式化字符串操作"><span class="nav-number">34.</span> <span class="nav-text">格式化字符串操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http参数被污染"><span class="nav-number">35.</span> <span class="nav-text">http参数被污染</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过报错泄露敏感信息"><span class="nav-number">36.</span> <span class="nav-text">通过报错泄露敏感信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SMTP-头部注入"><span class="nav-number">37.</span> <span class="nav-text">SMTP 头部注入</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
