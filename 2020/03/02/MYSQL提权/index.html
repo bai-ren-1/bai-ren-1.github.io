@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="白仁的博客">
 <meta property="og:description" content="MYSQL写Webshell写Webshell比较常见的方法有：  select … into outfile general_log   select … into outfile1.利用条件 对web目录有写权限 GPC关闭（能使用单引号） 有绝对路径（读文件可以不用，写文件必须） 没有配置 –secure-file-priv  2.利用方式 有 union  12id=2) union se">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-03T09:42:44.444Z">
+<meta property="og:updated_time" content="2020-03-04T02:54:54.141Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -395,7 +395,6 @@
 <p>这段代码只是在目标系统上添加了一个admin用户，并没有添加到管理员组（如果需要自行查找，网上很多），将这个文件存储为nullevt.mof上传到任意一个你在目标机上可写的路径(当然，如果你直接可以写到c:/windows/system32/wbem/mof/就更好了)，接下来我们就可以直接执行sql语句把该文件写入到目标路径：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select load_file(&apos;你上传的路径/nullevt.mof&apos;) into dumpfile &apos;c:/windows/system32/wbem/mof/nullevt.mof&apos;;</span><br></pre></td></tr></table></figure>
 
-
 <p>执行完后，你可以在你的webshell里执行使用net user查看是否多了一个admin用户，如果有则说明可以利用，否则就不需要继续了。</p>
 <hr>
 <h2 id="udf提权"><a href="#udf提权" class="headerlink" title="udf提权"></a>udf提权</h2><h3 id="1-原理-1"><a href="#1-原理-1" class="headerlink" title="1.原理"></a>1.原理</h3><p>UDF提权是利用MYSQL的自定义函数功能，将MYSQL账号转化为系统system权限</p>
@@ -560,7 +559,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
