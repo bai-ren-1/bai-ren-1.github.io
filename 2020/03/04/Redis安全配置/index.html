@@ -81,11 +81,14 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="白仁的博客">
-<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;categories&#x2F;WEB%E5%AE%89%E5%85%A8&#x2F;index.html">
+<meta name="description" content="Redis安全配置以下操作均在redis.conf中进行操作 0x01 监听地址较新版本redis默认监听环回地址(loopback)，无需修改； 1bind 127.0.0.1 ::1    0x02 修改端口1port 6379  6379为默认端口，可修改为自己需要的端口. 0x03 添加密码添加如下语句： 1requirepass yourpassword    0x04 常规操作重启服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis安全配置">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;04&#x2F;Redis%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="Redis安全配置以下操作均在redis.conf中进行操作 0x01 监听地址较新版本redis默认监听环回地址(loopback)，无需修改； 1bind 127.0.0.1 ::1    0x02 修改端口1port 6379  6379为默认端口，可修改为自己需要的端口. 0x03 添加密码添加如下语句： 1requirepass yourpassword    0x04 常规操作重启服务">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-03-04T05:51:21.450Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -116,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://bai-ren-1.github.io/categories/WEB安全/"/>
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/04/Redis安全配置/"/>
 
 
 
 
 
-  <title>分类: WEB安全 | 白仁的博客</title>
+  <title>Redis安全配置 | 白仁的博客</title>
   
 
 
@@ -141,7 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -225,309 +228,187 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>WEB安全<small>分类</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/04/Redis%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2020/03/04/Redis%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/" itemprop="url">
-              
-                <span itemprop="name">Redis安全配置</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Redis安全配置</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-03-04T13:37:57+08:00"
-              content="2020-03-04" >
-          03-04
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T13:37:57+08:00">
+                2020-03-04
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/03/04/Apache%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/" itemprop="url">
-              
-                <span itemprop="name">Apache安全配置</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-03-04T11:00:59+08:00"
-              content="2020-03-04" >
-          03-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/03/03/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" itemprop="url">
-              
-                <span itemprop="name">Redis未授权访问</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-03-03T16:30:25+08:00"
-              content="2020-03-03" >
-          03-03
-        </time>
-      </div>
-
-    </header>
-  </article>
+        <h1 id="Redis安全配置"><a href="#Redis安全配置" class="headerlink" title="Redis安全配置"></a>Redis安全配置</h1><p>以下操作均在<code>redis.conf</code>中进行操作</p>
+<h2 id="0x01-监听地址"><a href="#0x01-监听地址" class="headerlink" title="0x01 监听地址"></a>0x01 监听地址</h2><p>较新版本<code>redis</code>默认监听<code>环回地址(loopback)</code>，无需修改；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind 127.0.0.1 ::1</span><br></pre></td></tr></table></figure>
 
 
-      
-        
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+<h2 id="0x02-修改端口"><a href="#0x02-修改端口" class="headerlink" title="0x02 修改端口"></a>0x02 修改端口</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">port 6379</span><br></pre></td></tr></table></figure>
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/03/02/MYSQL%E6%8F%90%E6%9D%83/" itemprop="url">
-              
-                <span itemprop="name">MYSQL提权</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-03-02T15:58:51+08:00"
-              content="2020-03-02" >
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
+<p>6379为默认端口，可修改为自己需要的端口.</p>
+<h2 id="0x03-添加密码"><a href="#0x03-添加密码" class="headerlink" title="0x03 添加密码"></a>0x03 添加密码</h2><p>添加如下语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requirepass yourpassword</span><br></pre></td></tr></table></figure>
 
 
-      
-        
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+<h2 id="0x04-常规操作"><a href="#0x04-常规操作" class="headerlink" title="0x04 常规操作"></a>0x04 常规操作</h2><p>重启服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sudo /etc/init.d/redis-server restart</span><br></pre></td></tr></table></figure>
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/03/02/Java%E5%AE%A1%E8%AE%A1-DAY4/" itemprop="url">
-              
-                <span itemprop="name">Java审计-DAY4</span>
-              
-            </a>
-        
-      </h2>
+<p>查看<code>redis</code>运行状况:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -p xxx #xxx为新设置端口</span><br><span class="line">127.0.0.1:xxx&gt; info</span><br></pre></td></tr></table></figure>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-03-02T14:57:00+08:00"
-              content="2020-03-02" >
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
+<p>查看<code>redis</code>进程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep redis</span><br></pre></td></tr></table></figure>
 
 
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/03/02/Java%E5%AE%A1%E8%AE%A1-DAY3/" itemprop="url">
-              
-                <span itemprop="name">Java审计-DAY3</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-03-02T14:56:56+08:00"
-              content="2020-03-02" >
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/03/02/Java%E5%AE%A1%E8%AE%A1-DAY2/" itemprop="url">
-              
-                <span itemprop="name">Java审计-DAY2</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-03-02T14:56:50+08:00"
-              content="2020-03-02" >
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/03/02/Java%E5%AE%A1%E8%AE%A1-DAY1/" itemprop="url">
-              
-                <span itemprop="name">Java审计-DAY1</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-03-02T14:56:43+08:00"
-              content="2020-03-02" >
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/27/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" itemprop="url">
-              
-                <span itemprop="name">PHP反序列化</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-01-27T15:29:41+08:00"
-              content="2020-01-27" >
-          01-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/12/27/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%87%BD%E6%95%B0/" itemprop="url">
-              
-                <span itemprop="name">代码审计函数</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-12-27T22:59:56+08:00"
-              content="2019-12-27" >
-          12-27
-        </time>
-      </div>
-
-    </header>
-  </article>
 
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/04/Apache%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/" rel="next" title="Apache安全配置">
+                <i class="fa fa-chevron-left"></i> Apache安全配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/categories/WEB%E5%AE%89%E5%85%A8/page/2/">2</a><a class="extend next" rel="next" href="/categories/WEB%E5%AE%89%E5%85%A8/page/2/"><i class="fa fa-hand-o-right" aria-label="accessibility.next_page"></i></a>
-  </nav>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -535,6 +416,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -555,8 +440,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -614,6 +508,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis安全配置"><span class="nav-number">1.</span> <span class="nav-text">Redis安全配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-监听地址"><span class="nav-number">1.1.</span> <span class="nav-text">0x01 监听地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-修改端口"><span class="nav-number">1.2.</span> <span class="nav-text">0x02 修改端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-添加密码"><span class="nav-number">1.3.</span> <span class="nav-text">0x03 添加密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-常规操作"><span class="nav-number">1.4.</span> <span class="nav-text">0x04 常规操作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -747,6 +657,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

