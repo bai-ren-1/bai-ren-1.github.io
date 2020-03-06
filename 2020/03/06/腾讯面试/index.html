@@ -81,16 +81,16 @@
 
 
 
-<meta name="description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（XSS的防御变化和自己绕CSP打自己防御">
+<meta name="description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化） 问根据上面的防">
 <meta property="og:type" content="article">
 <meta property="og:title" content="面试腾讯">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（XSS的防御变化和自己绕CSP打自己防御">
+<meta property="og:description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化） 问根据上面的防">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;2.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;1.png">
-<meta property="og:updated_time" content="2020-03-06T11:39:51.098Z">
+<meta property="og:updated_time" content="2020-03-06T11:54:17.429Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;2.png">
 
@@ -315,9 +315,12 @@
         <h1 id="面试腾讯"><a href="#面试腾讯" class="headerlink" title="面试腾讯"></a>面试腾讯</h1><p>面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。</p>
 <h2 id="问题复现"><a href="#问题复现" class="headerlink" title="问题复现"></a>问题复现</h2><ul>
 <li>具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程）</li>
-<li>介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（XSS的防御变化和自己绕CSP打自己防御）</li>
+<li>介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化）</li>
+<li>问根据上面的防御和自己的进攻模拟攻防（防御就用普通CSP加上对其的进攻绕过）</li>
 <li>问漏扫项目怎么处理目录遍历这种路径一层一层的情况（枚举）</li>
 <li>问怎么优化这个问题（得好好思考一下）</li>
+<li>问SQL注入的最本质是什么（答语法结构改变，这个并非最根源的原因）</li>
+<li>追问是SQL注入本质，为什么C不会呢（解析）</li>
 <li>问有没有破解过游戏或者软件（crackme）</li>
 <li>问32位int、unsign int所占字节数（4字节，也是4字节，出错于记忆和理解出错，难受了）</li>
 <li>问具体过程（答了一种很简单的验证码绕过）</li>
