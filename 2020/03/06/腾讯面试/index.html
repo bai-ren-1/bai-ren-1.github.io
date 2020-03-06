@@ -81,17 +81,18 @@
 
 
 
-<meta name="description" content="程序员的自我修养 Day2上一篇文章是对操作系统和计组的一些基本概念进行了复习，这一篇主要是用来学习编译和链接的过程。 gcc 编译过程我们在Linux下，对一个简单的hello.c的C文件使用命令gcc就能对其进行编译： 12gcc hello.c.&#x2F;a.out  上面的命令就是用gcc编译生成a.out，然后执行了a.out。看似很简单一气呵成，但其实gcc的过程包括了4个步骤： 预处理（Pr">
+<meta name="description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（XSS的防御变化和自己绕CSP打自己防御">
 <meta property="og:type" content="article">
-<meta property="og:title" content="程序员的自我修养-DAY2">
-<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;21&#x2F;%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2&#x2F;index.html">
+<meta property="og:title" content="面试腾讯">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="程序员的自我修养 Day2上一篇文章是对操作系统和计组的一些基本概念进行了复习，这一篇主要是用来学习编译和链接的过程。 gcc 编译过程我们在Linux下，对一个简单的hello.c的C文件使用命令gcc就能对其进行编译： 12gcc hello.c.&#x2F;a.out  上面的命令就是用gcc编译生成a.out，然后执行了a.out。看似很简单一气呵成，但其实gcc的过程包括了4个步骤： 预处理（Pr">
+<meta property="og:description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（XSS的防御变化和自己绕CSP打自己防御">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;21&#x2F;%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2&#x2F;gcc%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B.png">
-<meta property="og:updated_time" content="2019-12-21T08:36:58.625Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;1.png">
+<meta property="og:updated_time" content="2020-03-06T11:39:51.098Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;21&#x2F;%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2&#x2F;gcc%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;2.png">
 
 
 
@@ -121,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://bai-ren-1.github.io/2019/12/21/程序员的自我修养-DAY2/"/>
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/06/腾讯面试/"/>
 
 
 
 
 
-  <title>程序员的自我修养-DAY2 | 白仁的博客</title>
+  <title>面试腾讯 | 白仁的博客</title>
   
 
 
@@ -244,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/12/21/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2/">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白仁">
@@ -261,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">程序员的自我修养-DAY2</h1>
+          <h1 class="post-title" itemprop="name headline">面试腾讯</h1>
         
 
         <div class="post-meta">
@@ -273,8 +274,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-21T15:57:52+08:00">
-                2019-12-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-06T18:32:26+08:00">
+                2020-03-06
               </time>
             
 
@@ -283,28 +284,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
-                    <span itemprop="name">二进制安全</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -333,41 +312,79 @@
       
 
       
-        <h1 id="程序员的自我修养-Day2"><a href="#程序员的自我修养-Day2" class="headerlink" title="程序员的自我修养 Day2"></a>程序员的自我修养 Day2</h1><p>上一篇文章是对操作系统和计组的一些基本概念进行了复习，这一篇主要是用来学习编译和链接的过程。</p>
-<h2 id="gcc-编译过程"><a href="#gcc-编译过程" class="headerlink" title="gcc 编译过程"></a>gcc 编译过程</h2><p>我们在Linux下，对一个简单的hello.c的C文件使用命令gcc就能对其进行编译：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc hello.c</span><br><span class="line">./a.out</span><br></pre></td></tr></table></figure>
-
-<p>上面的命令就是用gcc编译生成a.out，然后执行了a.out。看似很简单一气呵成，但其实gcc的过程包括了4个步骤：</p>
-<p><strong>预处理</strong>（Prepressing）-&gt; <strong>编译</strong>（Compilation）-&gt; <strong>汇编</strong>（Assembly）-&gt; <strong>链接</strong>（Linking）， 这个gcc编译过程入下图所示：</p>
-<p><img src="/2019/12/21/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY2/gcc%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B.png" alt></p>
-<p>我们下面分开讲解这四个步骤。</p>
-<h3 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h3><p>预编译相当于使用了下面这个命令（-E 参数代表只进行预编译）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -E hello.c -o hello.i （执行后输出hello.i文件）</span><br></pre></td></tr></table></figure>
-
-<p>预编译过程是对源代码中#开始的预编译指令进行处理：</p>
-<ul>
-<li>删除所有的”#define”，展开所有的宏定义</li>
-<li>处理所有的条件预编译指令，如”#if”、”#ifdef”、”#elif”、”#else”、”#endif”</li>
-<li>处理”#include”预编译指令，将包含文件插入到该预编译指令的位置</li>
-<li>删除注释 “//“、”/**/“</li>
-<li>保留所有的#pragma编译器指令</li>
+        <h1 id="面试腾讯"><a href="#面试腾讯" class="headerlink" title="面试腾讯"></a>面试腾讯</h1><p>面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。</p>
+<h2 id="问题复现"><a href="#问题复现" class="headerlink" title="问题复现"></a>问题复现</h2><ul>
+<li>具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程）</li>
+<li>介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（XSS的防御变化和自己绕CSP打自己防御）</li>
+<li>问漏扫项目怎么处理目录遍历这种路径一层一层的情况（枚举）</li>
+<li>问怎么优化这个问题（得好好思考一下）</li>
+<li>问有没有破解过游戏或者软件（crackme）</li>
+<li>问32位int、unsign int所占字节数（4字节，也是4字节，出错于记忆和理解出错，难受了）</li>
+<li>问具体过程（答了一种很简单的验证码绕过）</li>
+<li>pe结构（会，但具体有些遗忘）</li>
+<li>怎么给一个进程免杀（守护进程和hook api？）</li>
+<li>文件水印算法（没有听说过）</li>
+<li>问怎么设计一个水印算法（答文件分块后每块按哈希加密后拼接在后边）</li>
+<li>如何对水印使用动态校验（得好好思考一下）</li>
+<li>sql语句的编写（很难受，因为明明应该很流畅的，下面有复现）</li>
+<li>为什么不能用order by然后limit？（只能选一条）</li>
+<li>问一个具体场景的指针（更难受的地方，太久没使用把最基础的遗忘了还自以为准备充分）</li>
+<li>问开发了一个第三方的API得注意什么（不被泄露给其他第三方，配置隐私）</li>
+<li>给出具体场景就是一个根据id索引给出资料的API（不能枚举越权、SQL注入防止）</li>
+<li>问答</li>
 </ul>
-<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>编译相当于使用了下面这个命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -S hello.i -o hello.s  （执行后输出hello.s文件）</span><br></pre></td></tr></table></figure>
-
-<p>对于C语言来说，执行预编译和编译的程序是cc1；对于C++来说，对应的程序叫做cc1plus；Objective-C则是cc1obj；Java则是jc1。所以<strong>gcc只是对这些后台程序的包装，它根据不同参数要求去调用不同的预编译编译程序cc1、汇编器as、链接器ld</strong>。</p>
-<h3 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h3><p>汇编相当于使用了下面这个命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc -c hello.s -o hello.o  （执行后输出hello.s文件）</span><br><span class="line">或者直接调用汇编器</span><br><span class="line">as hello.s -o hello.o</span><br></pre></td></tr></table></figure>
-
-<p>也可以直接一步到位，由C源码直接预编译、编译、汇编输出成<strong>目标文件</strong>（object file）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -c hello.c -o hello.o</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>如果通过调用链接器ld来执行，命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ld -static crt1.o crti.o crtbeginT.o hello.o -start-group -lgcc -lgcc_eh -lc -end-group crtend.o crtn.o</span><br></pre></td></tr></table></figure>
-
-<p>需要将上面这一大堆文件链接起来才可以得到最后的a.out可执行文件。这里的过程后面补上。</p>
+<p>下面就那些比较简单的答案复现一下，以敲响警钟要全面和扎实一点。</p>
+<h2 id="答案复现"><a href="#答案复现" class="headerlink" title="答案复现"></a>答案复现</h2><h3 id="占字节数"><a href="#占字节数" class="headerlink" title="占字节数"></a>占字节数</h3><ul>
+<li><p>32位编译器：</p>
+<ul>
+<li><p>char：1个字节</p>
+</li>
+<li><p>short int : 2个字节</p>
+</li>
+<li><p>int： 4个字节</p>
+</li>
+<li><p>unsigned int : 4个字节</p>
+</li>
+<li><p>float: 4个字节</p>
+</li>
+<li><p>double:  8个字节</p>
+</li>
+<li><p>long:  4个字节</p>
+</li>
+<li><p>long long: 8个字节</p>
+</li>
+<li><p>unsigned long: 4个字节 </p>
+</li>
+</ul>
+</li>
+<li><p>64位编译器：</p>
+<ul>
+<li>short int : 2个字节</li>
+<li>int： 4个字节</li>
+<li>unsigned int : 4个字节</li>
+<li>float: 4个字节</li>
+<li>double:  8个字节</li>
+<li>long:  4个字节</li>
+<li>long long: 8个字节</li>
+<li>unsigned long: 4个字节 </li>
+<li>unsigned long: 8个字节 </li>
+</ul>
+</li>
+</ul>
+<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><ul>
+<li>找出成绩最高的学生的id：</li>
+</ul>
+<p><img src="/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/2.png" alt></p>
+<p>顺便提醒了自己有关<strong>多表查询、子查询、谓词</strong>的复习</p>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>这个是最难受，连最简单指针的使用形式都忘记了，提醒自己得复习<strong>指针，引用，C++特性,数据结构</strong></p>
+<p><img src="/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/1.png" alt></p>
+<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><ul>
+<li>继续深入挖掘漏洞，在攻防研究可以继续深入，进步还是比较快和大的。</li>
+<li>不只是深入web安全，要把二进制相关的更进一步的学好（不能浅尝辄止）。</li>
+<li>批评在开发基础的表现，不能学了安全就只把目光放在那几款安全开发。</li>
+<li>复习数据结构，计网，操作系统等知识。</li>
+</ul>
+<h2 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h2><p>新的计划，得抽更多时间来进行了。加油，继续冲击腾讯！！！</p>
 
       
     </div>
@@ -392,8 +409,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/20/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-DAY1/" rel="next" title="程序员的自我修养-DAY1">
-                <i class="fa fa-chevron-left"></i> 程序员的自我修养-DAY1
+              <a href="/2020/03/04/MySQL%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/" rel="next" title="MySQL安全配置">
+                <i class="fa fa-chevron-left"></i> MySQL安全配置
               </a>
             
           </div>
@@ -401,10 +418,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/27/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E6%80%9D%E8%B7%AF/" rel="prev" title="代码审计思路">
-                代码审计思路 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -534,7 +547,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#程序员的自我修养-Day2"><span class="nav-number">1.</span> <span class="nav-text">程序员的自我修养 Day2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc-编译过程"><span class="nav-number">1.1.</span> <span class="nav-text">gcc 编译过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#预编译"><span class="nav-number">1.1.1.</span> <span class="nav-text">预编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译"><span class="nav-number">1.1.2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编"><span class="nav-number">1.1.3.</span> <span class="nav-text">汇编</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接"><span class="nav-number">1.1.4.</span> <span class="nav-text">链接</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#面试腾讯"><span class="nav-number">1.</span> <span class="nav-text">面试腾讯</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题复现"><span class="nav-number">1.1.</span> <span class="nav-text">问题复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#答案复现"><span class="nav-number">1.2.</span> <span class="nav-text">答案复现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#占字节数"><span class="nav-number">1.2.1.</span> <span class="nav-text">占字节数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL"><span class="nav-number">1.2.2.</span> <span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">1.2.3.</span> <span class="nav-text">指针</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反思"><span class="nav-number">1.3.</span> <span class="nav-text">反思</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#展望"><span class="nav-number">1.4.</span> <span class="nav-text">展望</span></a></li></ol></li></ol></div>
             
 
           </div>
