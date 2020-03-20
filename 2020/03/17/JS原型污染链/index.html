@@ -73,8 +73,6 @@
 
 
 
-  
-
 
   <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
 
@@ -100,7 +98,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;17&#x2F;JS%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E9%93%BE&#x2F;8.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;17&#x2F;JS%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E9%93%BE&#x2F;9.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;17&#x2F;JS%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E9%93%BE&#x2F;10.png">
-<meta property="og:updated_time" content="2020-03-18T09:15:41.831Z">
+<meta property="og:updated_time" content="2020-03-20T15:16:31.893Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;17&#x2F;JS%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E9%93%BE&#x2F;3.png">
 
@@ -381,9 +379,12 @@
 <p>那我们就开始操作，给他进行方法的“污染”。实例化对象儿子a即sona很生气，想让其他儿子也变笨。于是我们通过sona对象的<code>__proto__</code>属性指向了父类Shabi，并改写其中的ShowName方法。</p>
 <p><img src="/2020/03/17/JS%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E9%93%BE/10.png" alt></p>
 <p>可以看到，我们通过改写父类的方法，成功让其他继承了父类的聪明的宝宝变成了shabi。</p>
-<h2 id="0x04-CTF利用"><a href="#0x04-CTF利用" class="headerlink" title="0x04 CTF利用"></a>0x04 CTF利用</h2><p>常见于对象合并merge、对象clone</p>
-<p>参考链接： <a href="https://www.freebuf.com/column/216381.html" target="_blank" rel="noopener">https://www.freebuf.com/column/216381.html</a> </p>
-<p>参考链接： <a href="https://www.freebuf.com/articles/web/200406.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/web/200406.html</a> </p>
+<h2 id="0x04-CTF利用"><a href="#0x04-CTF利用" class="headerlink" title="0x04 CTF利用"></a>0x04 CTF利用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果攻击者控制并修改了一个对象的原型，那么将可以影响所有和这个对象来自同一个类、父祖类的对象。这种攻击方式就是原型链污染.</span><br></pre></td></tr></table></figure>
+
+<p>原型链污染一般会出现在<code>对象或数组</code>的<code>键名或属性名</code>可控,而且是<code>赋值语句</code>的情况下 ：例如对象合并merge、对象clone。 </p>
+<p>CTF题目参考链接：</p>
+<p><a href="https://www.freebuf.com/column/216381.html" target="_blank" rel="noopener">https://www.freebuf.com/column/216381.html</a> </p>
+<p><a href="https://www.freebuf.com/articles/web/200406.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/web/200406.html</a> </p>
 <h2 id="0x05-小结"><a href="#0x05-小结" class="headerlink" title="0x05 小结"></a>0x05 小结</h2><p>最近事情太多了，应接不暇。希望早点结束这些麻烦事情，早日轻松，冲冲冲！</p>
 
       
@@ -498,7 +499,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
