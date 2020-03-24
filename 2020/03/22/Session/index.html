@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Session作为上一篇的兄弟篇，这一篇主要说明服务端对于用户标识的做法。session的具体用法和参数，这里我就详细的记录下来。 0x00 初探Session在php中，我们可以通过phpinfo获取到session保存的位置：  可以看出php服务端在开启会话后，会发送一个名字为PHPSESSID的session标识给我们客户端，用于作为“钥匙”获取服务端的数据。然后我们可以看到服务端通过文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Session">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="Session作为上一篇的兄弟篇，这一篇主要说明服务端对于用户标识的做法。session的具体用法和参数，这里我就详细的记录下来。 0x00 初探Session在php中，我们可以通过phpinfo获取到session保存的位置：  可以看出php服务端在开启会话后，会发送一个名字为PHPSESSID的session标识给我们客户端，用于作为“钥匙”获取服务端的数据。然后我们可以看到服务端通过文件">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;Session%5C3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;8.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;7.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;9.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;10.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;11.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;12.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;13.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;14.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;15.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;16.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;17.png">
+<meta property="og:updated_time" content="2020-03-22T06:37:34.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Session&#x2F;1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/22/Session/"/>
+
+
+
+
+
+  <title>Session | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/22/Session/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Session</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-22T11:54:08+08:00">
+                2020-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h1><p>作为上一篇的兄弟篇，这一篇主要说明服务端对于用户标识的做法。session的具体用法和参数，这里我就详细的记录下来。</p>
+<h2 id="0x00-初探Session"><a href="#0x00-初探Session" class="headerlink" title="0x00 初探Session"></a>0x00 初探Session</h2><p>在php中，我们可以通过phpinfo获取到session保存的位置：</p>
+<p><img src="/2020/03/22/Session/1.png" alt></p>
+<p>可以看出php服务端在开启会话后，会发送一个名字为PHPSESSID的session标识给我们客户端，用于作为“钥匙”获取服务端的数据。然后我们可以看到服务端通过文件形式将session保存在tmp路径下。我新建一个1.php用于开启一个会话：</p>
+<p><img src="/2020/03/22/Session/2.png" alt></p>
+<p>1.php下通过session_start开启一个session，然后我们通过浏览器对其进行访问，看session保存路径下是否会生成新的session文件。可见原先我们该路径下的文件夹是空的：</p>
+<p><img src="/2020/03/22/Session/Session%5C3.png" alt></p>
+<p>然后我们访问localhost/1.php，在cookie字段下面多了一个名为PHPSESSID的键：</p>
+<p><img src="/2020/03/22/Session/4.png" alt></p>
+<p>然后我们到session路径下查看，就能发现在该路径下确实生成了一个session文件，其名称包含了cookie下的对应的键值：</p>
+<p><img src="/2020/03/22/Session/5.png" alt></p>
+<blockquote>
+<p>服务端通过客户端的浏览器标识客户，所以即使同一台客户端主机，开启不同的浏览器访问会获得不同的session。</p>
+</blockquote>
+<p>综上所述，当服务端php使用session_start开启了一个会话后，就会给访这个页面的浏览器发布一个</p>
+<p>sessionid存放在客户端cookie内，其键名为PHPSESSID。</p>
+<p>我们有了存放在服务端的session文件，那客户端是怎么通过PHPSESSID获取到里面的内容的呢？</p>
+<p><img src="/2020/03/22/Session/6.png" alt></p>
+<p>我们首先刷新请求，可以看到请求头里带上了cookie字段。服务器接收到cookie的数据后，就会打开对应的session文件并返回给客户端。这个的具体演示就看下一章的实验。</p>
+<h2 id="0x01-Session内容"><a href="#0x01-Session内容" class="headerlink" title="0x01 Session内容"></a>0x01 Session内容</h2><p>把1.php的源码修改为给超全局数组$_SESSION中写入一个键值并打印数组内容：</p>
+<p><img src="/2020/03/22/Session/8.png" alt></p>
+<p>我们重新刷新页面，可以看到$_SESSION数组的值被打印出来：</p>
+<p><img src="/2020/03/22/Session/7.png" alt></p>
+<p>我们得看看存储在服务端的session的文件是什么形式存储数据的呢？</p>
+<p><img src="/2020/03/22/Session/9.png" alt></p>
+<p>可见在服务端的session文件里存储了序列化形式数据。</p>
+<blockquote>
+<p>综上，当客户端第一次访问到服务端该页面时，服务端会执行session_start启动一个session。执行后服务器会在保存路径下生成一个空的session用于保存数据，并且在给客户端返回一个PHPSESSID保存在cookie中（好像sessonid不一定是保留客户端的cookie中，也可以是其他地方）。然后程序继续执行，往$_SESSION数组中里面写入值，服务端会自动取出里面内容并用序列化的形式保存至对应的会话文件中。然后只要客户端带着这个PHPSESSID来访问服务端，服务端就会给其返回对应的session文件对应的内容。</p>
+</blockquote>
+<h2 id="0x02-共享Session"><a href="#0x02-共享Session" class="headerlink" title="0x02 共享Session"></a>0x02 共享Session</h2><p>我想在另一个文件里面也使用这个session，该怎么操作？新建2.php，内容如下：</p>
+<p><img src="/2020/03/22/Session/10.png" alt></p>
+<p>然后我带着刚刚的PHPSESSID访问2.php：</p>
+<p><img src="/2020/03/22/Session/11.png" alt></p>
+<p>session文件里面会多了一条序列化数据：</p>
+<p><img src="/2020/03/22/Session/12.png" alt></p>
+<blockquote>
+<p>在另一个文件中使用session_start开启会话，如果请求头中cookie带有PHPSESSID，就不会生成新的session文件，而是会找到ID对应的文件并进行操作，达成不同文件共享会话session的目的。</p>
+</blockquote>
+<h2 id="0x03-删除Session"><a href="#0x03-删除Session" class="headerlink" title="0x03 删除Session"></a>0x03 删除Session</h2><p>然后我们可以通过unset属性或者直接将session设置为空来清空session。首先修改2.php，我们给他赋值age属性后立马将session里面的name属性删除：</p>
+<p><img src="/2020/03/22/Session/13.png" alt></p>
+<p>清除之前实验的session重新开始，我们访问1.php查看结果，和之前实验一样生成了session文件并写入了name属性：</p>
+<p><img src="/2020/03/22/Session/14.png" alt></p>
+<p>然后我们再访问2.php看结果如何？由下图的结果我们可以分析出，访问2.php后在同一个session下写入age属性并打印出结果。在浏览器上我们能看到两个属性：</p>
+<p><img src="/2020/03/22/Session/15.png" alt></p>
+<p>那2.php执行完后的session文件中的属性是什么样的呢？如我们所料，原来的session中的name属性被我们删除了。现在session文件里面只剩下了age属性。</p>
+<p><img src="/2020/03/22/Session/16.png" alt></p>
+<p>然后我们在做最后一步验证，看访问1.php会打印出什么内容：</p>
+<p><img src="/2020/03/22/Session/17.png" alt></p>
+<p>因为1.php的执行流程是重新写入name属性再打印出结果，由键值顺序我们就能看出。刚刚的删除操作是成功执行了。</p>
+<blockquote>
+<p>综上，两个不同文件都是用使用session_start就能使用同一个会话。当我们需要删除会话属性时，可以使用unset或者直接赋值$_SESSION为空来做到。</p>
+</blockquote>
+<h2 id="0x04-Session-amp-Cookie"><a href="#0x04-Session-amp-Cookie" class="headerlink" title="0x04 Session&amp;Cookie"></a>0x04 Session&amp;Cookie</h2><p>当然下面的结论是使用setcookie和session_start得到的，其他语言或者其他函数我就这里就不继续做了。</p>
+<ul>
+<li><p><strong>cookie</strong>是服务端通过setcookie直接给客户端的cookie字段中加入了的标识用户的数据，即<strong>标识用户的数据存储在客户端中</strong>。</p>
+</li>
+<li><p><strong>session</strong>是服务端通过session_start给客户端cookie字段（也可能是客户端其他地方）中加入了获取标识用户数据的“钥匙”即sessionid，客户端通过这把钥匙才能在服务端上对应的session文件上获得用户的数据。<strong>即标识用户的数据存在了服务端，但用户需要sessionid这把本地“钥匙”才能进行获取</strong>。</p>
+</li>
+</ul>
+<h2 id="0x05-小结"><a href="#0x05-小结" class="headerlink" title="0x05 小结"></a>0x05 小结</h2><p>session和cookie的博客就先写到这里。后面看看把tokn给补充上来，完成三杀。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/22/Cookie/" rel="next" title="Cookie">
+                <i class="fa fa-chevron-left"></i> Cookie
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/23/JWT/" rel="prev" title="JWT">
+                JWT <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Session"><span class="nav-number">1.</span> <span class="nav-text">Session</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-初探Session"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 初探Session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Session内容"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 Session内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-共享Session"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 共享Session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-删除Session"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 删除Session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-Session-amp-Cookie"><span class="nav-number">1.5.</span> <span class="nav-text">0x04 Session&amp;Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-小结"><span class="nav-number">1.6.</span> <span class="nav-text">0x05 小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

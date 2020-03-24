@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
 
@@ -98,7 +100,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;11.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;12.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;13.png">
-<meta property="og:updated_time" content="2020-03-20T15:05:16.312Z">
+<meta property="og:updated_time" content="2020-03-21T04:51:39.751Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;1.png">
 
@@ -569,7 +571,7 @@
 <p>预解析标签指向的地址是分割符号后出来的并经过window.btoa进行b64编码的cookie作为二级域名的域名；</p>
 </blockquote>
 <p>上面的Payload将Cookie中截取的重要字段进行简单的base64编码后，作为我们DNSLOG平台的二级域名，并在body中插入了相应的link标签对此域名进行强制DNS预解析。当触发XSS攻击时，可以在Web控制台下看到结 </p>
-<h2 id="0x04-DNS解绑定绕SSRF"><a href="#0x04-DNS解绑定绕SSRF" class="headerlink" title="0x04 DNS解绑定绕SSRF"></a>0x04 DNS解绑定绕SSRF</h2><p>SSRF解绑定攻击流程：</p>
+<h2 id="0x04-DNS解绑定绕SSRF"><a href="#0x04-DNS解绑定绕SSRF" class="headerlink" title="0x04 DNS解绑定绕SSRF"></a>0x04 DNS解绑定绕SSRF</h2><p>在ceye.io平台上也提供了DNS解绑定的功能。下图是SSRF解绑定攻击流程：</p>
 <p><img src="/2020/03/19/DNSlog%E6%B3%A8%E5%85%A5/13.png" alt></p>
 <ul>
 <li>服务器端获得URL参数，进行第一次DNS解析，获得了一个非内网的IP。</li>
@@ -577,7 +579,7 @@
 <li>服务器端对于URL进行访问，由于DNS服务器设置的TTL为0，所以再次进行DNS解析，这一次DNS服务器返回的是内网地址。</li>
 </ul>
 <blockquote>
-<p>攻击点就在于<strong>第二次</strong>服务端发出请求时，我们能通过短时间的ttl来修改返回的地址。因为验证的操作是在第一步那里，那一步我们可以返回不是内网的地址，所以我们能绕过验证。绕过后服务器要请求页面了，这次我们给他响应一个内网地址，所以就能利用ssrf了。</p>
+<p>攻击点就在于<strong>第二次</strong>服务端发出请求时，我们能通过短时间的ttl来修改返回的地址。因为验证url的操作是在第一步那里，我们给他响应一个外网ip，所以我们能绕过验证。<strong>由于ttl为0，DNS解析结果缓存时间很短</strong>，服务器第二次要请求url的时候就会<strong>重新解析</strong>域名，那这次我们就给他响应个内网ip，就能成功绕过SSRF限制发出到内网的请求了。</p>
 </blockquote>
 <ul>
 <li>由于已经绕过验证，所以服务器端返回访问内网资源的结果。</li>
@@ -620,8 +622,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/03/19/%E8%AE%A1%E7%BD%91%E5%B0%8F%E5%A4%8D%E4%B9%A0/" rel="prev" title="计网小复习">
-                计网小复习 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/03/22/Cookie/" rel="prev" title="Cookie">
+                Cookie <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -699,7 +701,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -710,7 +712,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

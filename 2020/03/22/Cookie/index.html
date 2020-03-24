@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Cookie拿php做一个简单的实验，分析cookie的各个选项的作用并加深理解。 0x00 修改hosts hosts作用：就是将一些常用的网址域名与其对应的IP地址建立一个关联。 hosts文件路径：C:\windows\system32\drivers\etc\hosts 。   这里我设置两个shabi.com的子域，都指向了同一个地址（为了区分cookie作用域选项）。然后我们开启wam">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cookie">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="Cookie拿php做一个简单的实验，分析cookie的各个选项的作用并加深理解。 0x00 修改hosts hosts作用：就是将一些常用的网址域名与其对应的IP地址建立一个关联。 hosts文件路径：C:\windows\system32\drivers\etc\hosts 。   这里我设置两个shabi.com的子域，都指向了同一个地址（为了区分cookie作用域选项）。然后我们开启wam">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;7.png">
+<meta property="og:updated_time" content="2020-03-22T06:23:53.539Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;22&#x2F;Cookie&#x2F;1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/22/Cookie/"/>
+
+
+
+
+
+  <title>Cookie | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/22/Cookie/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Cookie</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-22T11:07:49+08:00">
+                2020-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h1><p>拿php做一个简单的实验，分析cookie的各个选项的作用并加深理解。</p>
+<h2 id="0x00-修改hosts"><a href="#0x00-修改hosts" class="headerlink" title="0x00 修改hosts"></a>0x00 修改hosts</h2><ul>
+<li>hosts作用：就是将一些常用的网址域名与其对应的IP地址建立一个关联。</li>
+<li>hosts文件路径：C:\windows\system32\drivers\etc\hosts 。</li>
+</ul>
+<p><img src="/2020/03/22/Cookie/1.png" alt></p>
+<p>这里我设置两个shabi.com的子域，都指向了同一个地址（为了区分cookie作用域选项）。然后我们开启wampserver，就可以开始实验了。</p>
+<h2 id="0x01-设置cookie"><a href="#0x01-设置cookie" class="headerlink" title="0x01 设置cookie"></a>0x01 设置cookie</h2><p>我们的主文件1.php通过setcookie进行cookie的设置，而同目录下的2.php是通过print_r($_COOKIE)使用超全局变量数组将cookie打印出来：</p>
+<p><img src="/2020/03/22/Cookie/2.png" alt></p>
+<p>其中setcookie中的每个选项的作用如下图所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">name</td>
+<td align="left">必需。规定 cookie 的名称。</td>
+</tr>
+<tr>
+<td align="left">value</td>
+<td align="left">必需。规定 cookie 的值。</td>
+</tr>
+<tr>
+<td align="left">expire</td>
+<td align="left">可选。规定 cookie 的有效期。</td>
+</tr>
+<tr>
+<td align="left">path</td>
+<td align="left">可选。规定 cookie 的服务器路径。</td>
+</tr>
+<tr>
+<td align="left">domain</td>
+<td align="left">可选。规定 cookie 的域名。</td>
+</tr>
+<tr>
+<td align="left">secure</td>
+<td align="left">可选。规定是否通过安全的HTTPS连接来传输cookie。</td>
+</tr>
+<tr>
+<td align="left">httponly</td>
+<td align="left">可选。当true时cookie仅能通过http协议访问。JS等脚本语言无法访问cookie。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>expire： 指定cookie的过期时间。0或未指定时会默认当前会话为有效期，关闭浏览器后cookie会被清除。 </li>
+<li>path： cookie的有效路径。当设置’/‘时有效路径为根目录，所有根目录和子目录都可以访问；设置为’/shabi/‘时是指只有根目录下的shabi文件夹中的网页和/shabi/下子目录的网页才能访问到 </li>
+</ul>
+<h2 id="0x02-验证cookie属性"><a href="#0x02-验证cookie属性" class="headerlink" title="0x02 验证cookie属性"></a>0x02 验证cookie属性</h2><p>直接访问wo.shabi.com的1.php我们获取到我们的cookie：</p>
+<p><img src="/2020/03/22/Cookie/3.png" alt><br>我们直接在console下面的Application字段可以看到我们的cookie的键和值。我们来具体实验一下其他选项的配置。</p>
+<ul>
+<li>Domain</li>
+</ul>
+<p>Domain我们设置其为shabi.com，即该域名的子域下该cookie仍会存在，我们通过访问ni.shabi.com的2.php，看能否将cookie打印出来：</p>
+<p><img src="/2020/03/22/Cookie/4.png" alt></p>
+<p>可见只要在shabi.com的子域下，子域间的cookie是可以被共享的。</p>
+<ul>
+<li>httponly</li>
+</ul>
+<p>httponly限制了脚本语言对cookie的读取。我们已经写好了js.html，他的内容是console.log(document.cookie)将cookie打印在控制台上。我们访问wo.shabi.com/js.html：</p>
+<p><img src="/2020/03/22/Cookie/5.png" alt></p>
+<p>可见我们的JS不能读取到cookie的内容，该行的结果为空。</p>
+<ul>
+<li>expire</li>
+</ul>
+<p>上面我将expire设置为0，0或者空会将cookie的作用时间设置为该会话。即只要会话结束，cookie就会失效。现在我们的cookie还在作用中：</p>
+<p><img src="/2020/03/22/Cookie/6.png" alt></p>
+<p>然后关闭浏览器后重新访问wo.shabi.com/2.php：</p>
+<p><img src="/2020/03/22/Cookie/7.png" alt></p>
+<p>可以看到我们的cookie数组已经为空了，因为前一个cookie的会话被关闭，导致前一个cookie已经失效。</p>
+<h2 id="0x02-cookie性质"><a href="#0x02-cookie性质" class="headerlink" title="0x02 cookie性质"></a>0x02 cookie性质</h2><ul>
+<li>Cookie实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。</li>
+<li>客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。</li>
+<li>Cookie是不可跨域名的。域名<a href="http://www.google.com颁发的Cookie不会被提交到域名www.baidu.com去。该性质是由Cookie的隐私安全机制决定的。隐私安全机制能够禁止网站非法获取其他网站的Cookie。" target="_blank" rel="noopener">www.google.com颁发的Cookie不会被提交到域名www.baidu.com去。该性质是由Cookie的隐私安全机制决定的。隐私安全机制能够禁止网站非法获取其他网站的Cookie。</a> </li>
+</ul>
+<blockquote>
+<p>假如现在我有个恶意网站，想诱骗用户点击骗取他在另一个网站的cookie，这是不能做到的。因为他的cookie是在另一个网站，当他访问我们的恶意网站时请求头是不会带上这个跨域的cookie的。这就是XSS跨站的意思，它通过JS的src之类的跨站属性，再搭配对cookie的读取，就能成功让该网站的cookie跨到我们的恶意网站上。</p>
+</blockquote>
+<p><strong>综上，cookie就是把用户状态记录并保存在客户端上来标识用户的字段。具有不可跨域性。</strong></p>
+<h2 id="0x03-小结"><a href="#0x03-小结" class="headerlink" title="0x03 小结"></a>0x03 小结</h2><p>这里只是做了个很简单的实验，其他选项的时候做了但是觉得没必要一直写。这两个兄弟篇主要是为了将cookie和session区分开来。下一篇继续写上session的实验。继续加油吧。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/19/DNSlog%E6%B3%A8%E5%85%A5/" rel="next" title="DNSlog注入">
+                <i class="fa fa-chevron-left"></i> DNSlog注入
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/22/Session/" rel="prev" title="Session">
+                Session <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cookie"><span class="nav-number">1.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-修改hosts"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 修改hosts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-设置cookie"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 设置cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-验证cookie属性"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 验证cookie属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-cookie性质"><span class="nav-number">1.4.</span> <span class="nav-text">0x02 cookie性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-小结"><span class="nav-number">1.5.</span> <span class="nav-text">0x03 小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
