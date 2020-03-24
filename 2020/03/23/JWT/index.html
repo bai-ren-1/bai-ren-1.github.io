@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="白仁的博客">
 <meta property="og:description" content="JWT上面两篇博客我们使用的是基于cookie&#x2F;session来进行身份认证。今天就来说一说基于token的身份认证。token中一种常用的形式就是JSON WEB TOKEN，也就是JWT。首先我们从session认证和token认证入手。 0x00 基于session认证 基于Session的认证一直处于主流地位。由于http协议是无状态的，借助cookie，客户端登陆成功后，服务端就能识别其">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-24T09:08:26.277Z">
+<meta property="og:updated_time" content="2020-03-24T09:14:25.367Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -411,12 +411,13 @@
 <blockquote>
 <p>secret是保存在服务器端的，jwt的签发生成也是在服务器端的，secret就是用来进行jwt的签发和jwt的验证，所以，它就是你服务端的私钥，在任何场景都不应该流露出去。一旦客户端得知这个secret, 那就意味着客户端是可以自我签发jwt了。</p>
 </blockquote>
-<h2 id="0x02-小结"><a href="#0x02-小结" class="headerlink" title="0x02 小结"></a>0x02 小结</h2><ul>
+<h2 id="0x03-小结"><a href="#0x03-小结" class="headerlink" title="0x03 小结"></a>0x03 小结</h2><p>这里简单做一下关于这几篇博客的小结：</p>
+<ul>
 <li>基于cookie/session的是身份认证方式。</li>
 <li>基于token的也是身份认证方式。</li>
 <li>JWT是基于token身份认证的一种具体形式。</li>
 </ul>
-<h2 id="0x03-参考连接"><a href="#0x03-参考连接" class="headerlink" title="0x03 参考连接"></a>0x03 参考连接</h2><p><a href="https://www.jianshu.com/p/576dbf44b2ae" target="_blank" rel="noopener">https://www.jianshu.com/p/576dbf44b2ae</a> </p>
+<h2 id="0x04-参考连接"><a href="#0x04-参考连接" class="headerlink" title="0x04 参考连接"></a>0x04 参考连接</h2><p><a href="https://www.jianshu.com/p/576dbf44b2ae" target="_blank" rel="noopener">https://www.jianshu.com/p/576dbf44b2ae</a> </p>
 <p><a href="https://www.cnblogs.com/xiangkejin/p/9011119.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiangkejin/p/9011119.html</a> </p>
 
       
@@ -584,7 +585,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JWT"><span class="nav-number">1.</span> <span class="nav-text">JWT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-基于session认证"><span class="nav-number">2.</span> <span class="nav-text">0x00 基于session认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于session认证的流程"><span class="nav-number">2.1.</span> <span class="nav-text">基于session认证的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于session认证的缺点"><span class="nav-number">2.2.</span> <span class="nav-text">基于session认证的缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-基于token认证"><span class="nav-number">3.</span> <span class="nav-text">0x01 基于token认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于token认证的流程"><span class="nav-number">3.1.</span> <span class="nav-text">基于token认证的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于token认证的缺点"><span class="nav-number">3.2.</span> <span class="nav-text">基于token认证的缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-JWT"><span class="nav-number">4.</span> <span class="nav-text">0x02 JWT</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-header"><span class="nav-number">4.0.1.</span> <span class="nav-text">1. header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-playload"><span class="nav-number">4.0.2.</span> <span class="nav-text">2. playload</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-signature"><span class="nav-number">4.0.3.</span> <span class="nav-text">3.signature</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-小结"><span class="nav-number">5.</span> <span class="nav-text">0x02 小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-参考连接"><span class="nav-number">6.</span> <span class="nav-text">0x03 参考连接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JWT"><span class="nav-number">1.</span> <span class="nav-text">JWT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-基于session认证"><span class="nav-number">2.</span> <span class="nav-text">0x00 基于session认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于session认证的流程"><span class="nav-number">2.1.</span> <span class="nav-text">基于session认证的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于session认证的缺点"><span class="nav-number">2.2.</span> <span class="nav-text">基于session认证的缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-基于token认证"><span class="nav-number">3.</span> <span class="nav-text">0x01 基于token认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于token认证的流程"><span class="nav-number">3.1.</span> <span class="nav-text">基于token认证的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于token认证的缺点"><span class="nav-number">3.2.</span> <span class="nav-text">基于token认证的缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-JWT"><span class="nav-number">4.</span> <span class="nav-text">0x02 JWT</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-header"><span class="nav-number">4.0.1.</span> <span class="nav-text">1. header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-playload"><span class="nav-number">4.0.2.</span> <span class="nav-text">2. playload</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-signature"><span class="nav-number">4.0.3.</span> <span class="nav-text">3.signature</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-小结"><span class="nav-number">5.</span> <span class="nav-text">0x03 小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-参考连接"><span class="nav-number">6.</span> <span class="nav-text">0x04 参考连接</span></a></li></ol></div>
             
 
           </div>
