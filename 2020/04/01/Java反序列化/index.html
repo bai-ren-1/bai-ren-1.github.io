@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Java反序列化没啥好说的，比赛打太多的憨批只会PHP，实际工作都是Java，鬼特么现在还有人用PHP就奇了。所以这里记录一下Java反序列化的机制，下一节博客再说Java反序列化漏洞。 0x00 概念序列化和反序列化的实现方法概念？  Java 序列化是指把 Java 对象转换为字节序列的过程。ObjectOutputStream类的 writeObject()方法可以实现序列化。 Java 反">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java反序列化">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="Java反序列化没啥好说的，比赛打太多的憨批只会PHP，实际工作都是Java，鬼特么现在还有人用PHP就奇了。所以这里记录一下Java反序列化的机制，下一节博客再说Java反序列化漏洞。 0x00 概念序列化和反序列化的实现方法概念？  Java 序列化是指把 Java 对象转换为字节序列的过程。ObjectOutputStream类的 writeObject()方法可以实现序列化。 Java 反">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;7.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;8.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;10.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;9.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;11.png">
+<meta property="og:updated_time" content="2020-04-01T08:45:53.505Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&#x2F;2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/04/01/Java反序列化/"/>
+
+
+
+
+
+  <title>Java反序列化 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java反序列化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-01T14:12:03+08:00">
+                2020-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java反序列化"><a href="#Java反序列化" class="headerlink" title="Java反序列化"></a>Java反序列化</h1><p>没啥好说的，比赛打太多的憨批只会PHP，实际工作都是Java，鬼特么现在还有人用PHP就奇了。所以这里记录一下Java反序列化的机制，下一节博客再说Java反序列化漏洞。</p>
+<h2 id="0x00-概念"><a href="#0x00-概念" class="headerlink" title="0x00 概念"></a>0x00 概念</h2><p>序列化和反序列化的实现方法概念？</p>
+<ul>
+<li>Java 序列化是指把 Java 对象转换为字节序列的过程。ObjectOutputStream类的 <strong>writeObject()方法</strong>可以实现序列化。</li>
+<li>Java 反序列化是指把字节序列恢复为 Java 对象的过程。ObjectInputStream 类的 <strong>readObject()方法</strong>用于反序列化。</li>
+</ul>
+<blockquote>
+<p>那么序列化的目的是什么呢？序列化与反序列化是让 Java 对象脱离 Java 运行环境的一种手段，可以有效的实现多平台之间的通信、对象持久化存储。 </p>
+</blockquote>
+<h2 id="0x01-实现方法"><a href="#0x01-实现方法" class="headerlink" title="0x01 实现方法"></a>0x01 实现方法</h2><p>Java中的一个类的对象要想序列化成功，必须满足两个条件：</p>
+<ul>
+<li>该类必须实现 <strong>java.io.Serializable 接口</strong>，因为 Serializable 接口是启用其序列化功能的接口。</li>
+<li>该类的所有属性必须是可序列化的。</li>
+</ul>
+<blockquote>
+<p>关于<strong>接口和抽象方法</strong>等的相关知识请自行查阅相关课程。</p>
+</blockquote>
+<p>我们做一个简单的实验，用来验证序列化和反序列化的过程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.shabi;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="comment">//实现Serializable接口的Student类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">	<span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String sex;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSex</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sex;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(String sex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sex = sex;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//实现serialize接口的三个抽象方法，这里只是简单打印消息进行验证</span></span><br><span class="line">    <span class="comment">//不实现，也是能直接调用ObjectInputStream.readObject进行反序列化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(ObjectInputStream s)</span> <span class="keyword">throws</span> ClassNotFoundException, IOException </span>&#123;</span><br><span class="line">          System.out.println(<span class="string">"Student readObject"</span>);</span><br><span class="line">         s.defaultReadObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//不实现，也是能直接调用ObjectOutputStream.writeObject进行序列化的    </span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span><span class="params">(ObjectOutputStream s)</span><span class="keyword">throws</span> java.io.IOException</span>&#123;</span><br><span class="line">          System.out.println(<span class="string">"Student writeObject"</span>);</span><br><span class="line">          s.defaultWriteObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          System.out.println(<span class="string">"Student readResolve"</span>);</span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;	</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> FileNotFoundException, IOException, ClassNotFoundException </span>&#123;</span><br><span class="line">    	Student student = <span class="keyword">new</span> Student();</span><br><span class="line">    	student.setName(<span class="string">"chenxiaoyi"</span>);</span><br><span class="line">    	student.setSex(<span class="string">"man"</span>);</span><br><span class="line">		<span class="keyword">try</span> (ObjectOutputStream output = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(<span class="string">"Student.txt"</span>)))) &#123;</span><br><span class="line">			output.writeObject(student);</span><br><span class="line">		&#125;</span><br><span class="line">    	<span class="keyword">try</span> (ObjectInputStream input = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"Student.txt"</span>)))) &#123;</span><br><span class="line">			Student student1 = (Student) input.readObject();</span><br><span class="line">			System.out.println(student1.getName() + <span class="string">":"</span> + student1.getSex());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果目标类中没有定义私有的writeObject或readObject方法，那么序列化和反序列化的时候将调用默认的方法来根据目标类中的属性（不包含transient修饰的属性以及static变量）来进行序列化和反序列化。</p>
+<p>如果目标类中定义了私有的writeObject或readObject方法，那么序列化和反序列化的时候将通过反射调用目标类指定的writeObject或readObject方法来实现，比如将static变量也加入到序列化中。</p>
+<p>至于readResolve同样也是通过<strong>反射</strong>调用的。从内存中反序列化地”组装”一个新对象时，就会自动调用这个 readResolve方法来返回指定好的对象。从上面结果可以看到它是在readObject之后调用的，因此readResolve可以最终修改反序列化得到的对象。</p>
+</blockquote>
+<p>关于相关的序列化和反序列化的过程的学习，要具体看下面实验：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/2.png" alt>在开始实验之前，我们可以看到项目的根目录下没有序列化文件的存在。OK，我们可以开始实验了。</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/1.png" alt></p>
+<p>我们开始进行debug，看看这个具体过程。下断点，然后慢慢运行到对象输出流的<strong>writeObject方法</strong>即序列化处：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/3.png" alt></p>
+<p>当运行到此时，我们可以看到已经生成了一个student对象和一个对象输出流output，我们看根目录下生成的Student.txt对象流文件：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/4.png" alt></p>
+<blockquote>
+<p>ObjectOutputStream建立后第一次写入一个对象时，会在对象数据前写入一些标志的数据“ACED0005” </p>
+</blockquote>
+<p>我们继续step over，看看执行完writeObject后的结果：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/5.png" alt></p>
+<p>winhex中打开的Student.txt相应的变化了，文件中写入了我们需要的序列化内容：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/6.png" alt></p>
+<p>序列化的内容实验好了，我们继续往下看看反序列化的实验：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/7.png" alt></p>
+<p>程序在执行完对象输入流的<strong>readObject方法</strong>后，可见反序列化的得到的新对象student1的属性和原对象student的属性时一样的。OK，自此序列化和反序列化的触发点和具体展示效果实验结束。</p>
+<h2 id="0x02-特点"><a href="#0x02-特点" class="headerlink" title="0x02 特点"></a>0x02 特点</h2><p>Java的序列化常见一般是通过两种方式：</p>
+<ul>
+<li>实现 Serializable 接口。</li>
+<li>实现 Externalizable 接口。</li>
+</ul>
+<p>实现Serialize接口的序列化注意点有：</p>
+<ul>
+<li>序列化时，不会序列化<strong>静态变量</strong>，因为只有堆内存会被序列化，所以静态变量会天生不会被序列化。</li>
+<li>序列化时，不会序列化<strong>transient</strong>修饰的变量，也就是通过序列化后再被反序列化后读取这个变量不会有值。</li>
+<li>反序列化时，不会调用对象的任何<strong>构造方法</strong>。</li>
+</ul>
+<p>为了验证上面的特性，我对原来的代码进行一些小修改：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/8.png" alt></p>
+<p>我把两个属性分别加上静态声明和transient进行声明，重新进行序列化和反序列化操作，得到的结果如下：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/10.png" alt></p>
+<p>可以看到我们的用<strong>transient修饰</strong>的属性反序列化为空了，原因在于序列化的时候不会序列化其修饰的属性，所以自然为空。但是这里会有个奇怪的地方，为什么<strong>static修饰</strong>的静态变量也没写入文件，怎么反序列化会有值？</p>
+<blockquote>
+<p>这里被static修饰的变量反序列化后有值是因为：静态变量在方法区,本来流里面就没有写入静态变量,我们打印静态变量当然会去方法区查找。我们当前jvm中有，所以静态变量在序列化后仍然有值。 </p>
+<p>由此可以看出 static 修饰的变量本身是不会被序列化的。我们读取的值是当前jvm中的方法区对应此变量的值，所以最后输出的值为我们对static变量后赋的值。</p>
+</blockquote>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/9.png" alt></p>
+<p>我们通过生成的文件也可以看出来，两个被修饰变量都没有被保存进序列化文件中。</p>
+<h2 id="0x03-简单实验"><a href="#0x03-简单实验" class="headerlink" title="0x03 简单实验"></a>0x03 简单实验</h2><p>前面我们能知道序列化过程依赖于 ObjectOutputStream 类中 <strong>writeObject</strong> 方法，而反序列化的过程是依赖于 ObjectOutputStream 类中 <strong>readObject</strong> 方法。 如果实际情况下，我们能够重写 <strong>readObject</strong> 方法，那么就有可能达到反序列化的时候命令执行的作用。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.shabi;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Calc</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;	</span><br><span class="line">	<span class="comment">//控制了反序列化的具体实现，将来攻击的地方就是在于控制它反序列化时执行的函数</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(java.io.ObjectInputStream input)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">		Runtime.getRuntime().exec(<span class="string">"calc.exe"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//函数入口</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		Calc calc = <span class="keyword">new</span> Calc();</span><br><span class="line">		<span class="comment">//序列化过程，写入被我们控制的了的序列化对象</span></span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">"shabi.txt"</span>);</span><br><span class="line">		ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(fos);</span><br><span class="line">		oos.writeObject(calc);</span><br><span class="line">		oos.close();</span><br><span class="line">		<span class="comment">//反序列化过程，会反序列化出被我们控制了的对象</span></span><br><span class="line">		FileInputStream fis = <span class="keyword">new</span> FileInputStream(<span class="string">"shabi.txt"</span>);</span><br><span class="line">		ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(fis);</span><br><span class="line">		Calc pwnedcalc = (Calc)ois.readObject();</span><br><span class="line">		ois.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里只是简单的演示一下最经典的弹计算器，OK我们已经实现被我们<strong>控制的类Serialize接口的实现为弹出计算器</strong>，为了简单我也把序列化和反序列化过程一次写在主函数中，然后我们执行：</p>
+<p><img src="/2020/04/01/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/11.png" alt></p>
+<p>成功弹出了计算器。</p>
+<h2 id="0x04-小结"><a href="#0x04-小结" class="headerlink" title="0x04 小结"></a>0x04 小结</h2><p>这一篇主要是简单写一下关于Java的反序列化的一些简单知识，后面才会具体加上一些例子来Java反序列化的漏洞，前路漫漫，继续努力！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/24/SQL%E9%A2%84%E7%BC%96%E8%AF%91%E7%BB%95%E8%BF%87/" rel="next" title="SQL预编译绕过">
+                <i class="fa fa-chevron-left"></i> SQL预编译绕过
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java反序列化"><span class="nav-number">1.</span> <span class="nav-text">Java反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-概念"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-实现方法"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 实现方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-特点"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-简单实验"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 简单实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-小结"><span class="nav-number">1.5.</span> <span class="nav-text">0x04 小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
