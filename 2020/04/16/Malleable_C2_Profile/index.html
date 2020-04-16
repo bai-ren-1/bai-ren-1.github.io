@@ -81,18 +81,15 @@
 
 
 
-<meta name="description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化） 问根据上面的防">
+<meta name="description" content="Malleable_C2_ProfileMalleable_C2_Profile是CobaltStrike中一种配置文件。目的是用来伪装流量，让通讯更加隐蔽。下面贴上  https:&#x2F;&#x2F;wbglil.gitbooks.io&#x2F;cobalt-strike&#x2F;content&#x2F;cobalt-strikekuo-zhan&#x2F;malleable-c2.html  上的解释。  Cobalt Strike的 Mal">
 <meta property="og:type" content="article">
-<meta property="og:title" content="面试腾讯">
-<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;index.html">
+<meta property="og:title" content="Malleable_C2_Profile">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;16&#x2F;Malleable_C2_Profile&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化） 问根据上面的防">
+<meta property="og:description" content="Malleable_C2_ProfileMalleable_C2_Profile是CobaltStrike中一种配置文件。目的是用来伪装流量，让通讯更加隐蔽。下面贴上  https:&#x2F;&#x2F;wbglil.gitbooks.io&#x2F;cobalt-strike&#x2F;content&#x2F;cobalt-strikekuo-zhan&#x2F;malleable-c2.html  上的解释。  Cobalt Strike的 Mal">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;1.png">
-<meta property="og:updated_time" content="2020-03-06T11:56:30.260Z">
+<meta property="og:updated_time" content="2020-04-16T12:23:27.600Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;2.png">
 
 
 
@@ -122,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/06/腾讯面试/"/>
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/04/16/Malleable_C2_Profile/"/>
 
 
 
 
 
-  <title>面试腾讯 | 白仁的博客</title>
+  <title>Malleable_C2_Profile | 白仁的博客</title>
   
 
 
@@ -245,7 +242,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/04/16/Malleable_C2_Profile/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白仁">
@@ -262,7 +259,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">面试腾讯</h1>
+          <h1 class="post-title" itemprop="name headline">Malleable_C2_Profile</h1>
         
 
         <div class="post-meta">
@@ -274,8 +271,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-06T18:32:26+08:00">
-                2020-03-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-16T16:55:13+08:00">
+                2020-04-16
               </time>
             
 
@@ -297,8 +294,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%80%BE%E8%B0%88/" itemprop="url" rel="index">
-                    <span itemprop="name">倾谈</span>
+                  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">后渗透</span>
                   </a>
                 </span>
 
@@ -334,82 +331,50 @@
       
 
       
-        <h1 id="面试腾讯"><a href="#面试腾讯" class="headerlink" title="面试腾讯"></a>面试腾讯</h1><p>面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。</p>
-<h2 id="问题复现"><a href="#问题复现" class="headerlink" title="问题复现"></a>问题复现</h2><ul>
-<li>具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程）</li>
-<li>介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化）</li>
-<li>问根据上面的防御和自己的进攻模拟攻防（防御就用普通CSP加上对其的进攻绕过）</li>
-<li>问漏扫项目怎么处理目录遍历这种路径一层一层的情况（枚举）</li>
-<li>问怎么优化这个问题（得好好思考一下）</li>
-<li>问SQL注入的最本质是什么（答语法结构改变，这个并非最根源的原因）</li>
-<li>追问是SQL注入本质，为什么C不会呢（解析）</li>
-<li>问有没有破解过游戏或者软件（crackme）</li>
-<li>问32位int、unsign int所占字节数（4字节，也是4字节，出错于记忆和理解出错，难受了）</li>
-<li>问具体过程（答了一种很简单的验证码绕过）</li>
-<li>pe结构（会，但具体有些遗忘）</li>
-<li>怎么给一个进程免杀（守护进程和hook api？）</li>
-<li>文件水印算法（没有听说过）</li>
-<li>问怎么设计一个水印算法（答文件分块后每块按哈希加密后拼接在后边）</li>
-<li>如何对水印使用动态校验（得好好思考一下）</li>
-<li>sql语句的编写（很难受，因为明明应该很流畅的，下面有复现）</li>
-<li>为什么不能用order by然后limit？（只能选一条）</li>
-<li>问一个具体场景的指针（更难受的地方，太久没使用把最基础的遗忘了还自以为准备充分）</li>
-<li>问开发了一个第三方的API得注意什么（不被泄露给其他第三方，配置隐私）</li>
-<li>给出具体场景就是一个根据id索引给出资料的API（不能枚举越权、SQL注入防止）</li>
-<li>问答</li>
-</ul>
-<p>下面就那些比较简单的答案复现一下，以敲响警钟要全面和扎实一点。</p>
-<h2 id="答案复现"><a href="#答案复现" class="headerlink" title="答案复现"></a>答案复现</h2><h3 id="占字节数"><a href="#占字节数" class="headerlink" title="占字节数"></a>占字节数</h3><ul>
-<li><p>32位编译器：</p>
+        <h1 id="Malleable-C2-Profile"><a href="#Malleable-C2-Profile" class="headerlink" title="Malleable_C2_Profile"></a>Malleable_C2_Profile</h1><p>Malleable_C2_Profile是CobaltStrike中一种配置文件。目的是用来伪装流量，让通讯更加隐蔽。下面贴上  <a href="https://wbglil.gitbooks.io/cobalt-strike/content/cobalt-strikekuo-zhan/malleable-c2.html" target="_blank" rel="noopener">https://wbglil.gitbooks.io/cobalt-strike/content/cobalt-strikekuo-zhan/malleable-c2.html</a>  上的解释。</p>
+<blockquote>
+<p>Cobalt Strike的 Malleable-C2-Profiles配置文件是用来伪装流量，让通讯更加隐蔽和控制其行为的一种方式。</p>
+<p>Beacon中使用http通信的payload由Malleable-C2-profile文件控制，关于Malleable-C2-profile，它是一个简单的配置文件，用来指定如何转换数据并将其存储在transaction中，转换和存储数据的相同配置文件也从transaction中提取和恢复。</p>
+</blockquote>
+<h2 id="0x00-加载方式"><a href="#0x00-加载方式" class="headerlink" title="0x00 加载方式"></a>0x00 加载方式</h2><p>首先贴上别人制作好的混淆profile，<a href="https://github.com/rsmudge/Malleable-C2-Profiles。加载profile的方式也很简单，在开启CobaltStrike（下面简称：CS）的命令时，在ip和密码后加上你的profile的路径就能让服务器通信时使用profile进行流量混淆达成隐藏的目的。如下所示：" target="_blank" rel="noopener">https://github.com/rsmudge/Malleable-C2-Profiles。加载profile的方式也很简单，在开启CobaltStrike（下面简称：CS）的命令时，在ip和密码后加上你的profile的路径就能让服务器通信时使用profile进行流量混淆达成隐藏的目的。如下所示：</a></p>
 <ul>
-<li><p>char：1个字节</p>
-</li>
-<li><p>short int : 2个字节</p>
-</li>
-<li><p>int： 4个字节</p>
-</li>
-<li><p>unsigned int : 4个字节</p>
-</li>
-<li><p>float: 4个字节</p>
-</li>
-<li><p>double:  8个字节</p>
-</li>
-<li><p>long:  4个字节</p>
-</li>
-<li><p>long long: 8个字节</p>
-</li>
-<li><p>unsigned long: 4个字节 </p>
-</li>
+<li>启动CS的teamserver时同时加载Malleable-C2-Profiles命令</li>
 </ul>
-</li>
-<li><p>64位编译器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./teamserver [external IP] [password] [/path/to/my.profile]</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>short int : 2个字节</li>
-<li>int： 4个字节</li>
-<li>unsigned int : 4个字节</li>
-<li>float: 4个字节</li>
-<li>double:  8个字节</li>
-<li>long:  4个字节</li>
-<li>long long: 8个字节</li>
-<li>unsigned long: 4个字节 </li>
-<li>unsigned long: 8个字节 </li>
+<li>检查预览Profiles文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./c2lint [/path/to/my.profile]</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x01-使用实例"><a href="#0x01-使用实例" class="headerlink" title="0x01 使用实例"></a>0x01 使用实例</h2><p>因为是在公司的资产上进行攻击的，这里就不放上截图了。稍微记录一下手法就可以了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CS服务器：10.100.19.19</span><br><span class="line">CS客户端：10.100.19.19</span><br><span class="line">受害机：20.100.0.25</span><br></pre></td></tr></table></figure>
+
+<p>首先启动CS服务器，这里假设使用的混淆profile名为amazon.profile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CS服务器：</span><br><span class="line">./teamserver 10.100.19.19 123456 /opt/malleable_C2_profile/amazon.profile</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在同一部主机另开终端连接CS服务，成为CS客户端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CS客户端</span><br><span class="line">./start.sh</span><br></pre></td></tr></table></figure>
+
+<p>然后CS就会执行进入图形化界面。直接使用默认的端口和用户名密码点击connect进入CS页面。我们要给受害机开启一个监听端口，点击“CobaltStrike -&gt; listeners”，然后选择参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Name：didi</span><br><span class="line">Paylaod：Beacon Http</span><br><span class="line">HTTP Hosts：10.10.19.19</span><br><span class="line">HTTP Hosts（Stager）：10.10.19.19</span><br><span class="line">Profile:defualt</span><br><span class="line">HTTP Port(C2):80</span><br></pre></td></tr></table></figure>
+
+<p>这样就就在CS服务器上开启了80端口监听受害机流量啦，并且通过http形式进行传输。我们现在要生成控制客户端的恶意软件，这里有很多种形式。下面是参考链接：<a href="https://blog.csdn.net/weixin_44677409/article/details/102725129" target="_blank" rel="noopener">https://blog.csdn.net/weixin_44677409/article/details/102725129</a> </p>
+<p>这里我继续我自己的做法，我想生成一个受害机上运行的恶意文件。点击“Attack -&gt; Packeges -&gt; Windows Executables”，然后选择刚刚添加的监听并点击Generate进行构建。然后我们将输出的exe上传到受害主机上，只要受害机一点击，马上就能在CS上上线。</p>
+<p>然后因为我们选择了profile，所以抓包观察的话能看到，通信请求都被伪造成对amazon的请求，能在一定程度上达成混淆视听的作用。</p>
+<h2 id="0x02-随机profile"><a href="#0x02-随机profile" class="headerlink" title="0x02 随机profile"></a>0x02 随机profile</h2><p>因为这个profile库已经发布很久了，我个人感觉肯定很多对其进行样本添加了，那我们应该对其进行随机化进行绕检测。</p>
+<p>工具链接：<a href="https://github.com/bluscreenofjeff/Malleable-C2-Randomizer。因为今天在公司上大了一份详细使用，这里就不详细写了，就稍微记录一下简单的命令即可：" target="_blank" rel="noopener">https://github.com/bluscreenofjeff/Malleable-C2-Randomizer。因为今天在公司上大了一份详细使用，这里就不详细写了，就稍微记录一下简单的命令即可：</a></p>
+<ul>
+<li>模板的具体样本的生成<ul>
+<li>我们可以使用它给我们的模板（/sample template），然后执行“python malleable-c2-randomizer.py -profile /opt/Malleable-C2-Randomizer/amazon.profile -count 2 -cobalt /opt/cobaltstrike4.0 -output shabi”直接生成它预设的模板的2个样本。</li>
+<li>我们也可以自己在想改的地方改成“%%wordlist%%”，然后执行“python malleable-c2-randomizer.py -profile /opt/Malleable-C2-Randomizer/amazon.profile -count 1 -cobalt /opt/cobaltstrike4.0 -wordlist /opt/hostname.txt -output shabi”（/opt/hostname.txt里面就是自己写好的想要替换进去模板种的%%wordlist%%的具体内容）生成我们需要的模板的1个样本。</li>
 </ul>
 </li>
+<li>然后根据上一章节一样的启动方法，把指定profile路径的那个位置修改为刚刚Randomize生成新的profile的路径，然后启动即可。</li>
 </ul>
-<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><ul>
-<li>找出成绩最高的学生的id：</li>
-</ul>
-<p><img src="/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/2.png" alt></p>
-<p>顺便提醒了自己有关<strong>多表查询、子查询、谓词</strong>的复习</p>
-<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>这个是最难受，连最简单指针的使用形式都忘记了，提醒自己得复习<strong>指针，引用，C++特性,数据结构</strong></p>
-<p><img src="/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/1.png" alt></p>
-<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><ul>
-<li>继续深入挖掘漏洞，在攻防研究可以继续深入，进步还是比较快和大的。</li>
-<li>不只是深入web安全，要把二进制相关的更进一步的学好（不能浅尝辄止）。</li>
-<li>批评在开发基础的表现，不能学了安全就只把目光放在那几款安全开发。</li>
-<li>复习数据结构，计网，操作系统等知识。</li>
-</ul>
-<h2 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h2><p>新的计划，得抽更多时间来进行了。加油，继续冲击腾讯！！！</p>
+<h2 id="0x03-小结"><a href="#0x03-小结" class="headerlink" title="0x03 小结"></a>0x03 小结</h2><p>CS是今天第一次接触，就这个隐藏通信流量就已经感觉到了他的强大之处，继续努力变得更强。</p>
 
       
     </div>
@@ -434,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/03/04/MySQL%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/" rel="next" title="MySQL安全配置">
-                <i class="fa fa-chevron-left"></i> MySQL安全配置
+              <a href="/2020/04/16/%E8%93%9D%E5%86%9B%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/" rel="next" title="蓝军代理工具">
+                <i class="fa fa-chevron-left"></i> 蓝军代理工具
               </a>
             
           </div>
@@ -443,10 +408,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/03/10/XCTF%E4%B9%8BHackme/" rel="prev" title="XCTF之Hackme">
-                XCTF之Hackme <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -576,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#面试腾讯"><span class="nav-number">1.</span> <span class="nav-text">面试腾讯</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题复现"><span class="nav-number">1.1.</span> <span class="nav-text">问题复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#答案复现"><span class="nav-number">1.2.</span> <span class="nav-text">答案复现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#占字节数"><span class="nav-number">1.2.1.</span> <span class="nav-text">占字节数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL"><span class="nav-number">1.2.2.</span> <span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">1.2.3.</span> <span class="nav-text">指针</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反思"><span class="nav-number">1.3.</span> <span class="nav-text">反思</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#展望"><span class="nav-number">1.4.</span> <span class="nav-text">展望</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Malleable-C2-Profile"><span class="nav-number">1.</span> <span class="nav-text">Malleable_C2_Profile</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-加载方式"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 加载方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-使用实例"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 使用实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-随机profile"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 随机profile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-小结"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 小结</span></a></li></ol></li></ol></div>
             
 
           </div>

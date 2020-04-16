@@ -81,18 +81,15 @@
 
 
 
-<meta name="description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化） 问根据上面的防">
+<meta name="description" content="蓝军代理工具好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。 0x00 frpfrp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。  服务端配置frps.ini监听端口，然后.&#x2F;frps -c .&#x2F;frps.ini开启监听。 客户端配置frpc.ini服务端地址和端口和使用的协议，然后.&#x2F;frpc -c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="面试腾讯">
-<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;index.html">
+<meta property="og:title" content="蓝军代理工具">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;16&#x2F;%E8%93%9D%E5%86%9B%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="面试腾讯面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。 问题复现 具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程） 介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化） 问根据上面的防">
+<meta property="og:description" content="蓝军代理工具好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。 0x00 frpfrp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。  服务端配置frps.ini监听端口，然后.&#x2F;frps -c .&#x2F;frps.ini开启监听。 客户端配置frpc.ini服务端地址和端口和使用的协议，然后.&#x2F;frpc -c">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;1.png">
-<meta property="og:updated_time" content="2020-03-06T11:56:30.260Z">
+<meta property="og:updated_time" content="2020-04-16T08:56:10.714Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;06&#x2F;%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95&#x2F;2.png">
 
 
 
@@ -122,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://bai-ren-1.github.io/2020/03/06/腾讯面试/"/>
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/04/16/蓝军代理工具/"/>
 
 
 
 
 
-  <title>面试腾讯 | 白仁的博客</title>
+  <title>蓝军代理工具 | 白仁的博客</title>
   
 
 
@@ -245,7 +242,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/04/16/%E8%93%9D%E5%86%9B%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白仁">
@@ -262,7 +259,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">面试腾讯</h1>
+          <h1 class="post-title" itemprop="name headline">蓝军代理工具</h1>
         
 
         <div class="post-meta">
@@ -274,8 +271,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-06T18:32:26+08:00">
-                2020-03-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-16T16:45:00+08:00">
+                2020-04-16
               </time>
             
 
@@ -297,8 +294,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%80%BE%E8%B0%88/" itemprop="url" rel="index">
-                    <span itemprop="name">倾谈</span>
+                  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">后渗透</span>
                   </a>
                 </span>
 
@@ -334,82 +331,79 @@
       
 
       
-        <h1 id="面试腾讯"><a href="#面试腾讯" class="headerlink" title="面试腾讯"></a>面试腾讯</h1><p>面试梦想中的腾讯，本以为做足了准备，还是缺少了很多事情（很多基础的知识得及时去复习，不然就会以为自己还记得，其实已经不记得了），有些沮丧。但很感谢面试官和耐心地一步一步引导我，让我又有了新的准备方向。</p>
-<h2 id="问题复现"><a href="#问题复现" class="headerlink" title="问题复现"></a>问题复现</h2><ul>
-<li>具体经历介绍，很具体包括过程，思路，收获（比赛，学到的漏洞和漏洞拓展的具体过程）</li>
-<li>介绍一种熟悉漏洞，并说出怎么防御，并说出怎么绕过这个防御（关于XSS的防御的变化）</li>
-<li>问根据上面的防御和自己的进攻模拟攻防（防御就用普通CSP加上对其的进攻绕过）</li>
-<li>问漏扫项目怎么处理目录遍历这种路径一层一层的情况（枚举）</li>
-<li>问怎么优化这个问题（得好好思考一下）</li>
-<li>问SQL注入的最本质是什么（答语法结构改变，这个并非最根源的原因）</li>
-<li>追问是SQL注入本质，为什么C不会呢（解析）</li>
-<li>问有没有破解过游戏或者软件（crackme）</li>
-<li>问32位int、unsign int所占字节数（4字节，也是4字节，出错于记忆和理解出错，难受了）</li>
-<li>问具体过程（答了一种很简单的验证码绕过）</li>
-<li>pe结构（会，但具体有些遗忘）</li>
-<li>怎么给一个进程免杀（守护进程和hook api？）</li>
-<li>文件水印算法（没有听说过）</li>
-<li>问怎么设计一个水印算法（答文件分块后每块按哈希加密后拼接在后边）</li>
-<li>如何对水印使用动态校验（得好好思考一下）</li>
-<li>sql语句的编写（很难受，因为明明应该很流畅的，下面有复现）</li>
-<li>为什么不能用order by然后limit？（只能选一条）</li>
-<li>问一个具体场景的指针（更难受的地方，太久没使用把最基础的遗忘了还自以为准备充分）</li>
-<li>问开发了一个第三方的API得注意什么（不被泄露给其他第三方，配置隐私）</li>
-<li>给出具体场景就是一个根据id索引给出资料的API（不能枚举越权、SQL注入防止）</li>
-<li>问答</li>
-</ul>
-<p>下面就那些比较简单的答案复现一下，以敲响警钟要全面和扎实一点。</p>
-<h2 id="答案复现"><a href="#答案复现" class="headerlink" title="答案复现"></a>答案复现</h2><h3 id="占字节数"><a href="#占字节数" class="headerlink" title="占字节数"></a>占字节数</h3><ul>
-<li><p>32位编译器：</p>
+        <h1 id="蓝军代理工具"><a href="#蓝军代理工具" class="headerlink" title="蓝军代理工具"></a>蓝军代理工具</h1><p>好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。</p>
+<h2 id="0x00-frp"><a href="#0x00-frp" class="headerlink" title="0x00 frp"></a>0x00 frp</h2><p>frp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。</p>
 <ul>
-<li><p>char：1个字节</p>
-</li>
-<li><p>short int : 2个字节</p>
-</li>
-<li><p>int： 4个字节</p>
-</li>
-<li><p>unsigned int : 4个字节</p>
-</li>
-<li><p>float: 4个字节</p>
-</li>
-<li><p>double:  8个字节</p>
-</li>
-<li><p>long:  4个字节</p>
-</li>
-<li><p>long long: 8个字节</p>
-</li>
-<li><p>unsigned long: 4个字节 </p>
-</li>
+<li>服务端配置frps.ini监听端口，然后./frps -c ./frps.ini开启监听。</li>
+<li>客户端配置frpc.ini服务端地址和端口和使用的协议，然后./frpc -c ./frpc.ini开启。</li>
 </ul>
-</li>
-<li><p>64位编译器：</p>
+<p>协议完成进度</p>
 <ul>
-<li>short int : 2个字节</li>
-<li>int： 4个字节</li>
-<li>unsigned int : 4个字节</li>
-<li>float: 4个字节</li>
-<li>double:  8个字节</li>
-<li>long:  4个字节</li>
-<li>long long: 8个字节</li>
-<li>unsigned long: 4个字节 </li>
-<li>unsigned long: 8个字节 </li>
+<li><input checked disabled type="checkbox"> tcp</li>
+<li><input disabled type="checkbox"> udp（远程连接时直接报错）</li>
+<li><input checked disabled type="checkbox"> stcp（开启kali服务端./frps -c ./frps.ini。根据github的wiki上的配置，使用./frpc -c ./frpc.ini让受害机连接到kali。然后根据github的wiki上的配置，使用./frpc -c ./frpc让访问机连接到kali。然后访问机访问配置中自己本地的端口即可连接到受害机上）</li>
+<li><input checked disabled type="checkbox"> xtcp（首先根据wiki在服务端的./frps.ini添加udp的监听端口。然后开启kali服务端./frps -c ./frps.ini。根据github的wiki上的配置，使用./frpc -c ./frpc.ini让受害机连接到kali。然后根据github的wiki上的配置，使用./frpc -c ./frpc让访问机连接到kali。然后访问机访问配置中自己本地的端口即可连接到受害机上）</li>
 </ul>
+<h2 id="0x01-fcn"><a href="#0x01-fcn" class="headerlink" title="0x01 fcn"></a>0x01 fcn</h2><p>fcn需要两台主机，一台内网受害机，一台外网攻击机（其客户端和服务端与其他相反）。</p>
+<ul>
+<li>在内网主机上开启fcn后点击服务端，配置好密码并开启服务。</li>
+<li>在外网攻击机上开启fcn后点击客户端，配置好名称和ID密码等后等待连接成功。</li>
+<li>连接成功后外网主机就能直接mstsc连接到内网主机上。</li>
+</ul>
+<p>协议完成进度</p>
+<ul>
+<li><input checked disabled type="checkbox"> <p>tcp</p>
+</li>
+<li><input checked disabled type="checkbox"> <p>udp</p>
+</li>
+<li><input disabled type="checkbox"> <p>tls（复现失败，客户端运行后不能上线）</p>
 </li>
 </ul>
-<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><ul>
-<li>找出成绩最高的学生的id：</li>
+<h2 id="0x02-ngrok"><a href="#0x02-ngrok" class="headerlink" title="0x02 ngrok"></a>0x02 ngrok</h2><p>ngrok需要两台主机，一台内网受害机，一台外网攻击机。</p>
+<ul>
+<li>在ngrok官网申请个人账号，然后记录自己的token，下载客户端。</li>
+<li>将客户端上传到受害机上，然后在受害机的cmd上按格式使用命令ngrok tcp 3389就能把本地远程桌面映射到ngrok提供的域名的端口上。</li>
+<li>在攻击机上mstsc到ngrok提供的域名端口即可远程连接。</li>
 </ul>
-<p><img src="/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/2.png" alt></p>
-<p>顺便提醒了自己有关<strong>多表查询、子查询、谓词</strong>的复习</p>
-<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>这个是最难受，连最简单指针的使用形式都忘记了，提醒自己得复习<strong>指针，引用，C++特性,数据结构</strong></p>
-<p><img src="/2020/03/06/%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95/1.png" alt></p>
-<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><ul>
-<li>继续深入挖掘漏洞，在攻防研究可以继续深入，进步还是比较快和大的。</li>
-<li>不只是深入web安全，要把二进制相关的更进一步的学好（不能浅尝辄止）。</li>
-<li>批评在开发基础的表现，不能学了安全就只把目光放在那几款安全开发。</li>
-<li>复习数据结构，计网，操作系统等知识。</li>
+<p>协议完成进度</p>
+<ul>
+<li><input checked disabled type="checkbox"> tcp</li>
+<li><input disabled type="checkbox"> udp （复现失败，无法连接远程桌面）</li>
 </ul>
-<h2 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h2><p>新的计划，得抽更多时间来进行了。加油，继续冲击腾讯！！！</p>
+<h2 id="0x03-sunny-ngrok"><a href="#0x03-sunny-ngrok" class="headerlink" title="0x03 sunny-ngrok"></a>0x03 sunny-ngrok</h2><p>sunny-ngrok需要两台主机，一台内网受害机，一台外网攻击机。</p>
+<ul>
+<li>在ngrok官网申请个人账号，并开通隧道获取隧道ID，下载客户端。</li>
+<li>将客户端上传到受害机上，然后在受害机上使用客户端按官网wiki的格式执行命令。其中隧道ID用于启动隧道，就能把本地远程桌面映射到sunny-ngrok提供的域名端口上。</li>
+<li>在攻击机上mstsc到sunny-ngrok提供的域名端口即可远程连接。</li>
+</ul>
+<p>协议完成进度</p>
+<ul>
+<li><input checked disabled type="checkbox"> tcp</li>
+<li><input disabled type="checkbox"> udp （复现失败，无法连接远程桌面）</li>
+</ul>
+<h2 id="0x04-natapp"><a href="#0x04-natapp" class="headerlink" title="0x04 natapp"></a>0x04 natapp</h2><p>natapp需要两台主机，一台内网受害机，一台外网攻击机。</p>
+<ul>
+<li>在natapp官网申请个人账号，并获取authtoken，下载客户端。</li>
+<li>将客户端上传到受害机上，然后在受害机上运行客户端，通过指定authtoken启动隧道，就能把本地远程桌面映射到natapp提供的域名端口上。</li>
+<li>在攻击机上mstsc到natapp提供的域名端口即可远程连接。</li>
+</ul>
+<p>协议完成进度</p>
+<ul>
+<li><input checked disabled type="checkbox"> tcp</li>
+<li><input disabled type="checkbox"> udp （复现失败，无法连接远程桌面）</li>
+</ul>
+<h2 id="0x05-小米球"><a href="#0x05-小米球" class="headerlink" title="0x05 小米球"></a>0x05 小米球</h2><p>小米球需要两台主机，一台内网受害机，一台外网攻击机。</p>
+<ul>
+<li>在小米球官网申请个人账号，下载客户端。</li>
+<li>将客户端上传到受害机上，在yml配置文件里面写好映射的本地端口和隧道名，使用cmd按官网教程格式运行命令，小米球就能把本地远程桌面映射到natapp提供的域名端口上。</li>
+<li>在攻击机上mstsc到natapp提供的域名端口即可远程连接</li>
+</ul>
+<p>协议完成进度</p>
+<ul>
+<li><input checked disabled type="checkbox"> tcp</li>
+<li><input disabled type="checkbox"> udp （复现失败，无法连接远程桌面）</li>
+</ul>
+<h2 id="0x06-小结"><a href="#0x06-小结" class="headerlink" title="0x06 小结"></a>0x06 小结</h2><p>工具用法何其多，这些并不是重要的。最重要的是，我们要知道里面的原理，然后通过工具去积累思路，尝试自己去写出这样的工具，才是真正的学习呀。</p>
 
       
     </div>
@@ -434,8 +428,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/03/04/MySQL%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/" rel="next" title="MySQL安全配置">
-                <i class="fa fa-chevron-left"></i> MySQL安全配置
+              <a href="/2020/04/05/Docker/" rel="next" title="Docker">
+                <i class="fa fa-chevron-left"></i> Docker
               </a>
             
           </div>
@@ -444,8 +438,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/03/10/XCTF%E4%B9%8BHackme/" rel="prev" title="XCTF之Hackme">
-                XCTF之Hackme <i class="fa fa-chevron-right"></i>
+              <a href="/2020/04/16/Malleable_C2_Profile/" rel="prev" title="Malleable_C2_Profile">
+                Malleable_C2_Profile <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -576,7 +570,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#面试腾讯"><span class="nav-number">1.</span> <span class="nav-text">面试腾讯</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题复现"><span class="nav-number">1.1.</span> <span class="nav-text">问题复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#答案复现"><span class="nav-number">1.2.</span> <span class="nav-text">答案复现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#占字节数"><span class="nav-number">1.2.1.</span> <span class="nav-text">占字节数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL"><span class="nav-number">1.2.2.</span> <span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">1.2.3.</span> <span class="nav-text">指针</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反思"><span class="nav-number">1.3.</span> <span class="nav-text">反思</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#展望"><span class="nav-number">1.4.</span> <span class="nav-text">展望</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蓝军代理工具"><span class="nav-number">1.</span> <span class="nav-text">蓝军代理工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-frp"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 frp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-fcn"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 fcn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-ngrok"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 ngrok</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-sunny-ngrok"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 sunny-ngrok</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-natapp"><span class="nav-number">1.5.</span> <span class="nav-text">0x04 natapp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-小米球"><span class="nav-number">1.6.</span> <span class="nav-text">0x05 小米球</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-小结"><span class="nav-number">1.7.</span> <span class="nav-text">0x06 小结</span></a></li></ol></li></ol></div>
             
 
           </div>
