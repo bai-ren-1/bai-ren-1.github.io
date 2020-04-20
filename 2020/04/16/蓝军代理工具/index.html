@@ -81,14 +81,14 @@
 
 
 
-<meta name="description" content="蓝军代理工具好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。 代理工具的使用和进展好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，一是为了总结用法，而是为了记录工作的进展。 0x00 frpfrp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。  服务端配置frps.i">
+<meta name="description" content="代理工具的使用和进展好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，一是为了总结用法，而是为了记录工作的进展。 0x00 frpfrp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。  服务端配置frps.ini监听端口，然后.&#x2F;frps -c .&#x2F;frps.ini开启监听。 客户端配置frpc.ini服务端地址和端口和使用的协议，然后.&#x2F;f">
 <meta property="og:type" content="article">
 <meta property="og:title" content="蓝军代理工具">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;16&#x2F;%E8%93%9D%E5%86%9B%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="蓝军代理工具好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。 代理工具的使用和进展好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，一是为了总结用法，而是为了记录工作的进展。 0x00 frpfrp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。  服务端配置frps.i">
+<meta property="og:description" content="代理工具的使用和进展好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，一是为了总结用法，而是为了记录工作的进展。 0x00 frpfrp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。  服务端配置frps.ini监听端口，然后.&#x2F;frps -c .&#x2F;frps.ini开启监听。 客户端配置frpc.ini服务端地址和端口和使用的协议，然后.&#x2F;f">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-17T06:39:01.498Z">
+<meta property="og:updated_time" content="2020-04-20T02:33:37.807Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -331,8 +331,7 @@
       
 
       
-        <h1 id="蓝军代理工具"><a href="#蓝军代理工具" class="headerlink" title="蓝军代理工具"></a>蓝军代理工具</h1><p>好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。</p>
-<h1 id="代理工具的使用和进展"><a href="#代理工具的使用和进展" class="headerlink" title="代理工具的使用和进展"></a>代理工具的使用和进展</h1><p>好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，一是为了总结用法，而是为了记录工作的进展。</p>
+        <h1 id="代理工具的使用和进展"><a href="#代理工具的使用和进展" class="headerlink" title="代理工具的使用和进展"></a>代理工具的使用和进展</h1><p>好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，一是为了总结用法，而是为了记录工作的进展。</p>
 <h2 id="0x00-frp"><a href="#0x00-frp" class="headerlink" title="0x00 frp"></a>0x00 frp</h2><p>frp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。</p>
 <ul>
 <li>服务端配置frps.ini监听端口，然后./frps -c ./frps.ini开启监听。</li>
@@ -397,7 +396,7 @@
 <ul>
 <li>在小米球官网申请个人账号，下载客户端。</li>
 <li>将客户端上传到受害机上，在yml配置文件里面写好映射的本地端口和隧道名，使用cmd按官网教程格式运行命令，小米球就能把本地远程桌面映射到natapp提供的域名端口上。</li>
-<li>在攻击机上mstsc到natapp提供的域名端口即可远程连接</li>
+<li>在攻击机上mstsc到natapp提供的域名端口即可远程连接。</li>
 </ul>
 <p>协议完成进度</p>
 <ul>
@@ -430,6 +429,7 @@
 <p> <a href="https://maizer.pw/index.php/archives/37/" target="_blank" rel="noopener">https://maizer.pw/index.php/archives/37/</a> </p>
 <p> <a href="https://maizer.pw/index.php/archives/50/" target="_blank" rel="noopener">https://maizer.pw/index.php/archives/50/</a> </p>
 <p> <a href="https://www.moerats.com/archives/891/" target="_blank" rel="noopener">https://www.moerats.com/archives/891/</a> </p>
+<h2 id="0x07-花生壳"><a href="#0x07-花生壳" class="headerlink" title="0x07 花生壳"></a>0x07 花生壳</h2><p>同上面ngrok系列的做法，因为做了很久就不记录了。</p>
 <h2 id="0x07-小结"><a href="#0x07-小结" class="headerlink" title="0x07 小结"></a>0x07 小结</h2><p>工具用法何其多，这些并不是重要的。最重要的是，我们要知道里面的原理，然后通过工具去积累思路，尝试自己去写出这样的工具，才是真正的学习呀。冲冲冲。</p>
 
       
@@ -597,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蓝军代理工具"><span class="nav-number">1.</span> <span class="nav-text">蓝军代理工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代理工具的使用和进展"><span class="nav-number">2.</span> <span class="nav-text">代理工具的使用和进展</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-frp"><span class="nav-number">2.1.</span> <span class="nav-text">0x00 frp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-fcn"><span class="nav-number">2.2.</span> <span class="nav-text">0x01 fcn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-ngrok"><span class="nav-number">2.3.</span> <span class="nav-text">0x02 ngrok</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-sunny-ngrok"><span class="nav-number">2.4.</span> <span class="nav-text">0x03 sunny-ngrok</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-natapp"><span class="nav-number">2.5.</span> <span class="nav-text">0x04 natapp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-小米球"><span class="nav-number">2.6.</span> <span class="nav-text">0x05 小米球</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-nps"><span class="nav-number">2.7.</span> <span class="nav-text">0x06 nps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-小结"><span class="nav-number">2.8.</span> <span class="nav-text">0x07 小结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#代理工具的使用和进展"><span class="nav-number">1.</span> <span class="nav-text">代理工具的使用和进展</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-frp"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 frp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-fcn"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 fcn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-ngrok"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 ngrok</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-sunny-ngrok"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 sunny-ngrok</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-natapp"><span class="nav-number">1.5.</span> <span class="nav-text">0x04 natapp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-小米球"><span class="nav-number">1.6.</span> <span class="nav-text">0x05 小米球</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-nps"><span class="nav-number">1.7.</span> <span class="nav-text">0x06 nps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-花生壳"><span class="nav-number">1.8.</span> <span class="nav-text">0x07 花生壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-小结"><span class="nav-number">1.9.</span> <span class="nav-text">0x07 小结</span></a></li></ol></li></ol></div>
             
 
           </div>
