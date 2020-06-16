@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="白仁的博客">
 <meta property="og:description" content="Malleable_C2_ProfileMalleable_C2_Profile是CobaltStrike中一种配置文件。目的是用来伪装流量，让通讯更加隐蔽。下面贴上  https:&#x2F;&#x2F;wbglil.gitbooks.io&#x2F;cobalt-strike&#x2F;content&#x2F;cobalt-strikekuo-zhan&#x2F;malleable-c2.html  上的解释。  Cobalt Strike的 Mal">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-16T12:23:27.600Z">
+<meta property="og:updated_time" content="2020-05-01T09:11:21.733Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -356,7 +356,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CS服务器：</span><br><span class="line">./teamserver 10.100.19.19 123456 /opt/malleable_C2_profile/amazon.profile</span><br></pre></td></tr></table></figure>
 
 <p>然后我们在同一部主机另开终端连接CS服务，成为CS客户端</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CS客户端</span><br><span class="line">./start.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CS客户端</span><br><span class="line">./start.sh 10.100.19.19 123456</span><br></pre></td></tr></table></figure>
 
 <p>然后CS就会执行进入图形化界面。直接使用默认的端口和用户名密码点击connect进入CS页面。我们要给受害机开启一个监听端口，点击“CobaltStrike -&gt; listeners”，然后选择参数：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Name：didi</span><br><span class="line">Paylaod：Beacon Http</span><br><span class="line">HTTP Hosts：10.10.19.19</span><br><span class="line">HTTP Hosts（Stager）：10.10.19.19</span><br><span class="line">Profile:defualt</span><br><span class="line">HTTP Port(C2):80</span><br></pre></td></tr></table></figure>
@@ -399,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/04/16/%E8%93%9D%E5%86%9B%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/" rel="next" title="蓝军代理工具">
-                <i class="fa fa-chevron-left"></i> 蓝军代理工具
+              <a href="/2020/04/16/%E7%BA%A2%E9%98%9F%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/" rel="next" title="红队代理工具">
+                <i class="fa fa-chevron-left"></i> 红队代理工具
               </a>
             
           </div>
@@ -408,6 +408,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/01/ATT&CK/" rel="prev" title="ATT&CK">
+                ATT&CK <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -484,7 +488,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -495,7 +499,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
