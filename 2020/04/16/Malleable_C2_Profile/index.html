@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="白仁的博客">
 <meta property="og:description" content="Malleable_C2_ProfileMalleable_C2_Profile是CobaltStrike中一种配置文件。目的是用来伪装流量，让通讯更加隐蔽。下面贴上  https:&#x2F;&#x2F;wbglil.gitbooks.io&#x2F;cobalt-strike&#x2F;content&#x2F;cobalt-strikekuo-zhan&#x2F;malleable-c2.html  上的解释。  Cobalt Strike的 Mal">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-01T09:11:21.733Z">
+<meta property="og:updated_time" content="2020-06-29T13:13:37.255Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -365,7 +365,7 @@
 <p>这里我继续我自己的做法，我想生成一个受害机上运行的恶意文件。点击“Attack -&gt; Packeges -&gt; Windows Executables”，然后选择刚刚添加的监听并点击Generate进行构建。然后我们将输出的exe上传到受害主机上，只要受害机一点击，马上就能在CS上上线。</p>
 <p>然后因为我们选择了profile，所以抓包观察的话能看到，通信请求都被伪造成对amazon的请求，能在一定程度上达成混淆视听的作用。</p>
 <h2 id="0x02-随机profile"><a href="#0x02-随机profile" class="headerlink" title="0x02 随机profile"></a>0x02 随机profile</h2><p>因为这个profile库已经发布很久了，我个人感觉肯定很多对其进行样本添加了，那我们应该对其进行随机化进行绕检测。</p>
-<p>工具链接：<a href="https://github.com/bluscreenofjeff/Malleable-C2-Randomizer。因为今天在公司上大了一份详细使用，这里就不详细写了，就稍微记录一下简单的命令即可：" target="_blank" rel="noopener">https://github.com/bluscreenofjeff/Malleable-C2-Randomizer。因为今天在公司上大了一份详细使用，这里就不详细写了，就稍微记录一下简单的命令即可：</a></p>
+<p>工具链接：<a href="https://github.com/bluscreenofjeff/Malleable-C2-Randomizer。因为今天在公司上打了一份详细使用，这里就不详细写了，就稍微记录一下简单的命令即可：" target="_blank" rel="noopener">https://github.com/bluscreenofjeff/Malleable-C2-Randomizer。因为今天在公司上打了一份详细使用，这里就不详细写了，就稍微记录一下简单的命令即可：</a></p>
 <ul>
 <li>模板的具体样本的生成<ul>
 <li>我们可以使用它给我们的模板（/sample template），然后执行“python malleable-c2-randomizer.py -profile /opt/Malleable-C2-Randomizer/amazon.profile -count 2 -cobalt /opt/cobaltstrike4.0 -output shabi”直接生成它预设的模板的2个样本。</li>
@@ -488,7 +488,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

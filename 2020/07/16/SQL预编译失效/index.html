@@ -81,14 +81,14 @@
 
 
 
-<meta name="description" content="蓝军代理工具简述好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。 0x00 frpfrp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。  服务端配置frps.ini监听端口，然后.&#x2F;frps -c .&#x2F;frps.ini开启监听。 客户端配置frpc.ini服务端地址和端口和使用的协议，然后.&#x2F;frpc -">
+<meta name="description" content="SQL预编译失效之前写了一篇《SQL预编译绕过》，其实这篇也没啥。只是提一下在某些特殊情况下，模板语句处理的不好其实也是会导致即使使用了预编译也会导致SQL注入的。 0x00 动态拼接语句参数是动态拼接的话，其实用不用SQL预编译都一个样： 12直接拼接（不安全的写法）String sql = &amp;quot;select * from product where pname = &amp;quot; + n">
 <meta property="og:type" content="article">
-<meta property="og:title" content="蓝军代理工具简述">
-<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;04&#x2F;16&#x2F;%E8%93%9D%E5%86%9B%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E7%AE%80%E8%BF%B0&#x2F;index.html">
+<meta property="og:title" content="SQL预编译失效">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;16&#x2F;SQL%E9%A2%84%E7%BC%96%E8%AF%91%E5%A4%B1%E6%95%88&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="蓝军代理工具简述好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。 0x00 frpfrp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。  服务端配置frps.ini监听端口，然后.&#x2F;frps -c .&#x2F;frps.ini开启监听。 客户端配置frpc.ini服务端地址和端口和使用的协议，然后.&#x2F;frpc -">
+<meta property="og:description" content="SQL预编译失效之前写了一篇《SQL预编译绕过》，其实这篇也没啥。只是提一下在某些特殊情况下，模板语句处理的不好其实也是会导致即使使用了预编译也会导致SQL注入的。 0x00 动态拼接语句参数是动态拼接的话，其实用不用SQL预编译都一个样： 12直接拼接（不安全的写法）String sql = &amp;quot;select * from product where pname = &amp;quot; + n">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-16T08:46:13.405Z">
+<meta property="og:updated_time" content="2020-07-16T13:16:27.126Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://bai-ren-1.github.io/2020/04/16/蓝军代理工具简述/"/>
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/07/16/SQL预编译失效/"/>
 
 
 
 
 
-  <title>蓝军代理工具简述 | 白仁的博客</title>
+  <title>SQL预编译失效 | 白仁的博客</title>
   
 
 
@@ -242,7 +242,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/04/16/%E8%93%9D%E5%86%9B%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E7%AE%80%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/07/16/SQL%E9%A2%84%E7%BC%96%E8%AF%91%E5%A4%B1%E6%95%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白仁">
@@ -259,7 +259,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">蓝军代理工具简述</h1>
+          <h1 class="post-title" itemprop="name headline">SQL预编译失效</h1>
         
 
         <div class="post-meta">
@@ -271,8 +271,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-16T16:45:00+08:00">
-                2020-04-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-16T20:51:53+08:00">
+                2020-07-16
               </time>
             
 
@@ -281,6 +281,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -309,79 +331,29 @@
       
 
       
-        <h1 id="蓝军代理工具简述"><a href="#蓝军代理工具简述" class="headerlink" title="蓝军代理工具简述"></a>蓝军代理工具简述</h1><p>好久没写博客了，最近一直复现各类代理和隧道的使用并且抓取通信流量进行分析。写这个文章，简单总结用法，并简单记录工作的进展。</p>
-<h2 id="0x00-frp"><a href="#0x00-frp" class="headerlink" title="0x00 frp"></a>0x00 frp</h2><p>frp需要三台主机，一台内网受害机，一台外网服务机，一台外网攻击访问机。</p>
+        <h1 id="SQL预编译失效"><a href="#SQL预编译失效" class="headerlink" title="SQL预编译失效"></a>SQL预编译失效</h1><p>之前写了一篇《SQL预编译绕过》，其实这篇也没啥。只是提一下在某些特殊情况下，模板语句处理的不好其实也是会导致即使使用了预编译也会导致SQL注入的。</p>
+<h2 id="0x00-动态拼接"><a href="#0x00-动态拼接" class="headerlink" title="0x00 动态拼接"></a>0x00 动态拼接</h2><p>语句参数是动态拼接的话，其实用不用SQL预编译都一个样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">直接拼接（不安全的写法）</span><br><span class="line">String sql = &quot;select * from product where pname = &quot; + name;</span><br></pre></td></tr></table></figure>
+
+<p>正确的做法是要进行参数绑定啦：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">参数绑定（安全的写法）</span><br><span class="line">String sql = &quot;select * from db_user where username = ?&quot;;</span><br><span class="line">PreparedStatement stmt = connection.prepareStatement(sql);</span><br><span class="line">stmt.setString(1,name);</span><br><span class="line">ResultSet rs = stmt.executeQuery();</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x01-order-by"><a href="#0x01-order-by" class="headerlink" title="0x01 order by"></a>0x01 order by</h2><p>order by 后面的语句，是不能够用<strong>预编译进行处理</strong>的，只能通过拼接进行操作，因此需要手动过滤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String sql = &quot;select * from userinfo where id = ? &quot;+&quot;order by &apos;&apos;&quot; + age + &quot;&apos; asc&apos;&quot; ;</span><br><span class="line">ps = conn.prepareStatement(sql);</span><br><span class="line">ps.setInt(1,id);</span><br><span class="line">rs = ps.executeQuery();</span><br></pre></td></tr></table></figure>
+
+<p>所以假如上面没有对order by 的参数age进行过滤的话，就会照成SQL注入。</p>
+<blockquote>
+<p>所以渗透中看到sort等参数就很大可能存在SQL注入。</p>
+</blockquote>
+<p>order by后面不能参数绑定的原因：</p>
 <ul>
-<li>服务端配置frps.ini监听端口，然后./frps -c ./frps.ini开启监听。</li>
-<li>客户端配置frpc.ini服务端地址和端口和使用的协议，然后./frpc -c ./frpc.ini开启。</li>
+<li>预编译又只有自动加引号的setString()方法，没有不加引号的方法；</li>
+<li>order by后接的字段名不能有引号；</li>
 </ul>
-<p>协议完成进度</p>
-<ul>
-<li><input checked disabled type="checkbox"> tcp</li>
-<li><input disabled type="checkbox"> udp（远程连接时直接报错）</li>
-<li><input checked disabled type="checkbox"> stcp（开启kali服务端./frps -c ./frps.ini。根据github的wiki上的配置，使用./frpc -c ./frpc.ini让受害机连接到kali。然后根据github的wiki上的配置，使用./frpc -c ./frpc让访问机连接到kali。然后访问机访问配置中自己本地的端口即可连接到受害机上）</li>
-<li><input checked disabled type="checkbox"> xtcp（首先根据wiki在服务端的./frps.ini添加udp的监听端口。然后开启kali服务端./frps -c ./frps.ini。根据github的wiki上的配置，使用./frpc -c ./frpc.ini让受害机连接到kali。然后根据github的wiki上的配置，使用./frpc -c ./frpc让访问机连接到kali。然后访问机访问配置中自己本地的端口即可连接到受害机上）</li>
-</ul>
-<h2 id="0x01-fcn"><a href="#0x01-fcn" class="headerlink" title="0x01 fcn"></a>0x01 fcn</h2><p>fcn需要两台主机，一台内网受害机，一台外网攻击机（其客户端和服务端与其他相反）。</p>
-<ul>
-<li>在内网主机上开启fcn后点击服务端，配置好密码并开启服务。</li>
-<li>在外网攻击机上开启fcn后点击客户端，配置好名称和ID密码等后等待连接成功。</li>
-<li>连接成功后外网主机就能直接mstsc连接到内网主机上。</li>
-</ul>
-<p>协议完成进度</p>
-<ul>
-<li><input checked disabled type="checkbox"> <p>tcp</p>
-</li>
-<li><input checked disabled type="checkbox"> <p>udp</p>
-</li>
-<li><input disabled type="checkbox"> <p>tls（复现失败，客户端运行后不能上线）</p>
-</li>
-</ul>
-<h2 id="0x02-ngrok"><a href="#0x02-ngrok" class="headerlink" title="0x02 ngrok"></a>0x02 ngrok</h2><p>ngrok需要两台主机，一台内网受害机，一台外网攻击机。</p>
-<ul>
-<li>在ngrok官网申请个人账号，然后记录自己的token，下载客户端。</li>
-<li>将客户端上传到受害机上，然后在受害机的cmd上按格式使用命令ngrok tcp 3389就能把本地远程桌面映射到ngrok提供的域名的端口上。</li>
-<li>在攻击机上mstsc到ngrok提供的域名端口即可远程连接。</li>
-</ul>
-<p>协议完成进度</p>
-<ul>
-<li><input checked disabled type="checkbox"> tcp</li>
-<li><input disabled type="checkbox"> udp （复现失败，无法连接远程桌面）</li>
-</ul>
-<h2 id="0x03-sunny-ngrok"><a href="#0x03-sunny-ngrok" class="headerlink" title="0x03 sunny-ngrok"></a>0x03 sunny-ngrok</h2><p>sunny-ngrok需要两台主机，一台内网受害机，一台外网攻击机。</p>
-<ul>
-<li>在ngrok官网申请个人账号，并开通隧道获取隧道ID，下载客户端。</li>
-<li>将客户端上传到受害机上，然后在受害机上使用客户端按官网wiki的格式执行命令。其中隧道ID用于启动隧道，就能把本地远程桌面映射到sunny-ngrok提供的域名端口上。</li>
-<li>在攻击机上mstsc到sunny-ngrok提供的域名端口即可远程连接。</li>
-</ul>
-<p>协议完成进度</p>
-<ul>
-<li><input checked disabled type="checkbox"> tcp</li>
-<li><input disabled type="checkbox"> udp （复现失败，无法连接远程桌面）</li>
-</ul>
-<h2 id="0x04-natapp"><a href="#0x04-natapp" class="headerlink" title="0x04 natapp"></a>0x04 natapp</h2><p>natapp需要两台主机，一台内网受害机，一台外网攻击机。</p>
-<ul>
-<li>在natapp官网申请个人账号，并获取authtoken，下载客户端。</li>
-<li>将客户端上传到受害机上，然后在受害机上运行客户端，通过指定authtoken启动隧道，就能把本地远程桌面映射到natapp提供的域名端口上。</li>
-<li>在攻击机上mstsc到natapp提供的域名端口即可远程连接。</li>
-</ul>
-<p>协议完成进度</p>
-<ul>
-<li><input checked disabled type="checkbox"> tcp</li>
-<li><input disabled type="checkbox"> udp （复现失败，无法连接远程桌面）</li>
-</ul>
-<h2 id="0x05-小米球"><a href="#0x05-小米球" class="headerlink" title="0x05 小米球"></a>0x05 小米球</h2><p>小米球需要两台主机，一台内网受害机，一台外网攻击机。</p>
-<ul>
-<li>在小米球官网申请个人账号，下载客户端。</li>
-<li>将客户端上传到受害机上，在yml配置文件里面写好映射的本地端口和隧道名，使用cmd按官网教程格式运行命令，小米球就能把本地远程桌面映射到natapp提供的域名端口上。</li>
-<li>在攻击机上mstsc到natapp提供的域名端口即可远程连接</li>
-</ul>
-<p>协议完成进度</p>
-<ul>
-<li><input checked disabled type="checkbox"> tcp</li>
-<li><input disabled type="checkbox"> udp （复现失败，无法连接远程桌面）</li>
-</ul>
-<h2 id="0x06-小结"><a href="#0x06-小结" class="headerlink" title="0x06 小结"></a>0x06 小结</h2><p>工具用法何其多，这些并不是重要的。最重要的是，我们要知道里面的原理，然后通过工具去积累思路，尝试自己去写出这样的工具，才是真正的学习呀。</p>
+<p>所以如果order by后面的参数使用动态绑定，就会因为引号问题报语法错误。所以order by后面只能以动态拼接的方式来执行，但是很多傻逼开发不知道怎么过滤或者根本不知道得过滤，就导致一抓一个准。</p>
+<h2 id="0x02-小结"><a href="#0x02-小结" class="headerlink" title="0x02 小结"></a>0x02 小结</h2><p>就写一下，因为很久没写了，很简单的问题。</p>
 
       
     </div>
@@ -406,8 +378,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/04/05/Docker/" rel="next" title="Docker">
-                <i class="fa fa-chevron-left"></i> Docker
+              <a href="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/" rel="next" title="AndroidKiller配置">
+                <i class="fa fa-chevron-left"></i> AndroidKiller配置
               </a>
             
           </div>
@@ -491,7 +463,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -502,7 +474,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -544,7 +516,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蓝军代理工具简述"><span class="nav-number">1.</span> <span class="nav-text">蓝军代理工具简述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-frp"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 frp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-fcn"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 fcn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-ngrok"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 ngrok</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-sunny-ngrok"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 sunny-ngrok</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-natapp"><span class="nav-number">1.5.</span> <span class="nav-text">0x04 natapp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-小米球"><span class="nav-number">1.6.</span> <span class="nav-text">0x05 小米球</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-小结"><span class="nav-number">1.7.</span> <span class="nav-text">0x06 小结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL预编译失效"><span class="nav-number">1.</span> <span class="nav-text">SQL预编译失效</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-动态拼接"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 动态拼接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-order-by"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 order by</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-小结"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 小结</span></a></li></ol></li></ol></div>
             
 
           </div>
