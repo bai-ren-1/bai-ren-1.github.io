@@ -81,12 +81,12 @@
 
 
 
-<meta name="description" content="CommonsCollections3利用链2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后我下面使用的就是Commons Collections3的版本的方法进行构造调用链，记录一下思路。 0x00 CommonsCollections调用链执行首先">
+<meta name="description" content="CommonsCollections3利用链2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后下面记录的就是Commons Collections3的版本的方法进行构造调用链的过程和分析。 0x00 CommonsCollections调用链执行首先在h">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CommonsCollections3利用链">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="CommonsCollections3利用链2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后我下面使用的就是Commons Collections3的版本的方法进行构造调用链，记录一下思路。 0x00 CommonsCollections调用链执行首先">
+<meta property="og:description" content="CommonsCollections3利用链2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后下面记录的就是Commons Collections3的版本的方法进行构造调用链的过程和分析。 0x00 CommonsCollections调用链执行首先在h">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;2.png">
@@ -94,7 +94,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;4.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;6.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;7.png">
-<meta property="og:updated_time" content="2020-07-19T14:44:44.840Z">
+<meta property="og:updated_time" content="2020-07-19T14:49:14.249Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;19&#x2F;CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE&#x2F;1.png">
 
@@ -338,7 +338,7 @@
       
 
       
-        <h1 id="CommonsCollections3利用链"><a href="#CommonsCollections3利用链" class="headerlink" title="CommonsCollections3利用链"></a>CommonsCollections3利用链</h1><p>2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后我下面使用的就是Commons Collections3的版本的方法进行构造调用链，记录一下思路。</p>
+        <h1 id="CommonsCollections3利用链"><a href="#CommonsCollections3利用链" class="headerlink" title="CommonsCollections3利用链"></a>CommonsCollections3利用链</h1><p>2015年最大的漏洞莫过于CommonsCollections反序列化漏洞了。它借用了Java反序列化和Apache Commons Collections这一基础类库，从而实现远程命令执行。然后下面记录的就是Commons Collections3的版本的方法进行构造调用链的过程和分析。</p>
 <h2 id="0x00-CommonsCollections调用链执行"><a href="#0x00-CommonsCollections调用链执行" class="headerlink" title="0x00 CommonsCollections调用链执行"></a>0x00 CommonsCollections调用链执行</h2><p>首先在<a href="https://github.com/frohoff/ysoserial上下载打包好的JAR包，新建一个Java项目《Java反序列化》，然后把ysoserial拉进项目文件夹中。基本的项目结构如下：" target="_blank" rel="noopener">https://github.com/frohoff/ysoserial上下载打包好的JAR包，新建一个Java项目《Java反序列化》，然后把ysoserial拉进项目文件夹中。基本的项目结构如下：</a></p>
 <p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/1.png" alt></p>
 <p>然后我们上面红圈的地方，右键导入后选择”Add as Library”。然后在弹出的窗口中选择OK就可以啦。这一步的目的是将CommonsCollections3中使用的依赖方法进行引入。</p>
@@ -352,11 +352,11 @@
 <p>执行这段代码就会成功弹出计算器：</p>
 <p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/3.png" alt></p>
 <h2 id="0x01-CommonsCollections调用链关键点"><a href="#0x01-CommonsCollections调用链关键点" class="headerlink" title="0x01 CommonsCollections调用链关键点"></a>0x01 CommonsCollections调用链关键点</h2><h3 id="Apache-CommonsCollections"><a href="#Apache-CommonsCollections" class="headerlink" title="Apache CommonsCollections"></a>Apache CommonsCollections</h3><p>Apache Commons Collections是一个扩展了Java标准库里的Collection结构的<strong>第三方基础库</strong>，它提供了很多强有力的数据结构类型并且实现了各种集合工具类。作为Apache开源项目的重要组件，Commons Collections被广泛应用于各种Java应用的开发。</p>
-<h3 id="TransformedMap类"><a href="#TransformedMap类" class="headerlink" title="TransformedMap类"></a>TransformedMap类</h3><p>TransformedMap类是Apache CommonsCollections 组件中的一个<strong>实现类</strong>。TransformedMap是对Java标准数据结构Map接口的一个扩展。该类可以在一个元素被加入到集合内时，自动对该元素进行特定的修饰变换，具体的变换逻辑由<strong>Transformer类</strong>定义，Transformer在TransformedMap实例化时作为参数传入。</p>
+<h3 id="TransformedMap类"><a href="#TransformedMap类" class="headerlink" title="TransformedMap类"></a>TransformedMap类</h3><p><strong>TransformedMap类</strong>是Apache CommonsCollections 组件中的一个<strong>实现类</strong>。TransformedMap是对Java标准数据结构Map接口的一个扩展。该类可以在一个元素被加入到集合内时，自动对该元素进行特定的修饰变换，具体的变换逻辑由<strong>Transformer类</strong>定义，Transformer在TransformedMap实例化时作为参数传入。</p>
 <p>我们可以通过TransformedMap.decorate()方法，获得一个TransformedMap的实例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map transformedMap = TransformedMap.decorate(map,keyTransformer,valueTransformer);</span><br></pre></td></tr></table></figure>
 
-<p><strong>”当TransformedMap内的key 或者 value发生变化时，就会触发相应的Transformer的transform()方法。另外，还可以使用Transformer数组构造成ChainedTransformer。当触发时，ChainedTransformer可以按顺序调用一系列的变换。“</strong></p>
+<p>当<strong>TransformedMap内的key 或者 value发生变化时，就会触发相应的Transformer的transform()方法</strong>。另外，还可以使用Transformer数组构造成ChainedTransformer。当触发时，<strong>ChainedTransformer可以按顺序调用一系列的变换</strong>。</p>
 <blockquote>
 <p>第一句解释了代码执行的触发点：TransformedMap的键值对中的值发生改变时就会触发Transformer类中的transform方法中的代码。</p>
 <p>第二据解释了代码调用链的构造：Transformer数组能构成一条链ChainedTransformer，上面代码触发时会链式地调用ChainedTransformer中的方法。</p>
@@ -373,7 +373,7 @@
 <p>getMethod：Method Class.getMethod(String name, Class&lt;?&gt;… parameterTypes)的作用是获得对象所声明的公开方法。getMethod的第一个参数name是要获得方法的名字，第二个参数parameterTypes是按声明顺序标识该方法形参类型。</p>
 <p>invoke：Method类的invoke(Object obj,Object args[])方法接收的参数必须为对象，返回值总是对象。用来执行某个的对象的目标方法。</p>
 </blockquote>
-<h3 id="ChainedTransformer类"><a href="#ChainedTransformer类" class="headerlink" title="ChainedTransformer类"></a>ChainedTransformer类</h3><p>由于完成Runtime.getRuntime().exec()的动作需要多次调用transform函数（先调用Runtime.getRuntime再调用Runtime.exec），所以还得找一个能多次调用transform的地方。这时候就需要用到ChainedTransformer进行调用类的串联了：</p>
+<h3 id="ChainedTransformer类"><a href="#ChainedTransformer类" class="headerlink" title="ChainedTransformer类"></a>ChainedTransformer类</h3><p>由于完成Runtime.getRuntime().exec()的动作需要多次调用transform函数（先调用Runtime.getRuntime再调用Runtime.exec），所以还得找一个能多次调用transform的地方。这时候就需要用到ChainedTransformer进行调用类的串联了（即是上面ChainedTransformer可以按顺序调用一系列的变换的原因）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private final Transformer[] iTransformers;// 填充构造后的实例</span><br><span class="line"></span><br><span class="line">public Object transform(Object object) &#123;</span><br><span class="line">    for (int i = 0; i &lt; iTransformers.length; i++) &#123;</span><br><span class="line">        object = iTransformers[i].transform(object);// 调用链，</span><br><span class="line">    &#125;</span><br><span class="line">    return object;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
@@ -407,6 +407,10 @@
 <p>去掉注释就会触发调用链重新打开计算器了：</p>
 <p><img src="/2020/07/19/CommonsCollections3%E5%88%A9%E7%94%A8%E9%93%BE/7.png" alt></p>
 <h2 id="0x03-小结"><a href="#0x03-小结" class="headerlink" title="0x03 小结"></a>0x03 小结</h2><p>这里只是梳理了Commons Collections3这条链的前因后果，因为写的头昏眼花啦，这篇等我后面再补齐剩余的内同。然后就是找到Java触发反序列化的点简单，关键是如何<strong>找到可利用的调用链</strong>。这个作为最经典的一条调用链，我就先说到这里了。下次继续补齐并写其他调用链。</p>
+<p>参考链接:</p>
+<p> <a href="https://security.tencent.com/index.php/blog/msg/97" target="_blank" rel="noopener">https://security.tencent.com/index.php/blog/msg/97</a> </p>
+<p> <a href="https://blog.0kami.cn/2019/10/24/study-java-deserialized-commonscollections3-1/" target="_blank" rel="noopener">https://blog.0kami.cn/2019/10/24/study-java-deserialized-commonscollections3-1/</a> </p>
+<p> <a href="https://www.cnblogs.com/GISQZC/p/5809019.html" target="_blank" rel="noopener">https://www.cnblogs.com/GISQZC/p/5809019.html</a> </p>
 
       
     </div>
