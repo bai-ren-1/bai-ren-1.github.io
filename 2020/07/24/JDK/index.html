@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
 
@@ -90,12 +92,14 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;8.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;3.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;4.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;9.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;6.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;7.png">
-<meta property="og:updated_time" content="2020-07-24T13:42:48.084Z">
+<meta property="og:updated_time" content="2020-07-25T01:46:08.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;24&#x2F;JDK&#x2F;1.png">
 
@@ -357,13 +361,17 @@
 <p>要使用JDKX的话就将JAVA_HOME的值改为%JAVA_HOMEX%，这里我是用JDK8</p>
 </blockquote>
 <p><img src="/2020/07/24/JDK/2.png" alt></p>
-<p>然后再系统变量Path添加前两项（bin和jre\bin）后就可以啦。以后你要切换哪个就修改JAVA_HOME的值就可以了。</p>
+<p>然后再系统变量Path添加前两项（bin和jre\bin）后就可以啦。最后新建一个classpath就可以了：</p>
+<p><img src="/2020/07/24/JDK/8.png" alt></p>
+<p>以后你要切换哪个就修改环境变量JAVA_HOME的值就可以了。</p>
 <h2 id="0x02-IDEA切换版本"><a href="#0x02-IDEA切换版本" class="headerlink" title="0x02 IDEA切换版本"></a>0x02 IDEA切换版本</h2><p>有时打开IDEA打到兴头上，根本不想切换JDK。其实IDEA里面可以直接选择使用的JDK：</p>
 <p><img src="/2020/07/24/JDK/3.png" alt></p>
 <p>点击右上角的项目结构的按钮，然后按下面添加其他JDK的路径：</p>
 <p><img src="/2020/07/24/JDK/4.png" alt></p>
 <p>当然这个是我自己在公司试的，当时是有用的。也不知道是不是正解，无效请自行上网搜索。</p>
 <p><img src="/2020/07/24/JDK/5.png" alt></p>
+<p>上面切换后编译提示找不到JDK的classpath的话就把这个选项去了：</p>
+<p><img src="/2020/07/24/JDK/9.png" alt></p>
 <h2 id="0x03-Maven"><a href="#0x03-Maven" class="headerlink" title="0x03 Maven"></a>0x03 Maven</h2><p>IDEA中配置Maven之前就做好啦，当时没想记录这些简单的东西，将就一下吧。</p>
 <p><img src="/2020/07/24/JDK/6.png" alt></p>
 <p>要使用Maven的话就偷偷藏在那里，点开就有许多命令可以使用了。噢噢然后写Sonar的时候得跳过它的检测进行打包Jar，如果使用Maven进行打包Jar的话，得选择跳过检测的选项：</p>
@@ -404,6 +412,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/" rel="prev" title="反序列化之RMI">
+                反序列化之RMI <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -480,7 +492,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

