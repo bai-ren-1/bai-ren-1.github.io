@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="OJ刷题记录菜，刷。两个字。大部分题目放在本地的IDEA中了，这里只是贴上一些老是忘记的点。 0x00 华为OJ1. 计算字符串个数题目概述这题难度标注是较难，个人感觉应该是标错了或者有更优解。不过搞安全的，这里不去探究最优解了，AC即可。 1234567891011121314151617181920212223242526272829303132333435&#x2F;*题目描述写出一个程序，接受一个由">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OJ刷题记录">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;07&#x2F;27&#x2F;OJ%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="OJ刷题记录菜，刷。两个字。大部分题目放在本地的IDEA中了，这里只是贴上一些老是忘记的点。 0x00 华为OJ1. 计算字符串个数题目概述这题难度标注是较难，个人感觉应该是标错了或者有更优解。不过搞安全的，这里不去探究最优解了，AC即可。 1234567891011121314151617181920212223242526272829303132333435&#x2F;*题目描述写出一个程序，接受一个由">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-27T13:22:18.345Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2020/07/27/OJ刷题记录/"/>
+
+
+
+
+
+  <title>OJ刷题记录 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/07/27/OJ%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OJ刷题记录</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-27T20:54:58+08:00">
+                2020-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="OJ刷题记录"><a href="#OJ刷题记录" class="headerlink" title="OJ刷题记录"></a>OJ刷题记录</h1><p>菜，刷。两个字。大部分题目放在本地的IDEA中了，这里只是贴上一些老是忘记的点。</p>
+<h2 id="0x00-华为OJ"><a href="#0x00-华为OJ" class="headerlink" title="0x00 华为OJ"></a>0x00 华为OJ</h2><h3 id="1-计算字符串个数"><a href="#1-计算字符串个数" class="headerlink" title="1. 计算字符串个数"></a>1. 计算字符串个数</h3><h4 id="题目概述"><a href="#题目概述" class="headerlink" title="题目概述"></a>题目概述</h4><p>这题难度标注是较难，个人感觉应该是标错了或者有更优解。不过搞安全的，这里不去探究最优解了，AC即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">题目描述</span></span><br><span class="line"><span class="comment">写出一个程序，接受一个由字母和数字组成的字符串，和一个字符，然后输出输入字符串中含有该字符的个数。不区分大小写。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入描述:</span></span><br><span class="line"><span class="comment">第一行输入一个有字母和数字以及空格组成的字符串，第二行输入一个字符。</span></span><br><span class="line"><span class="comment">输出描述:</span></span><br><span class="line"><span class="comment">输出输入字符串中含有该字符的个数。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">示例1</span></span><br><span class="line"><span class="comment">输入:</span></span><br><span class="line"><span class="comment">ABCDEF</span></span><br><span class="line"><span class="comment">A</span></span><br><span class="line"><span class="comment">输出:1</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">package</span> NumOfAlpha;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        String string = scanner.nextLine();</span><br><span class="line">        String alpha = scanner.nextLine();</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">char</span> ch:string.toCharArray())&#123;</span><br><span class="line">            String str;</span><br><span class="line">            str = Character.toString(ch);</span><br><span class="line">            <span class="keyword">if</span>(str.equalsIgnoreCase(alpha))&#123;      <span class="comment">// 比较两个String不能直接用==进行判断，需要使用equals方法</span></span><br><span class="line">                result++;                         <span class="comment">// 必须使用equalsIgnoreCase才能通过，直接equals不行</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="题目坑点"><a href="#题目坑点" class="headerlink" title="题目坑点"></a>题目坑点</h4><ul>
+<li><strong>String类型</strong>比较不同对象内容是否相同，应该用equals。因为==用于比较引用类型和比较基本数据类型时具有不同的功能。 </li>
+<li>equalsIgnoreCase() ：用于将字符串与指定的对象比较，<strong>不考虑大小写</strong>。</li>
+<li>for(char ch:string.toCharArray())：常用于<strong>String转Char数组并遍历</strong>。</li>
+</ul>
+<h3 id="2-输出逆序的字符串"><a href="#2-输出逆序的字符串" class="headerlink" title="2. 输出逆序的字符串"></a>2. 输出逆序的字符串</h3><h4 id="题目概述-1"><a href="#题目概述-1" class="headerlink" title="题目概述"></a>题目概述</h4><p>标注简单，主要是记录老是要忘的字符串和字符之间的转换。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">将一个字符串str的内容颠倒过来，并输出。str的长度不超过100个字符。</span></span><br><span class="line"><span class="comment">如：输入“I am a student”，输出“tneduts a ma I”。</span></span><br><span class="line"><span class="comment">输入参数：inputString：输入的字符串</span></span><br><span class="line"><span class="comment">返回值：输出转换好的逆序字符串</span></span><br><span class="line"><span class="comment">输入描述：输入一个字符串，可以有空格</span></span><br><span class="line"><span class="comment">输出描述：输出逆序的字符串</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">示例1</span></span><br><span class="line"><span class="comment">输入：I am a student</span></span><br><span class="line"><span class="comment">输出：tneduts a ma I</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">package</span> Easy.ReverseString;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        String string = scanner.nextLine();</span><br><span class="line">        <span class="keyword">int</span> num = string.length();</span><br><span class="line">        StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder();  <span class="comment">// 用来将字符拼接成字符串</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;num;i++)&#123;</span><br><span class="line">            Character word = string.charAt(num-<span class="number">1</span>-i);</span><br><span class="line">            stringBuilder.append(word);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(stringBuilder.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="题目坑点-1"><a href="#题目坑点-1" class="headerlink" title="题目坑点"></a>题目坑点</h4><ul>
+<li>StringBuilder类似Python中的数组的方法来实现<strong>把字符添加在一个结构</strong>。</li>
+<li>StringBuilder使用<strong>toString</strong>实现添加在一起的字符转为字符串。</li>
+<li>charAt实现<strong>字符串提取某个字符</strong>。</li>
+</ul>
+<h3 id="3-最小公倍数"><a href="#3-最小公倍数" class="headerlink" title="3. 最小公倍数"></a>3. 最小公倍数</h3><h4 id="题目概述-2"><a href="#题目概述-2" class="headerlink" title="题目概述"></a>题目概述</h4><p>经典，没啥好解释。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">题目描述</span></span><br><span class="line"><span class="comment">正整数A和正整数B 的最小公倍数是指 能被A和B整除的最小的正整数值，设计一个算法，求输入A和B的最小公倍数。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入描述:</span></span><br><span class="line"><span class="comment">输入两个正整数A和B。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输出描述:</span></span><br><span class="line"><span class="comment">输出A和B的最小公倍数。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">示例1</span></span><br><span class="line"><span class="comment">输入：5 7</span></span><br><span class="line"><span class="comment">输出：35</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">package</span> Easy.TheMinimumMultiple;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        <span class="keyword">while</span>(scanner.hasNext())&#123;</span><br><span class="line">            <span class="keyword">int</span> a = scanner.nextInt();</span><br><span class="line">            <span class="keyword">int</span> b = scanner.nextInt();</span><br><span class="line">            <span class="keyword">int</span> maximumConventions = MaximumConventions(a,b);</span><br><span class="line">            System.out.println(a*b/maximumConventions);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">MaximumConventions</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(a &lt; b)&#123;  <span class="comment">// 保证被除数大于除数</span></span><br><span class="line">            <span class="keyword">int</span> temp = a;</span><br><span class="line">            a = b;</span><br><span class="line">            b = temp;</span><br><span class="line">        &#125;<span class="keyword">while</span>(a % b != <span class="number">0</span>)&#123;     <span class="comment">// 除法余数不为0则循环</span></span><br><span class="line">            n = a % b;</span><br><span class="line">            a = b;      <span class="comment">// 大数改小数</span></span><br><span class="line">            b = n;      <span class="comment">// 小数改更小</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> b;       <span class="comment">// 最后返回小的数</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="题目坑点-2"><a href="#题目坑点-2" class="headerlink" title="题目坑点"></a>题目坑点</h4><ul>
+<li>记住<strong>辗转相除法</strong>的返回值是小的数而非余数。</li>
+<li>记住计算最小公倍数的公式。</li>
+</ul>
+<h3 id="4-漂亮度"><a href="#4-漂亮度" class="headerlink" title="4. 漂亮度"></a>4. 漂亮度</h3><h4 id="题目概述-3"><a href="#题目概述-3" class="headerlink" title="题目概述"></a>题目概述</h4><p>挺有意思的，思路就是统计字母个数，最多个数的占最大漂亮度然后依此类推。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">给出一个名字，该名字有26个字符串组成，定义这个字符串的“漂亮度”是其所有字母“漂亮度”的总和。</span></span><br><span class="line"><span class="comment">每个字母都有一个“漂亮度”，范围在1到26之间。没有任何两个字母拥有相同的“漂亮度”。字母忽略大小写。</span></span><br><span class="line"><span class="comment">给出多个名字，计算每个名字最大可能的“漂亮度”。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入描述:整数N，后续N个名字</span></span><br><span class="line"><span class="comment">输出描述:每个名称可能的最大漂亮程度</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">示例1</span></span><br><span class="line"><span class="comment">输入：</span></span><br><span class="line"><span class="comment">2</span></span><br><span class="line"><span class="comment">zhangsan</span></span><br><span class="line"><span class="comment">lisi</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输出：</span></span><br><span class="line"><span class="comment">192</span></span><br><span class="line"><span class="comment">101</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> Normal.Beauty;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        <span class="keyword">int</span> num = scanner.nextInt();</span><br><span class="line">        String[] names = <span class="keyword">new</span> String[num];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;num;i++)&#123;</span><br><span class="line">            Scanner scanner1 = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">            names[i] = scanner1.nextLine();</span><br><span class="line">            <span class="comment">// System.out.println(names[i]);</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;num;i++)&#123;</span><br><span class="line">            beauty(names[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">beauty</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        HashMap&lt;Character,Integer&gt; hm = <span class="keyword">new</span> HashMap&lt;Character, Integer&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> ch:name.toCharArray())&#123;</span><br><span class="line">            <span class="keyword">if</span>(hm.containsKey(ch))&#123;</span><br><span class="line">                hm.put(ch,hm.get(ch)+<span class="number">1</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                hm.put(ch,<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        Collection&lt;Integer&gt; coll = hm.values();</span><br><span class="line">        List&lt;Integer&gt; nums = <span class="keyword">new</span> ArrayList&lt;Integer&gt;(coll);</span><br><span class="line">        Collections.sort(nums);     <span class="comment">// 对所有的出现次数进行排序</span></span><br><span class="line">        <span class="keyword">int</span> N=<span class="number">26</span>;   <span class="comment">// 每个字母漂亮度</span></span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;  <span class="comment">// 每个名字总漂亮度</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=nums.size()-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            sum+=N*nums.get(i);     <span class="comment">// 取最后一个元素即次数最多的字母</span></span><br><span class="line">            N--;    <span class="comment">// 次多的字母漂亮度一次递减</span></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(sum);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="题目坑点-3"><a href="#题目坑点-3" class="headerlink" title="题目坑点"></a>题目坑点</h4><ul>
+<li>以前都写的其他语言没使用过HashMap，类似于Python的<strong>字典</strong>，注意实例化的方法。</li>
+<li>containsKey：判断HashMap中是否存在索引。</li>
+<li>put：往HashMap中传入键值对。</li>
+<li>get：通过索引获取其对应得值。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/26/CSP%E7%BB%95%E8%BF%87/" rel="next" title="CSP绕过">
+                <i class="fa fa-chevron-left"></i> CSP绕过
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OJ刷题记录"><span class="nav-number">1.</span> <span class="nav-text">OJ刷题记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-华为OJ"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 华为OJ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-计算字符串个数"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 计算字符串个数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#题目概述"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目坑点"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">题目坑点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-输出逆序的字符串"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 输出逆序的字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#题目概述-1"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目坑点-1"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">题目坑点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-最小公倍数"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 最小公倍数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#题目概述-2"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目坑点-2"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">题目坑点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-漂亮度"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 漂亮度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#题目概述-3"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目坑点-3"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">题目坑点</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
