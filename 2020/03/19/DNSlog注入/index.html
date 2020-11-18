@@ -81,12 +81,12 @@
 
 
 
-<meta name="description" content="DNSlog注入emmm，就写一写DNS log注入吧。有挺多利用方式的，都是为了盲打的效果。只要能在漏洞上通过某些方法发出一个请求，就能达成盲打的效果。 0x00 DNS log平台这个就详细地介绍一下，首先我们登录到  http:&#x2F;&#x2F;ceye.io&#x2F;  注册并登录，这个是知道创宇建立的一个平台。具体的使用情况说明在里面可以看到详细的解释。随后我们点开个人信息页面，可以看到有个标识符的字段，这是">
+<meta name="description" content="DNSlog注入emmm，就写一写DNS log注入吧。有挺多利用方式的，都是为了盲打的效果。只要能在漏洞上通过某些方法发出一个域名请求，就能达成盲打的效果。 DNSlog注入原理：首先准备一个可以配置的域名例如ceye.io，然后通过代理商设置域名ceye.io的nameserver为自己的服务器A。然后在服务器A上配置好DNS Server，这样一来所有ceye.io及其子域名的查询都会到服务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DNSlog注入">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="DNSlog注入emmm，就写一写DNS log注入吧。有挺多利用方式的，都是为了盲打的效果。只要能在漏洞上通过某些方法发出一个请求，就能达成盲打的效果。 0x00 DNS log平台这个就详细地介绍一下，首先我们登录到  http:&#x2F;&#x2F;ceye.io&#x2F;  注册并登录，这个是知道创宇建立的一个平台。具体的使用情况说明在里面可以看到详细的解释。随后我们点开个人信息页面，可以看到有个标识符的字段，这是">
+<meta property="og:description" content="DNSlog注入emmm，就写一写DNS log注入吧。有挺多利用方式的，都是为了盲打的效果。只要能在漏洞上通过某些方法发出一个域名请求，就能达成盲打的效果。 DNSlog注入原理：首先准备一个可以配置的域名例如ceye.io，然后通过代理商设置域名ceye.io的nameserver为自己的服务器A。然后在服务器A上配置好DNS Server，这样一来所有ceye.io及其子域名的查询都会到服务">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;3.png">
@@ -98,7 +98,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;11.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;12.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;13.png">
-<meta property="og:updated_time" content="2020-03-21T04:51:39.751Z">
+<meta property="og:updated_time" content="2020-08-04T03:18:42.535Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2020&#x2F;03&#x2F;19&#x2F;DNSlog%E6%B3%A8%E5%85%A5&#x2F;1.png">
 
@@ -342,7 +342,8 @@
       
 
       
-        <h1 id="DNSlog注入"><a href="#DNSlog注入" class="headerlink" title="DNSlog注入"></a>DNSlog注入</h1><p>emmm，就写一写DNS log注入吧。有挺多利用方式的，都是为了盲打的效果。只要能在漏洞上通过某些方法<strong>发出一个请求</strong>，就能达成盲打的效果。</p>
+        <h1 id="DNSlog注入"><a href="#DNSlog注入" class="headerlink" title="DNSlog注入"></a>DNSlog注入</h1><p>emmm，就写一写DNS log注入吧。有挺多利用方式的，都是为了盲打的效果。只要能在漏洞上通过某些方法<strong>发出一个域名请求</strong>，就能达成盲打的效果。</p>
+<p>DNSlog注入<strong>原理</strong>：首先准备一个可以配置的域名例如ceye.io，然后通过代理商设置域名ceye.io的nameserver为自己的服务器A。然后在服务器A上配置好DNS Server，这样一来所有ceye.io及其子域名的查询都会到服务器A上，这时就能够实时地监控域名查询请求了。</p>
 <h2 id="0x00-DNS-log平台"><a href="#0x00-DNS-log平台" class="headerlink" title="0x00 DNS log平台"></a>0x00 DNS log平台</h2><p>这个就详细地介绍一下，首先我们登录到  <a href="http://ceye.io/" target="_blank" rel="noopener">http://ceye.io/</a>  注册并登录，这个是知道创宇建立的一个平台。具体的使用情况说明在里面可以看到详细的解释。随后我们点开个人信息页面，可以看到有个标识符的字段，这是用来标识你这身份的依据：</p>
 <p><img src="/2020/03/19/DNSlog%E6%B3%A8%E5%85%A5/1.png" alt></p>
 <blockquote>
@@ -699,7 +700,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
