@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://bai-ren-1.github.io/"/>
-  <updated>2021-07-27T07:06:52.782Z</updated>
+  <updated>2021-07-27T07:25:13.374Z</updated>
   <id>http://bai-ren-1.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>GTFObins</title>
+    <link href="http://bai-ren-1.github.io/2021/07/27/GTFObins/"/>
+    <id>http://bai-ren-1.github.io/2021/07/27/GTFObins/</id>
+    <published>2021-07-27T07:18:52.000Z</published>
+    <updated>2021-07-27T07:25:13.374Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="GTFObins"><a href="#GTFObins" class="headerlink" title="GTFObins"></a>GTFObins</h1><p>好东西记录一下。</p><h2 id="0x00-简介"><a href="#0x00-简介" class="headerlink" title="0x00 简介"></a>0x00 简介</h2><p>网址链接：<a href="https://gtfobins.github.io/" target="_blank" rel="noopener">https://gtfobins.github.io/</a></p><p>“GTFOBins is a curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems.The project collects legitimate <a href="https://gtfobins.github.io/functions/" target="_blank" rel="noopener">functions</a> of Unix binaries that can be abused to <del>get the f**k</del> break out restricted shells, escalate or maintain elevated privileges, transfer files, spawn bind and reverse shells, and facilitate the other post-exploitation tasks.It is important to note that this is <strong>not</strong> a list of exploits, and the programs listed here are not vulnerable per se, rather, GTFOBins is a compendium about how to live off the land when you only have certain binaries available.GTFOBins is a <a href="https://github.com/GTFOBins/GTFOBins.github.io/graphs/contributors" target="_blank" rel="noopener">collaborative</a> project created by <a href="https://twitter.com/norbemi" target="_blank" rel="noopener">Emilio Pinna</a> and <a href="https://twitter.com/cyrus_and" target="_blank" rel="noopener">Andrea Cardaci</a> where everyone can <a href="https://gtfobins.github.io/contribute/" target="_blank" rel="noopener">contribute</a> with additional binaries and techniques.If you are looking for Windows binaries you should visit <a href="https://lolbas-project.github.io/" target="_blank" rel="noopener">LOLBAS</a>.”</p><p>直接贴谷歌翻译的概要：GTFOBins是一个精心策划的Unix二进制文件列表，可用于绕过配置错误的系统中的本地安全限制。该项目收集Unix具有合法功能的二进制文件，这些二进制文件可以被Hack，以获得受限的shell、升级或维护提升的特权、传输文件、生成绑定和反向shell。个人理解其实就是教你怎么利用合法软件提权</p><h2 id="0x01-利用"><a href="#0x01-利用" class="headerlink" title="0x01 利用"></a>0x01 利用</h2><ul><li>sudo -l 看进程</li><li>GTFObins 找对应利用</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;GTFObins&quot;&gt;&lt;a href=&quot;#GTFObins&quot; class=&quot;headerlink&quot; title=&quot;GTFObins&quot;&gt;&lt;/a&gt;GTFObins&lt;/h1&gt;&lt;p&gt;好东西记录一下。&lt;/p&gt;
+&lt;h2 id=&quot;0x00-简介&quot;&gt;&lt;a href=&quot;#0x00-简
+      
+    
+    </summary>
+    
+    
+      <category term="后渗透" scheme="http://bai-ren-1.github.io/categories/%E5%90%8E%E6%B8%97%E9%80%8F/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Searchsploit</title>
@@ -476,31 +501,6 @@
     
     
       <category term="计算机基础" scheme="http://bai-ren-1.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>审计记录</title>
-    <link href="http://bai-ren-1.github.io/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/"/>
-    <id>http://bai-ren-1.github.io/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/</id>
-    <published>2020-09-18T08:11:09.000Z</published>
-    <updated>2020-11-18T08:23:19.379Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="审计记录"><a href="#审计记录" class="headerlink" title="审计记录"></a>审计记录</h2><p>记录，有时间就慢慢补充。</p><h2 id="0x00-74CMS"><a href="#0x00-74CMS" class="headerlink" title="0x00 74CMS"></a>0x00 74CMS</h2><p>3.7版本，自己上官网搜索。关注SQL注入，全局搜索select函数观察sql语句：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/1.png" alt></p><p>跟进第67处sql语句，发现直接拼接参数变量id：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/2.png" alt></p><p>这个直接拼接的sql语句是在get_color_one中写的，于是我们全局搜索get_color_one方法：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/3.png" alt></p><p>明显只有1、2、5三处是调用了这个方法，我们跟进第一个：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/4.png" alt></p><p>直接拼接GET参数，中奖了。跟进第二个:</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/5.png" alt></p><p>也是直接拼接POST参数，再次中奖。跟进第三个：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/6.png" alt></p><p>这里获取val变量后使用intval进行转换，可见不能进行注入了。</p><h2 id="0x01-UCMS"><a href="#0x01-UCMS" class="headerlink" title="0x01 UCMS"></a>0x01 UCMS</h2><p>文件操作导致写shell的命令执行，记录一下。去CNVD上看到这个漏洞：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/7.png" alt></p><p>全局搜索fopen：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/8.png" alt></p><p>跟进最后一项，发现可以操作：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/9.png" alt></p><p>里面就是根据$alldir和$filename变量打开文件并且往其中写入$content（$content的内容是我们POST直接可控的）。然后我们看上面需要什么限定：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/10.png" alt></p><p>发现$alldir和$filename变量都是我们GET直接可控的，并且需要赋值才能走到我们下面的利用点。然后最开始的要求就是要“定义了admin”。我们就看到入口文件index.php：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/11.png" alt></p><p>看到了我们定义了admin的语句啦，就说明我们不能直接访问上面的fileedit.php，否则就会admin没定义而exit；我们需要在定义了admin的index.php从找到如何进入fileedit.php：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/12.png" alt></p><p>直接提交GET参数do，然后就会根据_符号进行分割。其中分割后所得的前半部分是路径，后半部分是文件名，然后将路径和文件名得到的文件包含进来。那我们为了包含上面的fileedit.php，就得构造?do=sadmin_fileedit的参数。</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/13.png" alt></p><p>上面这样构造后就会在index.php满足中路由到sadmin/fileedit.php，然后打开根目录下的/1.php文件，检查完post中的token后就往1.php中写入post中的co，达成我们要的目的。</p><blockquote><p>这里不知道为什么我一开始直接构造post包提交后一直没有反应。得我重新在fileedit页面抓包后重新构造payload发送后才有反应？一开始我是复现不出来的。</p></blockquote><p>最后在根目录就能看到写入的文件，这里完全可以写成一个webshell：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/14.png" alt></p><p>记得进入写文件操作前有个checktoken的检查方法，得把token放在POST内容上。否则提示非法：</p><p><img src="/2020/09/18/%E5%AE%A1%E8%AE%A1%E8%AE%B0%E5%BD%95/15.png" alt></p><h2 id="0x02-参考链接"><a href="#0x02-参考链接" class="headerlink" title="0x02 参考链接"></a>0x02 参考链接</h2><p><a href="https://sunian19.github.io/2020/09/08/UCMS%20v.1.4.8%20Command%20execution/" target="_blank" rel="noopener">https://sunian19.github.io/2020/09/08/UCMS%20v.1.4.8%20Command%20execution/</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;审计记录&quot;&gt;&lt;a href=&quot;#审计记录&quot; class=&quot;headerlink&quot; title=&quot;审计记录&quot;&gt;&lt;/a&gt;审计记录&lt;/h2&gt;&lt;p&gt;记录，有时间就慢慢补充。&lt;/p&gt;
-&lt;h2 id=&quot;0x00-74CMS&quot;&gt;&lt;a href=&quot;#0x00-74CMS&quot; cla
-      
-    
-    </summary>
-    
-    
-      <category term="WEB安全" scheme="http://bai-ren-1.github.io/categories/WEB%E5%AE%89%E5%85%A8/"/>
     
     
   </entry>
