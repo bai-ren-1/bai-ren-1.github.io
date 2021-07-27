@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://bai-ren-1.github.io/"/>
-  <updated>2021-07-27T07:38:41.554Z</updated>
+  <updated>2021-07-27T07:41:30.307Z</updated>
   <id>http://bai-ren-1.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://bai-ren-1.github.io/2021/07/27/Write-Shell/"/>
     <id>http://bai-ren-1.github.io/2021/07/27/Write-Shell/</id>
     <published>2021-07-27T07:35:56.000Z</published>
-    <updated>2021-07-27T07:38:41.554Z</updated>
+    <updated>2021-07-27T07:41:30.307Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="Write-Shell"><a href="#Write-Shell" class="headerlink" title="Write-Shell"></a>Write-Shell</h1><p>一道无聊的CTF题，来自红明谷CTF 2021的题目《write_shell》</p><h2 id="0x00-分析"><a href="#0x00-分析" class="headerlink" title="0x00 分析"></a>0x00 分析</h2><p>进入题目，直接给出了源代码，如下图所示：</p><p><img src="/2021/07/27/Write-Shell/1.png" alt></p><p>看看主函数的操作，通过action参数判断动作：如果传入值是pwd则打印当前路径，如果传入值是upload则可以再传入一个data参数，将其值经过waf函数过滤后写进指定的文件。那么很明显我们的目的就是绕过waf，通过写入代码去读取flag。</p><p><img src="/Write-Shell/2.png" alt></p><p>回头看看定义的两个个函数check和waf，如何对传入的参数进行过滤：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if(preg_match(&quot;/&apos;| |_|php|;|~|\\^|\\+|eval|&#123;|&#125;/i&quot;,$input)</span><br></pre></td></tr></table></figure><p>还是比较简单好绕的：</p><ul><li>过滤php：通过使用php短标签<?= ?> 绕过；</li><li>过滤空格：通过\t进行绕过；</li><li>使用`直接执行代码；</li><li>使用cat读取flag</li></ul><p>最终构造的payload：<?=`cat\t/*`?></p><p>构造好了payload也就进行攻击了。先传入pwd拿到路径：</p><p><img src="/Write-Shell/3.png" alt></p><p>再传入upload将payload写进文件：</p><p><img src="/Write-Shell/4.png" alt></p><p>结合第一步拿到的路径，访问拿到最后的flag：</p><p><img src="/Write-Shell/5.png" alt></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="Write-Shell"><a href="#Write-Shell" class="headerlink" title="Write-Shell"></a>Write-Shell</h1><p>一道无聊的CTF题，来自红明谷CTF 2021的题目《write_shell》</p><h2 id="0x00-分析"><a href="#0x00-分析" class="headerlink" title="0x00 分析"></a>0x00 分析</h2><p>进入题目，直接给出了源代码，如下图所示：</p><p><img src="/2021/07/27/Write-Shell/1.png" alt></p><p>看看主函数的操作，通过action参数判断动作：如果传入值是pwd则打印当前路径，如果传入值是upload则可以再传入一个data参数，将其值经过waf函数过滤后写进指定的文件。那么很明显我们的目的就是绕过waf，通过写入代码去读取flag。</p><p><img src="/2021/07/27/Write-Shell/2.png" alt></p><p>回头看看定义的两个个函数check和waf，如何对传入的参数进行过滤：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if(preg_match(&quot;/&apos;| |_|php|;|~|\\^|\\+|eval|&#123;|&#125;/i&quot;,$input)</span><br></pre></td></tr></table></figure><p>还是比较简单好绕的：</p><ul><li>过滤php：通过使用php短标签<?= ?> 绕过；</li><li>过滤空格：通过\t进行绕过；</li><li>使用`直接执行代码；</li><li>使用cat读取flag</li></ul><p>最终构造的payload：<?=`cat\t/*`?></p><p>构造好了payload也就进行攻击了。先传入pwd拿到路径：</p><p><img src="/2021/07/27/Write-Shell/3.png" alt></p><p>再传入upload将payload写进文件：</p><p><img src="/2021/07/27/Write-Shell/4.png" alt></p><p>结合第一步拿到的路径，访问拿到最后的flag：</p><p><img src="/2021/07/27/Write-Shell/5.png" alt></p>]]></content>
     
     <summary type="html">
     
