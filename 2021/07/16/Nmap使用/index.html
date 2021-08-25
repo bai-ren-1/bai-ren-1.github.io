@@ -81,14 +81,14 @@
 
 
 
-<meta name="description" content="Nmap使用https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;Z3tAOIvWnD9krbUohcO-Bw">
+<meta name="description" content="Nmap使用记录一下方便CV。 0x00 扫描方式 TCP：-sT SYN：-sS ACK：-sA UDP：-sU RPC：-sR ICMP：-sP Disable Port Scan：-sn  0x01 常用扫描 扫描10000端口、操作系统、版本：  1nmap -T4 -A &amp;lt;target&amp;gt;   版本探测：  1nmap -sV &amp;lt;target&amp;gt;   操作系统：  1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nmap使用">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;16&#x2F;Nmap%E4%BD%BF%E7%94%A8&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="Nmap使用https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;Z3tAOIvWnD9krbUohcO-Bw">
+<meta property="og:description" content="Nmap使用记录一下方便CV。 0x00 扫描方式 TCP：-sT SYN：-sS ACK：-sA UDP：-sU RPC：-sR ICMP：-sP Disable Port Scan：-sn  0x01 常用扫描 扫描10000端口、操作系统、版本：  1nmap -T4 -A &amp;lt;target&amp;gt;   版本探测：  1nmap -sV &amp;lt;target&amp;gt;   操作系统：  1">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-07-16T05:37:10.945Z">
+<meta property="og:updated_time" content="2021-08-16T06:34:17.815Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -331,7 +331,38 @@
       
 
       
-        <h1 id="Nmap使用"><a href="#Nmap使用" class="headerlink" title="Nmap使用"></a>Nmap使用</h1><p><a href="https://mp.weixin.qq.com/s/Z3tAOIvWnD9krbUohcO-Bw" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/Z3tAOIvWnD9krbUohcO-Bw</a></p>
+        <h1 id="Nmap使用"><a href="#Nmap使用" class="headerlink" title="Nmap使用"></a>Nmap使用</h1><p>记录一下方便CV。</p>
+<h2 id="0x00-扫描方式"><a href="#0x00-扫描方式" class="headerlink" title="0x00 扫描方式"></a>0x00 扫描方式</h2><ul>
+<li>TCP：-sT</li>
+<li>SYN：-sS</li>
+<li>ACK：-sA</li>
+<li>UDP：-sU</li>
+<li>RPC：-sR</li>
+<li>ICMP：-sP</li>
+<li>Disable Port Scan：-sn</li>
+</ul>
+<h2 id="0x01-常用扫描"><a href="#0x01-常用扫描" class="headerlink" title="0x01 常用扫描"></a>0x01 常用扫描</h2><ul>
+<li>扫描10000端口、操作系统、版本：</li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -T4 -A &lt;target&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>版本探测：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sV &lt;target&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>操作系统：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -O &lt;target&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x02-输出格式"><a href="#0x02-输出格式" class="headerlink" title="0x02 输出格式"></a>0x02 输出格式</h2><ul>
+<li>-oN <File></File></li>
+<li>-oX <XML file></XML></li>
+<li>-oG <Filespec></Filespec></li>
+</ul>
 
       
     </div>
@@ -366,8 +397,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/07/19/MSF%E5%90%8E%E9%97%A8/" rel="prev" title="MSF后门">
-                MSF后门 <i class="fa fa-chevron-right"></i>
+              <a href="/2021/07/19/MSF%E5%90%8E%E9%97%A8/" rel="prev" title="MSF后门生成命令">
+                MSF后门生成命令 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -445,7 +476,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -498,7 +529,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nmap使用"><span class="nav-number">1.</span> <span class="nav-text">Nmap使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nmap使用"><span class="nav-number">1.</span> <span class="nav-text">Nmap使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-扫描方式"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 扫描方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-常用扫描"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 常用扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-输出格式"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 输出格式</span></a></li></ol></li></ol></div>
             
 
           </div>

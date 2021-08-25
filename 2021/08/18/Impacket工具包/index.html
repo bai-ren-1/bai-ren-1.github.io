@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Impacket工具包转载自：https:&#x2F;&#x2F;www.freebuf.com&#x2F;sectool&#x2F;175208.html。 Impacket是一个Python类库，用于对SMB1-3或IPv4 &#x2F; IPv6 上的TCP、UDP、ICMP、IGMP，ARP，IPv4，IPv6，SMB，MSRPC，NTLM，Kerberos，WMI，LDAP等协议进行低级编程访问。**  在本文的实验场景中，我们需要准备">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Impacket工具包">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="Impacket工具包转载自：https:&#x2F;&#x2F;www.freebuf.com&#x2F;sectool&#x2F;175208.html。 Impacket是一个Python类库，用于对SMB1-3或IPv4 &#x2F; IPv6 上的TCP、UDP、ICMP、IGMP，ARP，IPv4，IPv6，SMB，MSRPC，NTLM，Kerberos，WMI，LDAP等协议进行低级编程访问。**  在本文的实验场景中，我们需要准备">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;7.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;8.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;9.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;10.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;11.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;12.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;13.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;14.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;15.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;16.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;17.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;18.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;19.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;20.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;21.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;22.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;23.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;24.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;25.png">
+<meta property="og:updated_time" content="2021-08-18T04:06:14.742Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;08&#x2F;18&#x2F;Impacket%E5%B7%A5%E5%85%B7%E5%8C%85&#x2F;1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2021/08/18/Impacket工具包/"/>
+
+
+
+
+
+  <title>Impacket工具包 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Impacket工具包</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-08-18T11:50:01+08:00">
+                2021-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id><a href="#" class="headerlink" title></a></h1><h1 id="Impacket工具包"><a href="#Impacket工具包" class="headerlink" title="Impacket工具包"></a>Impacket工具包</h1><p>转载自：<a href="https://www.freebuf.com/sectool/175208.html。" target="_blank" rel="noopener">https://www.freebuf.com/sectool/175208.html。</a></p>
+<p>Impacket是一个Python类库，用于对SMB1-3或IPv4 / IPv6 上的TCP、UDP、ICMP、IGMP，ARP，IPv4，IPv6，SMB，MSRPC，NTLM，Kerberos，WMI，LDAP等协议进行低级编程访问。** </p>
+<p>在本文的实验场景中，我们需要准备以下两个系统：</p>
+<blockquote>
+<p>配置域控的Windows服务器；</p>
+<p>Kali Linux；</p>
+</blockquote>
+<p>系统相关设置如下：</p>
+<h3 id="Windows-Server"><a href="#Windows-Server" class="headerlink" title="Windows Server"></a>Windows Server</h3><blockquote>
+<p>域: SERVER；</p>
+<p>用户: Administrator；</p>
+<p>密码: T00r；</p>
+<p>IP地址: 192.168.1.140；</p>
+<p><strong>Kali Linux:</strong> 192.168.1.135；</p>
+</blockquote>
+<p>在正式开始使用Impacket工具之前，让我们先对目标Windows服务器执行Nmap版本扫描，以获取当前Windows Server上运行的有关服务信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sV 192.168.1.140</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/1.png" alt></p>
+<p>正如你在上面的截图中看到的，目标系统当前运行的服务有域服务，Kerberos服务，Netbios服务，LDAP服务和Windows RPC服务。</p>
+<p>现在让我们从GitHub安装Impacket工具。你可以在<a href="https://github.com/CoreSecurity/impacket.git" target="_blank" rel="noopener">这里</a>获取到。</p>
+<p>首先，我们通过git clone命令克隆存储库，然后按以下截图所示安装Impacket。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/CoreSecurity/impacket.git</span><br><span class="line">cd impacket/</span><br><span class="line">python setup.py install</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/2.png" alt></p>
+<p>这将在你的Kali Linux上安装Impacket。安装完成后，我们来查看下Impacket中都有哪些工具。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd impacket/examples</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/3.png" alt></p>
+<p>可以看到其中包含了许多的python脚本工具，让我们来尝试使用其中的一些工具：</p>
+<h3 id="Ping-py"><a href="#Ping-py" class="headerlink" title="Ping.py"></a><strong>Ping.py</strong></h3><p>一个简单的ICMP ping脚本，使用ICMP echo和echo-reply数据包检查主机状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./ping.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/4.png" alt></p>
+<p><strong>语法: .</strong>/ping.py [Source IP] [Destination IP]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./ping.py 192.168.1.135 192.168.1.140</span><br></pre></td></tr></table></figure>
+
+<p>以下是我从192.168.1.140（Windows Server）获得的ICMP响应</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/5.png" alt></p>
+<h3 id="Lookupsid-py"><a href="#Lookupsid-py" class="headerlink" title="Lookupsid.py"></a><strong>Lookupsid.py</strong></h3><p>通过[MS-LSAT] MSRPC接口的Windows SID bruteforcer示例，旨在查找远程用户/组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./lookupsid.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/6.png" alt></p>
+<p><strong>语法:</strong> ./lookupsid.py [[domain/] username [: password] @] [Target IP Address]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./lookupsid.py SERVER/Administrator: T00r@192.168.1.140</span><br></pre></td></tr></table></figure>
+
+<p>如下所示，lookupsid.py已成功为我提取到了目标服务器的用户和组信息</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/7.png" alt></p>
+<h3 id="Psexec-py"><a href="#Psexec-py" class="headerlink" title="Psexec.py"></a><strong>Psexec.py</strong></h3><p>Psexec.py允许你在远程Windows系统上执行进程，复制文件，并返回处理输出结果。此外，它还允许你直接使用完整的交互式控制台执行远程shell命令（不需要安装任何客户端软件）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./psexec.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/8.png" alt></p>
+<p><strong>语法:</strong> ./psexec.py [[domain/] username [: password] @] [Target IP Address]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./psexec.py SERVER/Administrator: T00r@192.168.1.140</span><br></pre></td></tr></table></figure>
+
+<p>如下所示，我获取到了目标服务器的远程shell</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/9.png" alt></p>
+<h3 id="Rpcdump-py"><a href="#Rpcdump-py" class="headerlink" title="Rpcdump.py"></a><strong>Rpcdump.py</strong></h3><p>该脚本将转储在目标上注册的RPC端点和字符串bindings列表。它也会尝试将它们与一些知名的端点进行匹配。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./rpcdump.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/10.png" alt></p>
+<p><strong>语法:</strong> ./rpcdump.py [[domain/] username [: password] @] [Target IP Address]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./rpcdump.py SERVER/Administrator: T00r@192.168.1.140</span><br></pre></td></tr></table></figure>
+
+<p>如下所示，我成功获取到了目标RPC列表</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/11.png" alt></p>
+<p><strong>Samrdump.py</strong></p>
+<p>与MSRPC套件中的安全帐户管理器远程接口通信的应用程序。它将为我们列出目标系统上的用户帐户，可用资源共享以及通过此服务导出的其他敏感信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./samrdump.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/12.png" alt></p>
+<p><strong>语法:</strong> ./samrdump.py [[domain/] username [: password] @] [Target IP Address]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./samrdump.py SERVER/Administrator: T00r@192.168.1.140</span><br></pre></td></tr></table></figure>
+
+<p>如下所示，我从目标服务器提取了SAM信息</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/13.png" alt></p>
+<h3 id="Sniff-py"><a href="#Sniff-py" class="headerlink" title="Sniff.py"></a><strong>Sniff.py</strong></h3><p>一个简单的数据包嗅探脚本。使用pcapy库来侦听通过指定接口传输的数据包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. /sniff.py</span><br></pre></td></tr></table></figure>
+
+<p>选择正确的网卡，并开始嗅探</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/14.png" alt></p>
+<h3 id="Sniffer-py"><a href="#Sniffer-py" class="headerlink" title="Sniffer.py"></a><strong>Sniffer.py</strong></h3><p>一个简单的数据包嗅探脚本，使用原始套接字来侦听与指定协议相对应的传输数据包。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. /sniffer.py</span><br></pre></td></tr></table></figure>
+
+<p> sniffer开始监听icmp, tcp和udp数据包</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/15.png" alt></p>
+<h3 id="Wmiexec-py"><a href="#Wmiexec-py" class="headerlink" title="Wmiexec.py"></a><strong>Wmiexec.py</strong></h3><p>它会生成一个使用Windows Management Instrumentation的半交互式shell，并以管理员身份运行。你不需要在目标服务器上安装任何的服务/代理，因此它非常的隐蔽。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./wmiexec.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/16.png" alt></p>
+<p><strong>语法:</strong> ./wmiexec.py [[domain/] username [: password] @] [Target IP Address]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./wmiexec.py SERVER/Administrator: T00r@192.168.1.140</span><br></pre></td></tr></table></figure>
+
+<p>如下所示，我获取到了目标服务器的shell</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/17.png" alt></p>
+<h3 id="Wmiquery-py"><a href="#Wmiquery-py" class="headerlink" title="Wmiquery.py"></a><strong>Wmiquery.py</strong></h3><p>它允许发出WQL查询并获取目标系统WMI对象的描述信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./wmiquery.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/18.png" alt></p>
+<p><strong>语法:</strong> ./wmiquery.py [[domain/] username [: password] @] [Target IP Address]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./wmiquery.py SERVER/Administrator: T00r@192.168.1.140</span><br></pre></td></tr></table></figure>
+
+<p>这将打开一个shell，你可以在其中执行WQL查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM Win32_LogicalDisk WHERE FreeSpace &lt; 209152</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/19.png" alt></p>
+<h3 id="Atexec-py"><a href="#Atexec-py" class="headerlink" title="Atexec.py"></a><strong>Atexec.py</strong></h3><p>通过Task Scheduler服务在目标系统上执行命令，并返回输出结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./atexec.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/20.png" alt></p>
+<p><strong>语法:</strong> /atexec.py [[domain/] username [: password] @] [Target IP Address] [Command]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./atexec.py SERVER/Administrator: T00r@192.168.1.140 systeminfo</span><br></pre></td></tr></table></figure>
+
+<p>如下所示，我与目标服务器建立了远程连接，并执行了systeminfo命令，输出结果显示在了我的Kali终端上。</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/21.png" alt></p>
+<h3 id="getArch-py"><a href="#getArch-py" class="headerlink" title="getArch.py"></a><strong>getArch.py</strong></h3><p>该脚本将连接目标（或目标列表上的）计算机，并使用已记录的MSRPC特征收集由（ab）安装的操作系统架构类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./getArch.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/22.png" alt></p>
+<p><strong>语法:</strong> ./getArch.py -target [IP Address]</p>
+<p><strong>命令:</strong> ./getArch.py -target 192.168.1.140</p>
+<p>所下所示，目标系统架构为64-bit</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/23.png" alt></p>
+<h3 id="Ifmap"><a href="#Ifmap" class="headerlink" title="Ifmap"></a><strong>Ifmap</strong></h3><p>该脚本将绑定到目标的MGMT接口，以获取接口ID列表。它将在另一个接口UUID列表的顶部使用该列表，并报告该接口是否被列出和/或处于侦听状态。</p>
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/24.png" alt></p>
+<p><strong>语法:</strong> ./ifmap.py [Host IP Address] [Port]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./ifmap.py 192.168.1.140 135</span><br><span class="line">./ifmap.py 192.168.1.140 49154</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/18/Impacket%E5%B7%A5%E5%85%B7%E5%8C%85/25.png" alt></p>
+<p> <strong>*参考来源：<a href="http://www.hackingarticles.in/beginner-guide-to-impacket-tool-kit/" target="_blank" rel="noopener">hackingarticles</a>，FB小编 secist 编译，转载请注明来自FreeBuf.COM</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/08/18/Beef/" rel="next" title="Beef">
+                <i class="fa fa-chevron-left"></i> Beef
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/08/24/MSF%E5%90%AF%E5%8A%A8%E6%8A%A5%E9%94%99/" rel="prev" title="MSF启动报错">
+                MSF启动报错 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impacket工具包"><span class="nav-number">2.</span> <span class="nav-text">Impacket工具包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-Server"><span class="nav-number">2.0.1.</span> <span class="nav-text">Windows Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ping-py"><span class="nav-number">2.0.2.</span> <span class="nav-text">Ping.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lookupsid-py"><span class="nav-number">2.0.3.</span> <span class="nav-text">Lookupsid.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Psexec-py"><span class="nav-number">2.0.4.</span> <span class="nav-text">Psexec.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rpcdump-py"><span class="nav-number">2.0.5.</span> <span class="nav-text">Rpcdump.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sniff-py"><span class="nav-number">2.0.6.</span> <span class="nav-text">Sniff.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sniffer-py"><span class="nav-number">2.0.7.</span> <span class="nav-text">Sniffer.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wmiexec-py"><span class="nav-number">2.0.8.</span> <span class="nav-text">Wmiexec.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wmiquery-py"><span class="nav-number">2.0.9.</span> <span class="nav-text">Wmiquery.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Atexec-py"><span class="nav-number">2.0.10.</span> <span class="nav-text">Atexec.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getArch-py"><span class="nav-number">2.0.11.</span> <span class="nav-text">getArch.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ifmap"><span class="nav-number">2.0.12.</span> <span class="nav-text">Ifmap</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
