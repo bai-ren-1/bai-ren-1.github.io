@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="白仁的博客" type="application/atom+xml" />
 
@@ -88,7 +90,7 @@
 <meta property="og:site_name" content="白仁的博客">
 <meta property="og:description" content="域渗透之SPN扫描一般情况我们发现服务都是通过端口扫描来进行，而在域环境里面使用SPN扫描会更好。 0x00 SPN扫描优点使用SPN扫描发现服务对比端口扫描的优点是：SPN扫描并不需要连接到网络上的每个IP。SPN查询的原理是通过向域控发起LDAP查询来发现服务，而这个SPN查询是Kerberos正常机制中的一部分。因此SPN扫描是难以检测的，而端口扫描则十分明显。 0x01 SPN规范SPN">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-09-16T03:13:53.509Z">
+<meta property="og:updated_time" content="2021-09-16T03:23:27.141Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -334,7 +336,7 @@
         <h1 id="域渗透之SPN扫描"><a href="#域渗透之SPN扫描" class="headerlink" title="域渗透之SPN扫描"></a>域渗透之SPN扫描</h1><p>一般情况我们发现服务都是通过端口扫描来进行，而在域环境里面使用SPN扫描会更好。</p>
 <h2 id="0x00-SPN扫描优点"><a href="#0x00-SPN扫描优点" class="headerlink" title="0x00 SPN扫描优点"></a>0x00 SPN扫描优点</h2><p>使用SPN扫描发现服务对比端口扫描的优点是：SPN扫描并不需要连接到网络上的每个IP。SPN查询的原理是通过向域控发起LDAP查询来发现服务，而这个SPN查询是Kerberos正常机制中的一部分。因此SPN扫描是难以检测的，而端口扫描则十分明显。</p>
 <h2 id="0x01-SPN规范"><a href="#0x01-SPN规范" class="headerlink" title="0x01 SPN规范"></a>0x01 SPN规范</h2><p>SPN 是以下格式的字符串：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SPN = serviceclass “/” hostname [“:”port] [“/” servicename]</span><br><span class="line">serviceclass = alphanum</span><br><span class="line">servicename = alphanum</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SPN = serviceclass / hostname [:port] [/ servicename]</span><br><span class="line">serviceclass = alphanum</span><br><span class="line">servicename = alphanum</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>serviceclass 是标识服务类的字符串，例如“www”表示 Web 服务或“ ldap”用于目录服务。</li>
